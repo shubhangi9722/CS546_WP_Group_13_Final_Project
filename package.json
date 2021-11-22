@@ -1,0 +1,30 @@
+{
+  "name": "bow_wow_sitters_webapplication",
+  "version": "1.0.0",
+  "description": "A website to hire a sitter for dogs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git + https://github.com/shubhangi9722/CS546_WP_Group_13_Final_Project"
+  },
+  "author": "Group_13_CS546_A",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.1",
+    "express-handlebars": "^6.0.1",
+    "express-session": "^1.17.2",
+    "geodist": "^0.2.1",
+    "handlebars": "^4.7.7",
+    "mongodb": "^4.2.0",
+    "passport": "^0.5.0"
+  }
+}
