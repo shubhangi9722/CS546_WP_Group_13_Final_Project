@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const static = express.static(__dirname + '/public');
 const configRoutes = require('./routes');
-const exphbs = require('express-handlebars');
+const  exphbs= require('express-handlebars');
+
 
 app.use('/public', static);
 app.use(express.json());
@@ -31,17 +32,53 @@ app.use(
     next();
   });
 
-
-  app.use('/signup', (req, res,next) => {
+  app.use('/customerSignin', (req, res,next) => {
     if (req.session.user) {
-      return res.redirect('/private');
+      return res.redirect('/customerDashboard');
     } 
     else {
        next();
     }
   });
 
-  app.use('/private', (req, res, next) => {
+  app.use('/sitterSignin', (req, res,next) => {
+    if (req.session.user) {
+      return res.redirect('/sitterDashboard');
+    }
+     else {
+       next();
+    }
+  });
+
+  app.use('/customerSignup', (req, res,next) => {
+    if (req.session.user) {
+      return res.redirect('/customerDashboard');
+    } 
+    else {
+       next();
+    }
+  });
+
+  app.use('/sitterSignup', (req, res,next) => {
+    if (req.session.user) {
+      return res.redirect('/sitterDashboard');
+    } 
+    else {
+       next();
+    }
+  });
+
+  app.use('/customerDashboard', (req, res, next) => {
+    if (!req.session.user) {
+     res.statusCode = 403;
+     next();
+   } 
+   else {
+     next();
+   }
+ });
+
+  app.use('/sitterDashboard', (req, res, next) => {
      if (!req.session.user) {
       res.statusCode = 403;
       next();
@@ -52,13 +89,7 @@ app.use(
   });
 
 
-  app.use('/login', (req, res,next) => {
-    if (req.session.user) {
-      return res.redirect('/private');
-    } else {
-       next();
-    }
-  });
+ 
 
   app.use('/logout', (req, res,next) => {
   

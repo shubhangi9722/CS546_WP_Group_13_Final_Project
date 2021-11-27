@@ -1,0 +1,42 @@
+<head>
+    <meta charset="utf-8">
+    <title>Customer Login</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+    <h2>Customer Login</h2><br>
+    <div class="login">
+        <form id="login" method="post" action="/customerSignin">
+            <label><b>E-mail
+                </b>
+            </label>
+            <input type="email" name="email" id="email" placeholder="E-mail" value="{{email}}">
+            <br><br>
+            <label><b>Password
+                </b>
+            </label>
+            <input type="Password" name="password" id="Pass" placeholder="Password" value="{{password}}">
+            <br><br>
+            <input type="submit" name="log" id="log" value="Login">
+            <br><br>
+            <a href="/customerSignup">Need to register? Click here to sign-up</a>
+        </form>
+        <br><br>
+        {{#if hasErrors}}
+        <ul>
+    
+            {{#each error}}
+         <li class="errors">{{this}}.</li>
+            {{/each}}
+           
+        </ul>
+        {{/if}}
+                {{#if hasserverErrors}}
+        <ul>
+         <li class="errors">{{error}}.</li>
+        </ul>
+    {{/if}}
+    </div>
+
+</body>
