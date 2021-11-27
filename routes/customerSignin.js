@@ -1,17 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const userData = require('../data');
-const bcrypt = require('bcryptjs');
-const saltRounds = 10;
-
+const data = require('../data');
+const customerData= data.customer;
 
 router.get('/', async (req, res) => {
     try {
       if(!req.session.user){
-        res.render('user/login');
+        res.render('customer/login');
       }
       else{
-        res.redirect('/private');
+        res.redirect('/customerDashboard');
       }
     
     } catch (e) {
@@ -76,7 +74,7 @@ router.get('/', async (req, res) => {
 
   if (errors.length > 0) {
     res.statusCode = 400;
-    res.render('user/login', {
+    res.render('customer/login', {
       email:rest_params.email,
       password:rest_params.password,
       error:errors,
@@ -91,15 +89,15 @@ router.get('/', async (req, res) => {
 
         
         const{email, password}=rest_params
-        const rest = await userData.checkCustomer(email, password);
+        const rest = await customerData.checkCustomer(email, password);
         if(rest.authenticated===true)
         {
         req.session.user = { email: email, usertype:'customer'};
-        return  res.redirect('/private');
+        return  res.redirect('/customerDashboard');
         }
       } catch (error) {
           res.statusCode = 400;
-          res.render('user/login', {
+          res.render('customer/login', {
           email:rest_params.email,
           password:rest_params.password,  
           error:error,

@@ -64,7 +64,7 @@ async checkCustomer(email, password)
         email,
         phone_number,
         gender,
-        adress,
+        address,
         city,
         state,
         zipcode,
@@ -99,8 +99,8 @@ async checkCustomer(email, password)
           throw "You must provide gender"
         }
       
-        if (!adress) {
-          throw "You must provide adress"
+        if (!address) {
+          throw "You must provide address"
         }
       
         if (!city) {
@@ -116,7 +116,7 @@ async checkCustomer(email, password)
         }
       
         if (!dob) {
-          throw "You must provide age"
+          throw "You must provide date of birth"
         }
       
         if (!password) {
@@ -179,10 +179,7 @@ async checkCustomer(email, password)
           throw "zipcode must be sting"
         }
       
-        if (typeof age !== "string") {
-          throw "age must be sting"
-        }
-      
+
         if (typeof password !== "string") {
           throw "password must be sting"
         }
@@ -199,10 +196,6 @@ async checkCustomer(email, password)
           throw "dog's breed must be sting"
         }
       
-        if (typeof dog_age === "string") {
-          throw "dog's age must be number"
-        }
-      
         if (typeof dog_dob !== "string") {
           throw "dog's date of birth must be sting"
         }
@@ -215,9 +208,9 @@ async checkCustomer(email, password)
           throw "vet phone number must be sting"
         }
       
-        if (typeof weight === "string") {
+       /* if (typeof weight === "string") {
           throw "weight must be number"
-        }
+        }*/
       
         if (typeof behavioral_information !== "string") {
           throw "dog's behavioral_information must be sting"
@@ -239,8 +232,8 @@ async checkCustomer(email, password)
         if (gender.trim() === "") {
           throw "gender cannot be empty string"
         }
-        if (adress.trim() === "") {
-          throw "adress cannot be empty string"
+        if (address.trim() === "") {
+          throw "address cannot be empty string"
         }
         if (city.trim() === "") {
           throw "city cannot be empty string"
@@ -303,7 +296,7 @@ async checkCustomer(email, password)
           email:email.toLocaleLowerCase(),
           phone_number:phone_number,
           gender:gender,
-          adress:adress,
+          address:address,
           city:city,
           state:state,
           zipcode:zipcode,
@@ -312,7 +305,6 @@ async checkCustomer(email, password)
           dog_name:dog_name,
           dog_gender:dog_gender,
           dog_breed:dog_breed,
-          dog_age:dog_age,
           dog_dob:dog_dob,
           vet_name:vet_name,
           vet_phn:vet_phn,

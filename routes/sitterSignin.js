@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const userData = require('../data');
-const bcrypt = require('bcryptjs');
-const saltRounds = 10;
+const data = require('../data');
+const sitterData= data.sitter;
 
 
 router.get('/', async (req, res) => {
     try {
-      if(!req.session.user){
-        res.render('user/login');
-      }
-      else{
-        res.redirect('/private');
-      }
-    
+
+        res.render('sitter/login');
+        
     } catch (e) {
       res.status(500).send();
     }
@@ -77,7 +72,7 @@ router.get('/', async (req, res) => {
 
   if (errors.length > 0) {
     res.statusCode = 400;
-    res.render('user/login', {
+    res.render('sitter/login', {
       email:rest_params.email,
       password:rest_params.password,
       error:errors,
@@ -93,16 +88,16 @@ router.get('/', async (req, res) => {
         
         const{email, password}=rest_params
         //const pass = await bcrypt.hash(password, saltRounds);
-        const rest = await userData.checkSitter(email, password);
+        const rest = await sitterData.checkSitter(email, password);
        // console.log(pass);
         if(rest.authenticated===true)
         {
         req.session.user = { email: email, usertype:'sitter'};
-          return  res.redirect('/private');
+          return  res.redirect('/sitterDashboard');
         }
       } catch (error) {
           res.statusCode = 400;
-          res.render('user/login', {
+          res.render('sitter/login', {
           email:rest_params.email,
           password:rest_params.password,  
           error:error,

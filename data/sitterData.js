@@ -61,7 +61,7 @@ module.exports={
     email,
     phone_number,
     gender,
-    adress,
+    address,
     city,
     state,
     zipcode,
@@ -88,8 +88,8 @@ module.exports={
       throw "You must provide gender"
     }
   
-    if (!adress) {
-      throw "You must provide adress"
+    if (!address) {
+      throw "You must provide address"
     }
   
     if (!city) {
@@ -105,7 +105,7 @@ module.exports={
     }
   
     if (!dob) {
-      throw "You must provide age"
+      throw "You must provide date of birth"
     }
   
     if (!password) {
@@ -150,8 +150,8 @@ module.exports={
       throw "zipcode must be sting"
     }
   
-    if (typeof age !== "string") {
-      throw "age must be sting"
+    if (typeof dob !== "string") {
+      throw "date of birth must be sting"
     }
   
     if (typeof password !== "string") {
@@ -175,8 +175,8 @@ module.exports={
     if (gender.trim() === "") {
       throw "gender cannot be empty string"
     }
-    if (adress.trim() === "") {
-      throw "adress cannot be empty string"
+    if (address.trim() === "") {
+      throw "address cannot be empty string"
     }
     if (city.trim() === "") {
       throw "city cannot be empty string"
@@ -223,7 +223,7 @@ module.exports={
       email:email.toLocaleLowerCase(),
       phone_number:phone_number,
       gender:gender,
-      adress:adress,
+      address:address,
       city:city,
       state:state,
       zipcode:zipcode,

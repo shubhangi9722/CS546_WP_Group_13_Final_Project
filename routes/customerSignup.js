@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const userData = require("../data");
+const data = require("../data");
+const customerData = data.customer;
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
+var zipcodes = require('zipcodes');
 
 //Customer Signup Page
 router.get("/", async (req, res) => {
   try {
-    res.render("user/signup");
+    res.render("customer/signup");
   } catch (e) {
     console.log(e);
     res.status(500).send();
@@ -38,24 +40,24 @@ router.post("/", async (req, res) => {
     errors.push("You must provide gender");
   }
 
-  if (!rest_params.adress) {
+  if (!rest_params.address) {
     errors.push("You must provide adress");
   }
 
-  if (!rest_params.city) {
+/*  if (!rest_params.city) {
     errors.push("You must provide city");
   }
 
   if (!rest_params.state) {
     errors.push("You must provide state");
   }
-
+*/
   if (!rest_params.zipcode) {
     errors.push("You must provide zipcode");
   }
 
   if (!rest_params.dob) {
-    errors.push("You must provide age");
+    errors.push("You must provide date of birth");
   }
 
   if (!rest_params.password) {
@@ -102,24 +104,21 @@ router.post("/", async (req, res) => {
     errors.push("gender must be sting");
   }
 
-  if (typeof rest_params.adress !== "string") {
+  if (typeof rest_params.address !== "string") {
     errors.push("adress must be sting");
   }
 
-  if (typeof rest_params.city !== "string") {
+/*  if (typeof rest_params.city !== "string") {
     errors.push("city must be sting");
   }
 
   if (typeof rest_params.state !== "string") {
     errors.push("state must be sting");
   }
+  */
 
   if (typeof rest_params.zipcode !== "string") {
     errors.push("zipcode must be sting");
-  }
-
-  if (typeof rest_params.age !== "string") {
-    errors.push("age must be sting");
   }
 
   if (typeof rest_params.password !== "string") {
@@ -138,10 +137,6 @@ router.post("/", async (req, res) => {
     errors.push("dog's breed must be sting");
   }
 
-  if (typeof rest_params.dog_age === "string") {
-    errors.push("dog's age must be number");
-  }
-
   if (typeof rest_params.dog_dob !== "string") {
     errors.push("dog's date of birth must be sting");
   }
@@ -154,9 +149,9 @@ router.post("/", async (req, res) => {
     errors.push("vet phone number must be sting");
   }
 
-  if (typeof rest_params.weight === "string") {
+/*  if (typeof rest_params.weight === "string") {
     errors.push("weight must be number");
-  }
+  }*/
 
   if (typeof rest_params.behavioral_information !== "string") {
     errors.push("dog's behavioral information must be sting");
@@ -178,15 +173,16 @@ router.post("/", async (req, res) => {
   if (rest_params.gender.trim() === "") {
     errors.push("gender cannot be empty string");
   }
-  if (rest_params.adress.trim() === "") {
+  if (rest_params.address.trim() === "") {
     errors.push("adress cannot be empty string");
   }
-  if (rest_params.city.trim() === "") {
+ /* if (rest_params.city.trim() === "") {
     errors.push("city cannot be empty string");
   }
   if (rest_params.state.trim() === "") {
     errors.push("state cannot be empty string");
   }
+  */
   if (rest_params.zipcode.trim() === "") {
     errors.push("zipcode cannot be empty string");
   }
@@ -233,15 +229,37 @@ router.post("/", async (req, res) => {
       "your phone number format is incorrect"
     );
   }
+  var zipvalid=/^\d{5}$/
+  if (!rest_params.zipcode.valueOf().match(zipvalid)) {
+    errors.push(
+      "your zipcode is incorrect"
+    );
+  }
   
 
   if (errors.length > 0) {
     res.statusCode = 400;
-    res.render("user/signup", {
-      username: rest_params.username,
-      password: rest_params.password,
+    res.render("customer/signup", {
+      firstName:rest_params.firstName,
+      lastName:rest_params.lastName,
+      email:rest_params.email,
+      phone_number:rest_params.phone_number,
+      gender:rest_params.gender,
+      address:rest_params.address,
+      zipcode:rest_params.zipcode,
+      dob:rest_params.dob,
+      password:rest_params.password,
+      dog_name:rest_params.dog_name,
+      dog_gender:rest_params.dog_gender,
+      dog_breed:rest_params.dog_breed,
+      dog_age:rest_params.dog_age,
+      dog_dob:rest_params.dog_dob,
+      vet_name:rest_params.vet_name,
+      vet_phn:rest_params.vet_phn,
+      weight:rest_params.weight,
+      behavioral_informational_information:rest_params.behavioral_informational_information,
       error: errors,
-      hasErrors: true,
+      hasErrors: true
     });
     return;
   }
@@ -252,9 +270,7 @@ router.post("/", async (req, res) => {
       email,
       phone_number,
       gender,
-      adress,
-      city,
-      state,
+      address,
       dob,
       zipcode,
       password,
@@ -268,15 +284,20 @@ router.post("/", async (req, res) => {
       behavioral_information,
     } = rest_params;
 
-    const rest = await userData.createCustomer(
+    var zipcitystate= zipcodes.lookup(zipcode);
+    if (zipcitystate===null|| zipcitystate===undefined)
+    {
+      throw 'Your Zipcode does not have any related city or state'
+    } 
+    const rest = await customerData.createCustomer(
       firstName,
       lastName,
       email,
       phone_number,
       gender,
-      adress,
-      city,
-      state,
+      address,
+      zipcitystate.city,
+      zipcitystate.state,
       zipcode,
       dob,
       password,
@@ -296,10 +317,27 @@ router.post("/", async (req, res) => {
     }
   } catch (error) {
     res.statusCode = 400;
-    res.render("user/signup", {
+    res.render("customer/signup", {
       error: error,
-      username: rest_params.username,
-      password: rest_params.password,
+      firstName:rest_params.firstName,
+      lastName:rest_params.lastName,
+      email:rest_params.email,
+      phone_number:rest_params.phone_number,
+      gender:rest_params.gender,
+      address:rest_params.address,
+      zipcode:rest_params.zipcode,
+      dob:rest_params.dob,
+      password:rest_params.password,
+      dog_name:rest_params.dog_name,
+      dog_gender:rest_params.dog_gender,
+      dog_breed:rest_params.dog_breed,
+      dog_age:rest_params.dog_age,
+      dog_dob:rest_params.dog_dob,
+      vet_name:rest_params.vet_name,
+      vet_phn:rest_params.vet_phn,
+      weight:rest_params.weight,
+      behavioral_informational_information:rest_params.behavioral_informational_information,
+      error: errors,
       hasserverErrors: true,
     });
   }
