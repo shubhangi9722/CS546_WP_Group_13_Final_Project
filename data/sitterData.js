@@ -1,8 +1,9 @@
 const mongoCollections = require('../config/mongoCollections');
 const sitters = mongoCollections.sitters;
 const bcrypt = require('bcryptjs');
-const saltRounds = 16;
+const saltRounds = 10;
 const { ObjectId } = require('mongodb');
+//const { get } = require('../routes/sitterSignup');
 
 module.exports={
   //validate login
@@ -58,6 +59,7 @@ module.exports={
   async createSitter(
     firstName,
     lastName,
+    dob,
     email,
     phone_number,
     gender,
@@ -65,8 +67,8 @@ module.exports={
     city,
     state,
     zipcode,
-    dob,
-    password
+    password,
+    //active_status,
   ){
 
     if (!firstName) {
@@ -111,8 +113,10 @@ module.exports={
     if (!password) {
       throw "You must provide password"
     }
-  
    
+    // if (!active_status) {
+    //   throw "You must state your status"
+    // }
   
     if (typeof firstName !== "string") {
       throw "first name must be sting"
@@ -157,8 +161,8 @@ module.exports={
     if (typeof password !== "string") {
       throw "password must be sting"
     }
-  
-   
+
+
     if (firstName.trim() === "") {
       throw "first name cannot be empty string"
     }
@@ -193,20 +197,25 @@ module.exports={
     if (password.trim() === "") {
       throw "password cannot be empty string"
     }
+
+    /*if (active_status.trim() === "") {
+      throw "status cannot be empty string"
+    }*/
    
-    var emailRegex =
+    let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!email.valueOf().match(emailRegex)) {
       throw "e-mail format is incorrect"
 
     }
   
-    var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
+    let passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
     if (!password.valueOf().match(passRegex)) {
       throw  "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
 
     }
-    var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+    
+    let phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
     if (!phone_number.valueOf().match(phnregex)) {
       throw "your phone number format is incorrect"
     
@@ -217,22 +226,30 @@ module.exports={
 
     const passhash = await bcrypt.hash(password, saltRounds);
     const sittersCollection = await sitters();
+
     let newsitter = {
-      firstName:firstName,
-      lastName:lastName,
+      firstName:firstName.toLocaleLowerCase(),
+      lastName:lastName.toLocaleLowerCase(),
+      dob:dob,
       email:email.toLocaleLowerCase(),
       phone_number:phone_number,
-      gender:gender,
-      address:address,
-      city:city,
-      state:state,
+      gender:gender.toLocaleLowerCase(),
+      address:address.toLocaleLowerCase(),
+      city:city.toLocaleLowerCase(),
+      state:state.toLocaleLowerCase(),
       zipcode:zipcode,
-      dob:dob,
       password:passhash,
-      active_status:true,
+      //active_status:active_status,
       overall_rating:0,
       reviews:[]
     };
+
+    // if (active_status ==="Yes" || active_status === "No"){
+    //   active_status = newsitter.active_status;
+    // } else {
+    //   throw "Please provide valid status";
+    // }
+
 
     const addedUser = await sittersCollection.findOne({ email: email.toLocaleLowerCase() });
     if (addedUser !== null) throw 'User Already exists';
@@ -240,11 +257,10 @@ module.exports={
     if (insertInfo.insertedCount === 0) throw 'Failed to add user';
     
     obj['userInserted'] = true;
-    
-
     return obj;
-  }
+  },
+
+  
 
 
-      
 }
