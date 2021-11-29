@@ -174,7 +174,7 @@ router.post("/", async (req, res) => {
     res.render("sitter/signup", {
       firstName:rest_params.firstName,
       lastName:rest_params.lastName,
-      email:email,
+      email: rest_params.email,
       phone_number:rest_params.phone_number,
       gender:rest_params.gender,
       address:rest_params.address,
