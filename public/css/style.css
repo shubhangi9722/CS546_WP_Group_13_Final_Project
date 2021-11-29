@@ -3,7 +3,7 @@ body
     margin: 0;  
     padding: 0;  
     background-color:#6abadeba;  
-    font-family: 'Arial';  
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;  
 }  
 .login{  
         width: 382px;  
@@ -16,10 +16,31 @@ body
           
 }  
 h2{  
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 16pt;
+    font-style: italic;
     text-align: center;  
     color: #277582;  
     padding: 20px;  
+    align-items: center;
 }  
+
+.p-form {
+    font-size: 14pt;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-style: italic;
+    text-align: center;
+    color: blueviolet;
+}
+
+.p-note {
+    font-size: 14pt;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-style: italic;
+    text-align: center;
+    color: crimson;
+}
+
 label{  
     color: #08ffd1;  
     font-size: 17px;  
@@ -36,7 +57,7 @@ label{
     height: 30px;  
     border: none;  
     border-radius: 3px;  
-    padding-left: 8px;  
+    padding-left: 8px; 
       
 }  
 #log{  
@@ -64,13 +85,14 @@ span{
   
   /* Style the links inside the navigation bar */
   .navbar a {
-    float: left;
-    display: block;
+    float:inline-start;
+    display:flow-root;
     color: #f2f2f2;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
+    text-align: center;
   }
   
   /* Change the color of links on hover */
@@ -83,4 +105,12 @@ span{
   .navbar a.active {
     background-color: #04AA6D;
     color: white;
+  }
+
+  .logout {
+      font-size: 16pt;
+      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      font-style: italic;
+      color:maroon;
+      text-align: center;
   }

@@ -3,7 +3,7 @@ const router = express.Router();
 const data = require("../data");
 const sitterData = data.sitter;
 const bcrypt = require("bcryptjs");
-const saltRounds = 16;
+const saltRounds = 10;
 var zipcodes = require('zipcodes');
 
 //sitter Signup Page
@@ -64,29 +64,32 @@ router.post("/", async (req, res) => {
     errors.push("You must provide password");
   }
 
+  // if (!rest_params.active_status) {
+  //   errors.push(typeof rest_params.active_status);
+  // }
 
   if (typeof rest_params.firstName !== "string") {
-    errors.push("first name must be sting");
+    errors.push("first name must be string");
   }
 
   if (typeof rest_params.lastName !== "string") {
-    errors.push("last name must be sting");
+    errors.push("last name must be string");
   }
 
   if (typeof rest_params.email !== "string") {
-    errors.push("e-mail must be sting");
+    errors.push("e-mail must be string");
   }
 
   if (typeof rest_params.phone_number !== "string") {
-    errors.push("phone number must be sting");
+    errors.push("phone number must be string");
   }
 
   if (typeof rest_params.gender !== "string") {
-    errors.push("gender must be sting");
+    errors.push("gender must be string");
   }
 
   if (typeof rest_params.address !== "string") {
-    errors.push("address must be sting");
+    errors.push("address must be string");
   }
 
 /*  if (typeof rest_params.city !== "string") {
@@ -99,13 +102,13 @@ router.post("/", async (req, res) => {
   */
 
   if (typeof rest_params.zipcode !== "string") {
-    errors.push("zipcode must be sting");
+    errors.push("zipcode must be string");
   }
 
   if (typeof rest_params.password !== "string") {
-    errors.push("password must be sting");
+    errors.push("password must be string");
   }
-
+  
   if (rest_params.firstName.trim() === "") {
     errors.push("first name cannot be empty string");
   }
@@ -141,6 +144,8 @@ router.post("/", async (req, res) => {
     errors.push("password cannot be empty string");
   }
 
+  
+
   var emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!rest_params.email.valueOf().match(emailRegex)) {
@@ -168,19 +173,25 @@ router.post("/", async (req, res) => {
     );
   }
   
+  // if (rest_params.active_status === "Yes" || rest_params.active_status === "No") {
+  //   active_status = rest_params.active_status;
+  // } else {
+  //   errors.push("Please select a status");
+  // }
 
   if (errors.length > 0) {
     res.statusCode = 400;
     res.render("sitter/signup", {
       firstName:rest_params.firstName,
       lastName:rest_params.lastName,
-      email: rest_params.email,
+      dob:rest_params.dob,
+      email:rest_params.email,
       phone_number:rest_params.phone_number,
       gender:rest_params.gender,
       address:rest_params.address,
       zipcode:rest_params.zipcode,
-      dob:rest_params.dob,
       password:rest_params.password,
+      //active_status:rest_params.active_status,
       error: errors,
       hasErrors: true,
     });
@@ -190,13 +201,14 @@ router.post("/", async (req, res) => {
     const {
       firstName,
       lastName,
+      dob,
       email,
       phone_number,
       gender,
       address,
-      dob,
       zipcode,
-      password
+      password, 
+      //active_status
     } = rest_params;
 
     var zipcitystate= await zipcodes.lookup(zipcode);
@@ -205,6 +217,7 @@ router.post("/", async (req, res) => {
     const rest = await  sitterData.createSitter(
       firstName,
       lastName,
+      dob,
       email,
       phone_number,
       gender,
@@ -212,8 +225,8 @@ router.post("/", async (req, res) => {
       zipcitystate.city,
       zipcitystate.state,
       zipcode,
-      dob,
-      password
+      password,
+      //active_status
     );
 
     if (rest.userInserted === true) {
@@ -226,13 +239,14 @@ router.post("/", async (req, res) => {
       error: error,
       firstName:rest_params.firstName,
       lastName:rest_params.lastName,
-      email:email,
+      dob:rest_params.dob,
+      email:rest_params.email,
       phone_number:rest_params.phone_number,
       gender:rest_params.gender,
       address:rest_params.address,
       zipcode:rest_params.zipcode,
-      dob:rest_params.dob,
       password:rest_params.password,
+      //active_status:rest_params.active_status,
       hasserverErrors: true,
     });
   }
