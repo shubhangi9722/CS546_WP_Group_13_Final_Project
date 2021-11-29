@@ -1,12 +1,13 @@
 const mongoCollections = require('../config/mongoCollections');
 const dogOwners = mongoCollections.dogOwners;
+const sitters = mongoCollections.sitters;
 const bcrypt = require('bcryptjs');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
 
 module.exports={
   //validate login
-async checkCustomer(email, password)
+      async checkCustomer(email, password)
         {
             if (!email|| !password ) 
         {
@@ -321,7 +322,74 @@ async checkCustomer(email, password)
         
 
         return obj;
-      }
+      },
 
-  
+
+      async getAllSittersData() {
+
+
+        const sittersCollection = await sitters();
+        const sitterList = await sittersCollection.find({}).toArray();
+        
+        if(sitterList.length == 0){
+         throw [400, `No Sitters Found Right Now....!`]
+        }
+        else{
+          return sitterList;
+        }
+        //else{
+        //   for (let x of sitterList) {
+        //    x._id = x._id.toString();
+
+        //    for (let y of x.likes) {
+        //      y._id = y._id.toString();
+        //    }
+        //    for (let y of x.follows) {
+        //    y._id = y._id.toString();
+        //    }
+        //    for (let y of x.wishlist) {
+        //      y._id = y._id.toString();
+        //    }
+        //    for (let y of x.reviews) {
+        //      y._id = y._id.toString();
+            
+        //      for (let z of y.replies) {
+        //        z._id = z._id.toString();
+        //      }
+        //    }
+        //   //  for (let y of x.reviewLikes) {
+          //    y.gameId = y.gameId.toString();
+          //    y.reviewId = y.reviewId.toString();
+          //  }
+          //  for (let y of x.reviewDislikes) {
+          //    y.gameId = y.gameId.toString();
+          //    y.reviewId = y.reviewId.toString();
+          //  }
+        //  }
+         //  userList.forEach((user) => {
+         // 	 user._id = user._id.toString();
+         //  })
+       // }
+        
+  },
+
+  async getAllSittersByPriceAsc() {
+    
+    const sittersCollection = await sitters();
+return await sittersCollection.find({}).sort({ price: 1 }).toArray();
+},
+
+async getAllSittersSortedByPriceDec() {
+  const sittersCollection = await sitters();
+return await sittersCollection.find({}).sort({ price: -1 }).toArray();
+},
+
+async findByPriceRange(low, high){
+  if (!low || typeof low !== 'number') throw ' You must provide lowest price';
+  if (!high || typeof high !== 'number') throw ' You must provide highest price';
+  const sittersCollection = await sitters();
+  return await sittersCollection.find({ 'price': {$gte: low, $lte: high} }).toArray();
+},
+
+
 }
