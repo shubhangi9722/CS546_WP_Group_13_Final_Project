@@ -337,39 +337,7 @@ module.exports={
         else{
           return sitterList;
         }
-        //else{
-        //   for (let x of sitterList) {
-        //    x._id = x._id.toString();
-
-        //    for (let y of x.likes) {
-        //      y._id = y._id.toString();
-        //    }
-        //    for (let y of x.follows) {
-        //    y._id = y._id.toString();
-        //    }
-        //    for (let y of x.wishlist) {
-        //      y._id = y._id.toString();
-        //    }
-        //    for (let y of x.reviews) {
-        //      y._id = y._id.toString();
-            
-        //      for (let z of y.replies) {
-        //        z._id = z._id.toString();
-        //      }
-        //    }
-        //   //  for (let y of x.reviewLikes) {
-          //    y.gameId = y.gameId.toString();
-          //    y.reviewId = y.reviewId.toString();
-          //  }
-          //  for (let y of x.reviewDislikes) {
-          //    y.gameId = y.gameId.toString();
-          //    y.reviewId = y.reviewId.toString();
-          //  }
-        //  }
-         //  userList.forEach((user) => {
-         // 	 user._id = user._id.toString();
-         //  })
-       // }
+       
         
   },
 
