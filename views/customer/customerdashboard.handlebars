@@ -1,26 +1,90 @@
-
 <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Private</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-         <link rel="stylesheet" href="/public/css/style.css">
-    </head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+     <meta name="description" content="" />
+     <meta name="author" content="" />
+     <title>Customer Dashboard</title>
+     <!-- Favicon-->
+     <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico" />
+     <!-- Core theme CSS (includes Bootstrap)-->
+     <link href="/public/css/CustomerDashboard.css" rel="stylesheet" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
- <body>
-<main>
-
-
-   
-<p>
-    {{email}}
-    
-</p> 
-
-     <nav  class="navbar">
-          <a href="/logout">Logout</a>  
-     </nav>
-</main>
+<body>
+     <div class="d-flex" id="wrapper">
+          <!-- Sidebar-->
+          <div class="border-end bg-white" id="sidebar-wrapper">
+               <div class="sidebar-heading border-bottom bg-light">Bow-Wow Sitters</div>
+               <div class="list-group list-group-flush">
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getSomeSitter()" >Home</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">My
+                         Bookings</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Pending
+                         Request</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetOwnerDetails('{{email}}')">My Profile</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetOwnerDogDetails('{{email}}')">My Dog's Profile</a>
+               </div>
+          </div>
+          <!-- Page content wrapper-->
+          <div id="page-content-wrapper">
+               <!-- Top navigation-->
+               <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                    <div class="container-fluid">
+                         <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                              aria-expanded="false" aria-label="Toggle navigation"><span
+                                   class="navbar-toggler-icon"></span></button>
+                         <div class="search-container">
+                              <form method="POST" id="searchForm">
+                                   <label for="search">Search Name</label>
+                                   <input type="text" placeholder="Search.." name="search" id="search_term">
+                                   <label for="search">Zipcode</label>
+                                   <input type="text" placeholder="Zipcode" name="zipsearch" id="Zipcoe_term">
+                                   <label for="rating">Filter Price Range </label>
+                                   <select name="ratings" id="rating_val">
+                                        <option value="20-40">20$-40$</option>
+                                        <option value="40-60">40$-60$</option>
+                                        <option value="60-80">60$-80$</option>
+                                        <option value="80-100">80$-100$</option>
+                                   </select>
+                                   <label for="search">Filter rating</label>
+                                   <select name="ratings" id="rating_val">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                   </select>
+                                   <button type="submit"><i class="fa fa-search"></i></button>
+                              </form>
+                         </div>
+                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                              <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                   <li class="nav-item active"><a class="nav-link" href="/logout">Logout</a></li>
+                              </ul>
+                         </div>
+                    </div>
+               </nav>
+               <!-- Page content-->
+               <div class="container-fluid" id="mainbinder">
+                    
+                    </div>
+                    
+               </div>
+          </div>
+     </div>
+     <!-- Bootstrap core JS-->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+     <!-- Core theme JS-->
+     <script src="/public/scripts/btscript.js"></script>
+     <script src="/public/scripts/dashboardscript.js"></script>
+     <script>
+          $(document).ready(function () {
+               $('#error').hide();
+                getSomeSitter();
+          });
+     </script>
 </body>
-

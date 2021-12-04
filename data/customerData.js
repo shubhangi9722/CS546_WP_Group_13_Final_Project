@@ -325,11 +325,11 @@ module.exports={
       },
 
 
-      async getAllSittersData() {
+      async getsitterDataforDashboard() {
 
 
         const sittersCollection = await sitters();
-        const sitterList = await sittersCollection.find({}).toArray();
+        const sitterList = await sittersCollection.find({}).limit(20).toArray();
         
         if(sitterList.length == 0){
          throw [400, `No Sitters Found Right Now....!`]
@@ -357,6 +357,19 @@ async findByPriceRange(low, high){
   if (!high || typeof high !== 'number') throw ' You must provide highest price';
   const sittersCollection = await sitters();
   return await sittersCollection.find({ 'price': {$gte: low, $lte: high} }).toArray();
+},
+
+
+async getCuerrntCustomerInfo(email){
+  if (!email || email.trim()==="") throw ' email not available';
+
+
+  const dogOwnerCollection = await dogOwners();
+  const custInfo = await dogOwnerCollection.findOne({ email: email });
+  if (custInfo === null) throw 'User not found';
+     
+  return custInfo;
+
 },
 
 
