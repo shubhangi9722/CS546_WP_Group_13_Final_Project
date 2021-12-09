@@ -4,18 +4,18 @@ const data = require("../data");
 const customerData = data.customer;
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
-var zipcodes = require('zipcodes');
+var zipcodes = require("zipcodes");
 
 //Customer Signup Page
 router.get("/", async (req, res) => {
   try {
-    res.render("customer/signup");
+    //res.render("customer/signup");
+    res.render("customer/signupnew");
   } catch (e) {
     console.log(e);
     res.status(500).send();
   }
 });
-
 
 //Customer Signup
 router.post("/", async (req, res) => {
@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
     errors.push("You must provide adress");
   }
 
-/*  if (!rest_params.city) {
+  /*  if (!rest_params.city) {
     errors.push("You must provide city");
   }
 
@@ -108,7 +108,7 @@ router.post("/", async (req, res) => {
     errors.push("adress must be sting");
   }
 
-/*  if (typeof rest_params.city !== "string") {
+  /*  if (typeof rest_params.city !== "string") {
     errors.push("city must be sting");
   }
 
@@ -149,7 +149,7 @@ router.post("/", async (req, res) => {
     errors.push("vet phone number must be sting");
   }
 
-/*  if (typeof rest_params.weight === "string") {
+  /*  if (typeof rest_params.weight === "string") {
     errors.push("weight must be number");
   }*/
 
@@ -176,7 +176,7 @@ router.post("/", async (req, res) => {
   if (rest_params.address.trim() === "") {
     errors.push("adress cannot be empty string");
   }
- /* if (rest_params.city.trim() === "") {
+  /* if (rest_params.city.trim() === "") {
     errors.push("city cannot be empty string");
   }
   if (rest_params.state.trim() === "") {
@@ -212,9 +212,7 @@ router.post("/", async (req, res) => {
   var emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!rest_params.email.valueOf().match(emailRegex)) {
-    errors.push(
-      "e-mail format is incorrect"
-    );
+    errors.push("e-mail format is incorrect");
   }
 
   var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
@@ -223,43 +221,42 @@ router.post("/", async (req, res) => {
       "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
     );
   }
-  var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+  var phnregex =
+    /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
-    errors.push(
-      "your phone number format is incorrect"
-    );
+    errors.push("your phone number format is incorrect");
   }
-  var zipvalid=/^\d{5}$/
+  var zipvalid = /^\d{5}$/;
   if (!rest_params.zipcode.valueOf().match(zipvalid)) {
-    errors.push(
-      "your zipcode is incorrect"
-    );
+    errors.push("your zipcode is incorrect");
   }
-  
-
+  console.log("error length", errors.length);
+  console.log("error", errors);
   if (errors.length > 0) {
     res.statusCode = 400;
-    res.render("customer/signup", {
-      firstName:rest_params.firstName,
-      lastName:rest_params.lastName,
-      email:rest_params.email,
-      phone_number:rest_params.phone_number,
-      gender:rest_params.gender,
-      address:rest_params.address,
-      zipcode:rest_params.zipcode,
-      dob:rest_params.dob,
-      password:rest_params.password,
-      dog_name:rest_params.dog_name,
-      dog_gender:rest_params.dog_gender,
-      dog_breed:rest_params.dog_breed,
-      dog_age:rest_params.dog_age,
-      dog_dob:rest_params.dog_dob,
-      vet_name:rest_params.vet_name,
-      vet_phn:rest_params.vet_phn,
-      weight:rest_params.weight,
-      behavioral_informational_information:rest_params.behavioral_informational_information,
+    //res.render("customer/signup"
+    res.render("customer/signupnew", {
+      firstName: rest_params.firstName,
+      lastName: rest_params.lastName,
+      email: rest_params.email,
+      phone_number: rest_params.phone_number,
+      gender: rest_params.gender,
+      address: rest_params.address,
+      zipcode: rest_params.zipcode,
+      dob: rest_params.dob,
+      password: rest_params.password,
+      dog_name: rest_params.dog_name,
+      dog_gender: rest_params.dog_gender,
+      dog_breed: rest_params.dog_breed,
+      dog_age: rest_params.dog_age,
+      dog_dob: rest_params.dog_dob,
+      vet_name: rest_params.vet_name,
+      vet_phn: rest_params.vet_phn,
+      weight: rest_params.weight,
+      behavioral_informational_information:
+        rest_params.behavioral_informational_information,
       error: errors,
-      hasErrors: true
+      hasErrors: true,
     });
     return;
   }
@@ -284,11 +281,10 @@ router.post("/", async (req, res) => {
       behavioral_information,
     } = rest_params;
 
-    var zipcitystate= zipcodes.lookup(zipcode);
-    if (zipcitystate===null|| zipcitystate===undefined)
-    {
-      throw 'Your Zipcode does not have any related city or state'
-    } 
+    var zipcitystate = zipcodes.lookup(zipcode);
+    if (zipcitystate === null || zipcitystate === undefined) {
+      throw "Your Zipcode does not have any related city or state";
+    }
     const rest = await customerData.createCustomer(
       firstName,
       lastName,
@@ -312,31 +308,34 @@ router.post("/", async (req, res) => {
     );
 
     if (rest.userInserted === true) {
-      req.session.user = { email: email, usertype:'customer'};
+      req.session.user = { email: email, usertype: "customer" };
       res.redirect("/customerDashboard");
     }
   } catch (error) {
+    console.log("error1", error);
     res.statusCode = 400;
-    res.render("customer/signup", {
+    //res.render("customer/signup"
+    res.render("customer/signupnew", {
       error: error,
-      firstName:rest_params.firstName,
-      lastName:rest_params.lastName,
-      email:rest_params.email,
-      phone_number:rest_params.phone_number,
-      gender:rest_params.gender,
-      address:rest_params.address,
-      zipcode:rest_params.zipcode,
-      dob:rest_params.dob,
-      password:rest_params.password,
-      dog_name:rest_params.dog_name,
-      dog_gender:rest_params.dog_gender,
-      dog_breed:rest_params.dog_breed,
-      dog_age:rest_params.dog_age,
-      dog_dob:rest_params.dog_dob,
-      vet_name:rest_params.vet_name,
-      vet_phn:rest_params.vet_phn,
-      weight:rest_params.weight,
-      behavioral_informational_information:rest_params.behavioral_informational_information,
+      firstName: rest_params.firstName,
+      lastName: rest_params.lastName,
+      email: rest_params.email,
+      phone_number: rest_params.phone_number,
+      gender: rest_params.gender,
+      address: rest_params.address,
+      zipcode: rest_params.zipcode,
+      dob: rest_params.dob,
+      password: rest_params.password,
+      dog_name: rest_params.dog_name,
+      dog_gender: rest_params.dog_gender,
+      dog_breed: rest_params.dog_breed,
+      dog_age: rest_params.dog_age,
+      dog_dob: rest_params.dog_dob,
+      vet_name: rest_params.vet_name,
+      vet_phn: rest_params.vet_phn,
+      weight: rest_params.weight,
+      behavioral_informational_information:
+        rest_params.behavioral_informational_information,
       error: errors,
       hasserverErrors: true,
     });

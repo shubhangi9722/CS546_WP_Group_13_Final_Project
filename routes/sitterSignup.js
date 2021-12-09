@@ -4,18 +4,18 @@ const data = require("../data");
 const sitterData = data.sitter;
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
-var zipcodes = require('zipcodes');
+var zipcodes = require("zipcodes");
 
 //sitter Signup Page
 router.get("/", async (req, res) => {
   try {
-    res.render("sitter/signup");
+    //res.render("sitter/signup");
+    res.render("sitter/signupnew");
   } catch (e) {
     console.log(e);
     res.status(500).send();
   }
 });
-
 
 //sitter Signup post
 router.post("/", async (req, res) => {
@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
     errors.push("You must provide address");
   }
 
- /* if (!rest_params.city) {
+  /* if (!rest_params.city) {
     errors.push("You must provide city");
   }
 
@@ -92,7 +92,7 @@ router.post("/", async (req, res) => {
     errors.push("address must be string");
   }
 
-/*  if (typeof rest_params.city !== "string") {
+  /*  if (typeof rest_params.city !== "string") {
     errors.push("city must be sting");
   }
 
@@ -108,7 +108,7 @@ router.post("/", async (req, res) => {
   if (typeof rest_params.password !== "string") {
     errors.push("password must be string");
   }
-  
+
   if (rest_params.firstName.trim() === "") {
     errors.push("first name cannot be empty string");
   }
@@ -144,14 +144,10 @@ router.post("/", async (req, res) => {
     errors.push("password cannot be empty string");
   }
 
-  
-
   var emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!rest_params.email.valueOf().match(emailRegex)) {
-    errors.push(
-      "e-mail format is incorrect"
-    );
+    errors.push("e-mail format is incorrect");
   }
 
   var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
@@ -160,19 +156,16 @@ router.post("/", async (req, res) => {
       "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
     );
   }
-  var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+  var phnregex =
+    /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
-    errors.push(
-      "your phone number format is incorrect"
-    );
+    errors.push("your phone number format is incorrect");
   }
-  var zipvalid=/^\d{5}$/
+  var zipvalid = /^\d{5}$/;
   if (!rest_params.zipcode.valueOf().match(zipvalid)) {
-    errors.push(
-      "your zipcode is incorrect"
-    );
+    errors.push("your zipcode is incorrect");
   }
-  
+
   // if (rest_params.active_status === "Yes" || rest_params.active_status === "No") {
   //   active_status = rest_params.active_status;
   // } else {
@@ -181,16 +174,17 @@ router.post("/", async (req, res) => {
 
   if (errors.length > 0) {
     res.statusCode = 400;
-    res.render("sitter/signup", {
-      firstName:rest_params.firstName,
-      lastName:rest_params.lastName,
-      dob:rest_params.dob,
-      email:rest_params.email,
-      phone_number:rest_params.phone_number,
-      gender:rest_params.gender,
-      address:rest_params.address,
-      zipcode:rest_params.zipcode,
-      password:rest_params.password,
+    //res.render("sitter/signup"
+    res.render("sitter/signupnew", {
+      firstName: rest_params.firstName,
+      lastName: rest_params.lastName,
+      dob: rest_params.dob,
+      email: rest_params.email,
+      phone_number: rest_params.phone_number,
+      gender: rest_params.gender,
+      address: rest_params.address,
+      zipcode: rest_params.zipcode,
+      password: rest_params.password,
       //active_status:rest_params.active_status,
       error: errors,
       hasErrors: true,
@@ -207,14 +201,13 @@ router.post("/", async (req, res) => {
       gender,
       address,
       zipcode,
-      password, 
+      password,
       //active_status
     } = rest_params;
 
-    var zipcitystate= await zipcodes.lookup(zipcode);
-    
+    var zipcitystate = await zipcodes.lookup(zipcode);
 
-    const rest = await  sitterData.createSitter(
+    const rest = await sitterData.createSitter(
       firstName,
       lastName,
       dob,
@@ -225,27 +218,28 @@ router.post("/", async (req, res) => {
       zipcitystate.city,
       zipcitystate.state,
       zipcode,
-      password,
+      password
       //active_status
     );
 
     if (rest.userInserted === true) {
-      req.session.user = { email: email, usertype:'sitter'};
+      req.session.user = { email: email, usertype: "sitter" };
       res.redirect("/sitterDashboard");
     }
   } catch (error) {
     res.statusCode = 400;
-    res.render("sitter/signup", {
+    //res.render("sitter/signup"
+    res.render("sitter/signupnew", {
       error: error,
-      firstName:rest_params.firstName,
-      lastName:rest_params.lastName,
-      dob:rest_params.dob,
-      email:rest_params.email,
-      phone_number:rest_params.phone_number,
-      gender:rest_params.gender,
-      address:rest_params.address,
-      zipcode:rest_params.zipcode,
-      password:rest_params.password,
+      firstName: rest_params.firstName,
+      lastName: rest_params.lastName,
+      dob: rest_params.dob,
+      email: rest_params.email,
+      phone_number: rest_params.phone_number,
+      gender: rest_params.gender,
+      address: rest_params.address,
+      zipcode: rest_params.zipcode,
+      password: rest_params.password,
       //active_status:rest_params.active_status,
       hasserverErrors: true,
     });
