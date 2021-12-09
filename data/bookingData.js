@@ -82,7 +82,7 @@ module.exports = {
     }
 
     service_charge.replace("$", "");
-    let services = ["dog walking", "house visit", "day care", "night care"];
+    let services = ["dogwalking", "housevisit", "daycare", "nightcare"];
     var currency_value = parseFloat(service_charge.substr(1));
     start_date_time.replace("T", " ");
     end_date_time.replace("T", " ");
