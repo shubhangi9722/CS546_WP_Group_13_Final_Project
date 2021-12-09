@@ -1,0 +1,48 @@
+body {
+  padding: 0%;
+  margin: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.container {
+  width: 40%;
+}
+
+.normalOrientation {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style the form */
+#ownersignup {
+  background-color: #ffffff;
+  margin: auto;
+  padding: 40px;
+  width: 70%;
+  min-width: 300px;
+}
+
+/* Style the input fields */
+.textbox {
+  padding: 10px;
+  width: auto;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid #aaaaaa;
+}
+
+/* Mark input boxes that gets an error on validation: */
+.textbox.invalid {
+  background-color: #ffdddd;
+}
+
+.tab {
+  display: flex;
+  border-style: groove;
+  padding: 1rem;
+  flex-direction: column;
+}

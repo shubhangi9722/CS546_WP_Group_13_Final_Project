@@ -1,143 +1,226 @@
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Customer Signup</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/public/css/style.css">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Customer Signup</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/public/css/style.css" />
 </head>
 
 <body>
-    <h2>Customer Signupe</h2><br>
-    <div class="login">
-        <form id="signup" method="post" action="/customerSignup">
-            <label><b>First Name*
-                </b>
-            </label>
-            <input type="text" name="firstName" id="firstName" placeholder="First Name " value="{{firstName}}">
-            <br><br>
-            <label><b>Last Name*
-                </b>
-            </label>
-            <input type="text" name="lastName" id="lastName" placeholder="Last Name" value="{{lastName}}">
-            <br><br>
+  <h2>Customer Signupe</h2><br />
+  <div class="login">
+    <form id="signup" method="post" action="/customerSignup">
+      <label><b>First Name*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="firstName"
+        id="firstName"
+        placeholder="First Name "
+        value="{{firstName}}"
+      />
+      <br /><br />
+      <label><b>Last Name*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="lastName"
+        id="lastName"
+        placeholder="Last Name"
+        value="{{lastName}}"
+      />
+      <br /><br />
 
-            <label><b>Date of Birth*
-                </b>
-            </label>
-            <input type="text" name="dob" id="dob" placeholder="MM/DD/YYYY" value="{{dob}}">
-            <br><br>
+      <label><b>Date of Birth*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="dob"
+        id="dob"
+        placeholder="MM/DD/YYYY"
+        value="{{dob}}"
+      />
+      <br /><br />
 
-            <label><b>E-mail*
-                </b>
-            </label>
-            <input type="email" name="email" id="email" placeholder="E-mail" value="{{email}}">
-            <br><br>
-            <label><b>Gender*
-                </b>
-            </label>
-            <select name="gender" id="gender">
-                <option value="m">Male</option>
-                <option value="f">Female</option>
-                <option value="o">other</option>
-            </select>
-            <br><br>
+      <label><b>E-mail*
+        </b>
+      </label>
+      <input
+        type="email"
+        name="email"
+        id="email"
+        placeholder="E-mail"
+        value="{{email}}"
+      />
+      <br /><br />
+      <label><b>Gender*
+        </b>
+      </label>
+      <select name="gender" id="gender">
+        <option value="m">Male</option>
+        <option value="f">Female</option>
+        <option value="o">other</option>
+      </select>
+      <br /><br />
 
-            <label><b>Phone Number*
-                </b>
-            </label>
-            <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number"
-                value="{{phone_number}}">
-            <br><br>
+      <label><b>Phone Number*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="phone_number"
+        id="phone_number"
+        placeholder="Phone Number"
+        value="{{phone_number}}"
+      />
+      <br /><br />
 
-            <label><b>Address*
-                </b>
-            </label>
-            <input type="text" name="address" id="address" placeholder="Address" value="{{address}}">
-            <br><br>
-            <label><b>Zipcode*
-                </b>
-            </label>
-            <input type="text" name="zipcode" id="zipcode" placeholder="Zipcode" value="{{zipcode}}">
-            <br><br>
-            <label><b>Dog name*
-                </b>
-            </label>
-            <input type="text" name="dog_name" id="dog_name" placeholder="Dog Name" value="{{dog_name}}">
-            <br><br>
-            <label><b>Dog Gender*
-                </b>
-            </label>
-                <select name="dog_gender" id="dog_gender">
-                <option value="m">Male</option>
-                <option value="f">Female</option>
-            </select>
-            <br><br>
-            <label><b>Dog Breed*
-                </b>
-            </label>
-            <input type="text" name="dog_breed" id="dog_breed" placeholder="Dog Breed" value="{{dog_breed}}">
-            <br><br>
-            <label><b>Dog Date of Birth*
-                </b>
-            </label>
-            <input type="text" name="dog_dob" id="dog_dob" placeholder="Dog Date of Birth" value="{{dog_dob}}">
-            <br><br>
+      <label><b>Address*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="address"
+        id="address"
+        placeholder="Address"
+        value="{{address}}"
+      />
+      <br /><br />
+      <label><b>Zipcode*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="zipcode"
+        id="zipcode"
+        placeholder="Zipcode"
+        value="{{zipcode}}"
+      />
+      <br /><br />
+      <label><b>Dog name*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="dog_name"
+        id="dog_name"
+        placeholder="Dog Name"
+        value="{{dog_name}}"
+      />
+      <br /><br />
+      <label><b>Dog Gender*
+        </b>
+      </label>
+      <select name="dog_gender" id="dog_gender">
+        <option value="m">Male</option>
+        <option value="f">Female</option>
+      </select>
+      <br /><br />
+      <label><b>Dog Breed*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="dog_breed"
+        id="dog_breed"
+        placeholder="Dog Breed"
+        value="{{dog_breed}}"
+      />
+      <br /><br />
+      <label><b>Dog Date of Birth*
+        </b>
+      </label>
+      <input
+        type="text"
+        name="dog_dob"
+        id="dog_dob"
+        placeholder="Dog Date of Birth"
+        value="{{dog_dob}}"
+      />
+      <br /><br />
 
+      <label><b>Dog Weight*
+        </b>
+      </label>
+      <input
+        type="number"
+        name="weight"
+        id="weight"
+        placeholder="Dog Weight"
+        value="{{weight}}"
+      />
+      <br /><br />
 
-            <label><b>Dog Weight*
-                </b>
-            </label>
-            <input type="number" name="weight" id="weight" placeholder="Dog Weight" value="{{weight}}">
-            <br><br>
+      <label><b>Dog Behavioral Information
+        </b>
+      </label>
+      <textarea
+        type="text"
+        name="behavioral_information"
+        id="behavioral_information"
+        placeholder="Dog Behavioral Information"
+        value="{{behavioral_information}}"
+      ></textarea>
+      <br /><br />
 
+      <label><b>Veterinarian name
+        </b>
+      </label>
+      <input
+        type="text"
+        name="vet_name"
+        id="vet_name"
+        placeholder="veterinarian name"
+        value="{{vet_name}}"
+      />
+      <br /><br />
 
-            <label><b>Dog Behavioral Information
-                </b>
-            </label>
-            <textarea type="text" name="behavioral_information" id="behavioral_information"
-                placeholder="Dog Behavioral Information" value="{{behavioral_information}}"></textarea>
-            <br><br>
+      <label><b>Veterinarian Phone Number
+        </b>
+      </label>
+      <input
+        type="text"
+        name="vet_phn"
+        id="vet_phn"
+        placeholder="veterinarian name"
+        value="{{vet_phn}}"
+      />
+      <br /><br />
 
-            <label><b>Veterinarian name
-                </b>
-            </label>
-            <input type="text" name="vet_name" id="vet_name" placeholder="veterinarian name" value="{{vet_name}}">
-            <br><br>
+      <label><b>Password
+        </b>
+      </label>
+      <input
+        type="Password"
+        name="password"
+        id="Pass"
+        placeholder="Password"
+        value="{{password}}"
+      />
+      <br /><br />
 
+      <input type="submit" name="log" id="log" value="signup" />
+      <br /><br />
+      <a href="/login">Already have an account? Click here to log-in</a>
+    </form>
+    <br /><br />
 
-            <label><b>Veterinarian Phone Number
-                </b>
-            </label>
-            <input type="text" name="vet_phn" id="vet_phn" placeholder="veterinarian name" value="{{vet_phn}}">
-            <br><br>
+    {{#if hasErrors}}
+      <ul>
+        {{#each error}}
+          <li class="errors">{{this}}.</li>
+        {{/each}}
+      </ul>
+    {{/if}}
 
-            <label><b>Password
-                </b>
-            </label>
-            <input type="Password" name="password" id="Pass" placeholder="Password" value="{{password}}">
-            <br><br>
-
-
-            <input type="submit" name="log" id="log" value="signup">
-            <br><br>
-            <a href="/login">Already have an account? Click here to log-in</a>
-        </form>
-        <br><br>
-
-
-        {{#if hasErrors}}
-        <ul>
-            {{#each error}}
-            <li class="errors">{{this}}.</li>
-            {{/each}}
-        </ul>
-        {{/if}}
-
-        {{#if hasserverErrors}}
-        <ul>
-            <li class="errors">{{error}}.</li>
-        </ul>
-        {{/if}}
-    </div>
+    {{#if hasserverErrors}}
+      <ul>
+        <li class="errors">{{error}}.</li>
+      </ul>
+    {{/if}}
+  </div>
 </body>
