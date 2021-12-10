@@ -26,7 +26,7 @@ module.exports = {
 
     const sittersCollection = await sitters();
     const addedUser = await sittersCollection.findOne({
-      email: email.toLocaleLowerCase(),
+      $and: [ {email: email.toLocaleLowerCase()},{ active_status:1 }]
     });
     let compareToMatch = false;
     if (addedUser !== null) {
@@ -482,6 +482,24 @@ module.exports = {
     const sitterCollection = await sitters();
     const sitterInfo = await sitterCollection.findOne({ email: email });
     if (sitterInfo === null) throw 'User not found';
+       
+    return sitterInfo;
+  
+  },
+
+  
+  async DeleteSitter(email){
+    if (!email || email.trim()==="") throw ' email not available';
+  
+    let oldSitterdetails = {
+      active_status:0
+    };
+  
+    const sitterCollection = await sitters();
+    const sitterInfo = await sitterCollection.updateOne( { email: email },
+      { $set: oldSitterdetails });
+    if (sitterInfo === null) throw 'User not found';
+    sitterInfo['sitterDeleted'] = true;
        
     return sitterInfo;
   
