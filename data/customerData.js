@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const dogOwners = mongoCollections.dogOwners;
 const sitters = mongoCollections.sitters;
 const bcrypt = require('bcryptjs');
-const saltRounds = 16;
+const saltRounds = 10;
 const { ObjectId } = require('mongodb');
 
 module.exports={
@@ -268,6 +268,13 @@ module.exports={
           throw " dog's weight cannot be empty string"
         }
       
+        var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+          if (!dob.valueOf().match(dobregex) || !dog_dob.valueOf().match(dobregex)) {
+
+            throw  "your date of birth format is incorrect"
+
+          }
+
         var emailRegex =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!email.valueOf().match(emailRegex)) {
@@ -292,25 +299,25 @@ module.exports={
         const passhash = await bcrypt.hash(password, saltRounds);
         const dogOwnerCollection = await dogOwners();
         let newcustomer = {
-          firstName:firstName,
-          lastName:lastName,
+          firstName:firstName.toLocaleLowerCase(),
+          lastName:lastName.toLocaleLowerCase(),
           email:email.toLocaleLowerCase(),
           phone_number:phone_number,
-          gender:gender,
-          address:address,
-          city:city,
-          state:state,
+          gender:gender.toLocaleLowerCase(),
+          address:address.toLocaleLowerCase(),
+          city:city.toLocaleLowerCase(),
+          state:state.toLocaleLowerCase(),
           zipcode:zipcode,
           dob:dob,
           password:passhash,
-          dog_name:dog_name,
-          dog_gender:dog_gender,
-          dog_breed:dog_breed,
+          dog_name:dog_name.toLocaleLowerCase(),
+          dog_gender:dog_gender.toLocaleLowerCase(),
+          dog_breed:dog_breed.toLocaleLowerCase(),
           dog_dob:dog_dob,
-          vet_name:vet_name,
+          vet_name:vet_name.toLocaleLowerCase(),
           vet_phn:vet_phn,
           weight:weight,
-          behavioral_information:behavioral_information 
+          behavioral_information:behavioral_information.toLocaleLowerCase() 
         };
 
         const addedUser = await dogOwnerCollection.findOne({ email: email.toLocaleLowerCase() });
@@ -670,13 +677,13 @@ async UpdateOwner(
 
   const dogOwnerCollection = await dogOwners();
   let oldcustomer = {
-    firstName:firstName,
-    lastName:lastName,
+    firstName:firstName.toLocaleLowerCase(),
+    lastName:lastName.toLocaleLowerCase(),
     phone_number:phone_number,
-    gender:gender,
-    address:address,
-    city:city,
-    state:state,
+    gender:gender.toLocaleLowerCase(),
+    address:address.toLocaleLowerCase(),
+    city:city.toLocaleLowerCase(),
+    state:state.toLocaleLowerCase(),
     zipcode:zipcode,
     dob:dob
   };
@@ -779,14 +786,14 @@ async UpdateDog(
 
   const dogOwnerCollection = await dogOwners();
   let oldcustomer = {
-    dog_name:dog_name,
-    dog_gender:dog_gender,
-    dog_breed:dog_breed,
+    dog_name:dog_name.toLocaleLowerCase(),
+    dog_gender:dog_gender.toLocaleLowerCase(),
+    dog_breed:dog_breed.toLocaleLowerCase(),
     dog_dob:dog_dob,
-    vet_name:vet_name,
+    vet_name:vet_name.toLocaleLowerCase(),
     vet_phn:vet_phn,
     weight:weight,
-    behavioral_information:behavioral_information
+    behavioral_information:behavioral_information.toLocaleLowerCase()
   };
 
   const updatedInfo = await dogOwnerCollection.updateOne(

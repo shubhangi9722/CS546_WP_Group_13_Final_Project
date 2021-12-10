@@ -1,21 +1,62 @@
 
 <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Sitters Login Page</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-         <link rel="stylesheet" href="/public/css/style.css">
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+     <meta name="description" content="" />
+     <meta name="author" content="" />
+     <title>Sitter Dashboard</title>
+     <!-- Favicon-->
+     <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico" />
+     <!-- Core theme CSS (includes Bootstrap)-->
+     <link href="/public/css/SitterDashboard.css" rel="stylesheet" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
- <body>
-<main>
-<h1>Welcome to your page, {{email}}!</h1>
 
-
-
-     <nav  class="navbar">
-          <a href="/logout">Logout</a>  
-     </nav>
-</main>
+<body>
+     <div class="d-flex" id="wrapper">
+          <!-- Sidebar-->
+          <div class="border-end bg-white" id="sidebar-wrapper">
+               <div class="sidebar-heading border-bottom bg-light">Welcome, {{email}}</div>
+               <div class="list-group list-group-flush">
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getRequests()" >Home</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Booking
+                         History</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Pending
+                         Requests</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetSitterDetails('{{email}}')">My Profile</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetSitterDetails('{{email}}')">Delete Profile</a>
+               </div>
+          </div>
+          <!-- Page content wrapper-->
+          <div id="page-content-wrapper">
+               <!-- Top navigation-->
+               <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                    <div class="container-fluid">
+                         <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                              aria-expanded="false" aria-label="Toggle navigation"><span
+                                   class="navbar-toggler-icon"></span></button>
+                    
+                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                              <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                   <li class="nav-item active"><a class="nav-link" href="/logout">Logout</a></li>
+                              </ul>
+                         </div>
+                    </div>
+               </nav>
+               <!-- Page content-->
+               <div class="container-fluid" id="mainbinder">
+                    
+                    </div>
+                    
+               </div>
+          </div>
+     </div>
+     <!-- Bootstrap core JS-->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+     <!-- Core theme JS-->
+     <script src="/public/scripts/btscript.js"></script>
+     <script src="/public/scripts/dashboardscript.js"></script>
 </body>
-

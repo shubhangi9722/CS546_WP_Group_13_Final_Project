@@ -1,7 +1,7 @@
 body,html {
   margin: 0;
   font-family: sans-serif;
-  background-color:honeydew;
+  background-color:lavender;
 }
 
 ul {
@@ -59,10 +59,35 @@ a:active {
   color:darkmagenta;
 }
 
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 33.33%;
+  padding: 5px;
+}
+
 p {
   font-size: 14pt;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-style: italic;
   text-align: center;
   color:navy;
+}
+
+.p-footer {
+  color: navy;
+  font-size: 14pt;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-style: italic;
+}
+
+footer{
+  color: black;
+  font-size: 12pt;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-style: italic;
+  text-align: center;
 }
