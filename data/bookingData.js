@@ -82,18 +82,30 @@ module.exports = {
     }
 
     service_charge.replace("$", "");
-    let services = ["dog walking", "house visit", "day care", "night care"];
+    let services = ["DogWalking", "Housevisit", "Daycare", "Nightcare"];
+
+    //dogwalking 30min Checkindate startdate
+    //housevisit date-time
+    //daycare checkindate  10am to 8pm
+    //nigthcare checkindate 8pm to 8am
+
     var currency_value = parseFloat(service_charge.substr(1));
-    start_date_time.replace("T", " ");
-    end_date_time.replace("T", " ");
-    let s = moment(start_date_time);
-    let e = moment(end_date_time);
+    start_date_time = start_date_time.toString();
+    end_date_time = end_date_time.toString();
+    // start_date_time.replace("/", "-");
+    // end_date_time.replace("/", "-");
+
+    let s = moment(new Date(start_date_time));
+    let e = moment(new Date(end_date_time));
+
     if (s.isValid() == false || e.isValid() == false) {
       throw "start date or end date is not valid";
     }
-    if (moment(start_date_time).isAfter(end_date_time)) {
+
+    if (moment(new Date(start_date_time)).isAfter(new Date(end_date_time))) {
       throw "Start date and time cannnot be after end date and time";
     }
+
     if (service == services[0]) {
       if (!s.isSame(e, "date")) {
         throw "Dates cannot be different";
@@ -193,6 +205,7 @@ module.exports = {
     const insertInfo = await bookingsCollection.insertOne(booking);
     if (insertInfo.insertedCount === 0)
       throw new Error("Could not add booking");
+    console.log(insertInfo);
     return { BookingCreated: true };
   },
 
