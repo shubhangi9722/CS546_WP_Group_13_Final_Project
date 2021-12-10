@@ -60,65 +60,65 @@ router.get('/', async (req, res) => {
     return;
   }
 
-  if (!rest_params.service_availability) {
-    res.status(400).json({ error: "You must provide date of birth" });
-    return;
-  }
+  // if (!rest_params.service_availability) {
+  //   res.status(400).json({ error: "You must provide date of birth" });
+  //   return;
+  // }
 
   if (!rest_params.price) {
-    res.status(400).json({ error: "You must provide date of birth" });
+    res.status(400).json({ error: "You must provide price" });
     return;
   }
 
   if (!rest_params.bio) {
-    res.status(400).json({ error: "You must provide date of birth" });
+    res.status(400).json({ error: "You must provide bio" });
     return;
   }
 
 
   if (typeof rest_params.firstName !== "string") {
-    res.status(400).json({ error: "first name must be sting" });
+    res.status(400).json({ error: "first name must be string" });
     return;
   }
 
   if (typeof rest_params.lastName !== "string") {
-    res.status(400).json({ error: "last name must be sting" });
+    res.status(400).json({ error: "last name must be string" });
     return;
   }
 
   if (typeof rest_params.email !== "string") {
-    res.status(400).json({ error: "e-mail must be sting" });
+    res.status(400).json({ error: "e-mail must be string" });
     return;
   }
 
   if (typeof rest_params.phone_number !== "string") {
-    res.status(400).json({ error: "phone number must be sting" });
+    res.status(400).json({ error: "phone number must be string" });
     return;
   }
 
   if (typeof rest_params.gender !== "string") {
-    res.status(400).json({ error: "gender must be sting" });
+    res.status(400).json({ error: "gender must be string" });
     return;
   }
 
   if (typeof rest_params.address !== "string") {
-    res.status(400).json({ error: "adress must be sting" });
+    res.status(400).json({ error: "adress must be string" });
     return;
   }
 
 
   if (typeof rest_params.zipcode !== "string") {
-    res.status(400).json({ error: "zipcode must be sting" });
+    res.status(400).json({ error: "zipcode must be string" });
     return;
   }
 
   if (typeof rest_params.price !== "string") {
-    res.status(400).json({ error: "zipcode must be sting" });
+    res.status(400).json({ error: "price must be string" });
     return;
   }
 
   if (typeof rest_params.bio !== "string") {
-    res.status(400).json({ error: "zipcode must be sting" });
+    res.status(400).json({ error: "bio must be string" });
     return;
   }
 
@@ -136,7 +136,7 @@ router.get('/', async (req, res) => {
     return;
   }
   if (rest_params.phone_number.trim() === "") {
-    res.status(400).json({ error: "phone numbe cannot be empty string" });
+    res.status(400).json({ error: "phone number cannot be empty string" });
     return;
   }
   if (rest_params.gender.trim() === "") {
@@ -144,7 +144,7 @@ router.get('/', async (req, res) => {
     return;
   }
   if (rest_params.address.trim() === "") {
-    res.status(400).json({ error: "adress cannot be empty string" });
+    res.status(400).json({ error: "address cannot be empty string" });
     return;
   }
 
@@ -153,13 +153,13 @@ router.get('/', async (req, res) => {
     return;
   }
 
-  if (rest_params.price.trim() === "") {
-    res.status(400).json({ error: "date of birth cannot be empty string" });
-    return;
-  }
+  // if (rest_params.price.trim() === "") {
+  //   res.status(400).json({ error: "price cannot be empty string" });
+  //   return;
+  // }
 
   if (rest_params.bio.trim() === "") {
-    res.status(400).json({ error: "date of birth cannot be empty string" });
+    res.status(400).json({ error: "bio cannot be empty string" });
     return;
   }
 
@@ -190,7 +190,7 @@ router.get('/', async (req, res) => {
 
   
   try {
-    const { firstName, lastName, email, phone_number, gender, address, zipcode, service_availability, price, bio} = rest_params;
+    const { firstName, lastName, email, phone_number, gender, address, zipcode, price, bio} = rest_params;
 
     let zipcitystate= zipcodes.lookup(zipcode);
     if (zipcitystate === null|| zipcitystate === undefined)
@@ -202,8 +202,7 @@ router.get('/', async (req, res) => {
     const update = await sitterData.updateSitter( firstName, lastName, email, phone_number, gender, address,
       zipcitystate.city,
       zipcitystate.state,
-      zipcode,
-      service_availability, price, bio
+      zipcode, price, bio
     );
     return res.json(update);   
   } catch (e) {
