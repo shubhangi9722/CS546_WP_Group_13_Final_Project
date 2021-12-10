@@ -58,8 +58,10 @@ module.exports = {
     zipcode,
     password,
     service_availability,
+
     price,
     about
+
     //active_status,
   ) {
     if (!firstName) {
@@ -106,6 +108,7 @@ module.exports = {
     }
 
     if (!service_availability) {
+
       throw "You must state your availabiity";
     }
 
@@ -116,6 +119,16 @@ module.exports = {
     if (!about) {
       throw "You must provide some details about yourself";
     }
+	
+
+		if (!price) {
+			throw "You must enter price based on your availability"
+		}	
+
+		if (!about) {
+			throw "You must provide some details about yourself"
+		}	
+
 
     if (typeof firstName !== "string") {
       throw "first name must be sting";
@@ -173,6 +186,18 @@ module.exports = {
       throw "about provided must be a string";
     }
 
+
+		if (typeof price !== "string") {
+			throw "price provided must be a string"
+		}
+
+		if (typeof about !== "string") {
+			throw "about provided must be a string"
+		}
+
+
+
+    
     if (firstName.trim() === "") {
       throw "first name cannot be empty string";
     }
@@ -223,6 +248,22 @@ module.exports = {
       throw "Date of birth format is incorrect";
     }
 
+
+   // if (service_availability.trim() === "") {
+		// 	throw "service_availability cannot be empty string"
+		// }
+		// if (priceRange.trim() === "") {
+		// 	throw "priceRange cannot be empty string"
+		// }
+		if (about.trim() === "") {
+			throw "about cannot be empty string"
+		}
+   
+    let dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+      if (!dob.valueOf().match(dobregex)) {
+        throw  "Date of birth format is incorrect"
+      }
+
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!email.valueOf().match(emailRegex)) {
@@ -246,20 +287,20 @@ module.exports = {
     const sittersCollection = await sitters();
 
     let newsitter = {
-      firstName: firstName.toLocaleLowerCase(),
-      lastName: lastName.toLocaleLowerCase(),
-      dob: dob,
-      email: email.toLocaleLowerCase(),
-      phone_number: phone_number,
-      gender: gender.toLocaleLowerCase(),
-      address: address.toLocaleLowerCase(),
-      city: city.toLocaleLowerCase(),
-      state: state.toLocaleLowerCase(),
-      zipcode: zipcode,
-      password: passhash,
-      service_availability: service_availability.toLocaleLowerCase(),
-      price: price.toLocaleLowerCase(),
-      about: about.toLocaleLowerCase(),
+      firstName:firstName.toLocaleLowerCase(),
+      lastName:lastName.toLocaleLowerCase(),
+      dob:dob,
+      email:email.toLocaleLowerCase(),
+      phone_number:phone_number,
+      gender:gender.toLocaleLowerCase(),
+      address:address.toLocaleLowerCase(),
+      city:city.toLocaleLowerCase(),
+      state:state.toLocaleLowerCase(),
+      zipcode:zipcode,
+      password:passhash,
+      service_availability:service_availability.toLocaleLowerCase(),
+		  price:price.toLocaleLowerCase(),
+		  about:about.toLocaleLowerCase(),
       //active_status:active_status,
       overall_rating: 0,
       reviews: [],
@@ -281,6 +322,7 @@ module.exports = {
     obj["userInserted"] = true;
     return obj;
   },
+
 
   async getSitterEmail(email) {
     let emailRegex =

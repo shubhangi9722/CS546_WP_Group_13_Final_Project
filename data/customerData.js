@@ -1,854 +1,810 @@
-const mongoCollections = require("../config/mongoCollections");
+const mongoCollections = require('../config/mongoCollections');
 const dogOwners = mongoCollections.dogOwners;
 const sitters = mongoCollections.sitters;
-const bcrypt = require("bcryptjs");
-const saltRounds = 10;
-const { ObjectId } = require("mongodb");
+const bcrypt = require('bcryptjs');
+const saltRounds = 16;
+const { ObjectId } = require('mongodb');
 
-module.exports = {
+module.exports={
   //validate login
-  async checkCustomer(email, password) {
-    if (!email || !password) {
-      throw "All fields need to have valid values";
-    }
+      async checkCustomer(email, password)
+        {
+            if (!email|| !password ) 
+        {
+          throw 'All fields need to have valid values';
+        }
 
-    if (typeof email !== "string") {
-      throw "input value of username is not a string ";
-    }
-    if (typeof password !== "string") {
-      throw "input value of password is not a string";
-    }
+        if(typeof email!=='string')
+        {
+          throw 'input value of username is not a string ';
+        }
+        if(typeof password!=='string')
+        {
+          throw 'input value of password is not a string';
+        }
 
-    if (email.trim() === "") throw "name cannot be empty string";
-    if (password.trim() === "") throw "location cannot be empty string";
+        
+        
+        if ( email.trim() === '') throw 'name cannot be empty string';
+        if ( password.trim() === '') throw 'location cannot be empty string';
+        
+     
+        let obj={}
 
-    let obj = {};
+        const dogOwnerCollection = await dogOwners();
+        const addedUser = await dogOwnerCollection.findOne({ email: email.toLocaleLowerCase()});
+        let compareToMatch = false;
+        if (addedUser !== null)
+        {
+         const pass= addedUser.password;
+         compareToMatch = await bcrypt.compare(password, pass);
+        }
+        else 
+        {
+          throw'Either the username or password is invalid'
+        }
+        
+        obj['authenticated'] = true;
 
-    const dogOwnerCollection = await dogOwners();
-    const addedUser = await dogOwnerCollection.findOne({
-      email: email.toLocaleLowerCase(),
-    });
-    let compareToMatch = false;
-    if (addedUser !== null) {
-      const pass = addedUser.password;
-      compareToMatch = await bcrypt.compare(password, pass);
-    } else {
-      throw "Either the username or password is invalid";
-    }
+        if(compareToMatch)
+        {
+          return obj;
+        }
 
-    obj["authenticated"] = true;
+       else{
+        throw'Either the username or password is invalid'
+       }
+        },
 
-    if (compareToMatch) {
-      return obj;
-    } else {
-      throw "Either the username or password is invalid";
-    }
-  },
+        
 
-  //create Customer
-  async createCustomer(
-    firstName,
-    lastName,
-    email,
-    phone_number,
-    gender,
-    address,
-    city,
-    state,
-    zipcode,
-    dob,
-    password,
-    dog_name,
-    dog_gender,
-    dog_breed,
-    dog_dob,
-    vet_name,
-    vet_phn,
-    weight,
-    behavioral_information
-  ) {
-    if (!firstName) {
-      throw "You must provide first name";
-    }
+      //create Customer
+      async createCustomer(
+        firstName,
+        lastName,
+        email,
+        phone_number,
+        gender,
+        address,
+        city,
+        state,
+        zipcode,
+        dob,
+        password,
+        dog_name,
+        dog_gender,
+        dog_breed,
+        dog_dob,
+        vet_name,
+        vet_phn,
+        weight,
+        behavioral_information
+      ){
 
-    if (!lastName) {
-      throw "You must provide last name";
-    }
-    if (!email) {
-      throw "You must provide e-mail";
-    }
+        if (!firstName) {
+          throw "You must provide first name"
+        }
+      
+        if (!lastName) {
+          throw "You must provide last name"
+        }
+        if (!email) {
+          throw "You must provide e-mail"
+        }
+      
+        if (!phone_number) {
+          throw "You must provide phone number"
+        }
+      
+        if (!gender) {
+          throw "You must provide gender"
+        }
+      
+        if (!address) {
+          throw "You must provide address"
+        }
+      
+        if (!city) {
+          throw "You must provide city"
+        }
+      
+        if (!state) {
+          throw "You must provide state"
+        }
+      
+        if (!zipcode) {
+          throw "You must provide zipcode"
+        }
+      
+        if (!dob) {
+          throw "You must provide date of birth"
+        }
+      
+        if (!password) {
+          throw "You must provide password"
+        }
+      
+        if (!dog_name) {
+          throw "You must provide dog's name"
+        }
+      
+        if (!dog_gender) {
+          throw "You must provide dog's gender"
+        }
+      
+        if (!dog_breed) {
+          throw "You must provide dog's breed"
+        }
+      
+        if (!dog_dob) {
+          throw "You must provide dog's date of birth"
+        }
+      
+        if (!weight) {
+          throw "You must provide dog's weight"
+        }
+      
+        if (typeof firstName !== "string") {
+          throw "first name must be sting"
+        }
+      
+        if (typeof lastName !== "string") {
+          throw "last name must be sting"
+        }
+      
+        if (typeof email !== "string") {
+          throw "e-mail must be sting"
+        }
+      
+        if (typeof phone_number !== "string") {
+          throw "phone number must be sting"
+        }
+      
+        if (typeof gender !== "string") {
+          throw "gender must be sting"
+        }
+      
+        if (typeof address !== "string") {
+          throw "address must be sting"
+        }
+      
+        if (typeof city !== "string") {
+          throw "city must be sting"
+        }
+      
+        if (typeof state !== "string") {
+          throw "state must be sting"
+        }
+      
+        if (typeof zipcode !== "string") {
+          throw "zipcode must be sting"
+        }
+      
 
-    if (!phone_number) {
-      throw "You must provide phone number";
-    }
-
-    if (!gender) {
-      throw "You must provide gender";
-    }
-
-    if (!address) {
-      throw "You must provide address";
-    }
-
-    if (!city) {
-      throw "You must provide city";
-    }
-
-    if (!state) {
-      throw "You must provide state";
-    }
-
-    if (!zipcode) {
-      throw "You must provide zipcode";
-    }
-
-    if (!dob) {
-      throw "You must provide date of birth";
-    }
-
-    if (!password) {
-      throw "You must provide password";
-    }
-
-    if (!dog_name) {
-      throw "You must provide dog's name";
-    }
-
-    if (!dog_gender) {
-      throw "You must provide dog's gender";
-    }
-
-    if (!dog_breed) {
-      throw "You must provide dog's breed";
-    }
-
-    if (!dog_dob) {
-      throw "You must provide dog's date of birth";
-    }
-
-    if (!weight) {
-      throw "You must provide dog's weight";
-    }
-
-    if (typeof firstName !== "string") {
-      throw "first name must be sting";
-    }
-
-    if (typeof lastName !== "string") {
-      throw "last name must be sting";
-    }
-
-    if (typeof email !== "string") {
-      throw "e-mail must be sting";
-    }
-
-    if (typeof phone_number !== "string") {
-      throw "phone number must be sting";
-    }
-
-    if (typeof gender !== "string") {
-      throw "gender must be sting";
-    }
-
-    if (typeof address !== "string") {
-      throw "address must be sting";
-    }
-
-    if (typeof city !== "string") {
-      throw "city must be sting";
-    }
-
-    if (typeof state !== "string") {
-      throw "state must be sting";
-    }
-
-    if (typeof zipcode !== "string") {
-      throw "zipcode must be sting";
-    }
-
-    if (typeof password !== "string") {
-      throw "password must be sting";
-    }
-
-    if (typeof dog_name !== "string") {
-      throw "dog's name must be sting";
-    }
-
-    if (typeof dog_gender !== "string") {
-      throw "dog's gender must be sting";
-    }
-
-    if (typeof dog_breed !== "string") {
-      throw "dog's breed must be sting";
-    }
-
-    if (typeof dog_dob !== "string") {
-      throw "dog's date of birth must be sting";
-    }
-
-    if (typeof vet_name !== "string") {
-      throw "vet name must be sting";
-    }
-
-    if (typeof vet_phn !== "string") {
-      throw "vet phone number must be sting";
-    }
-
-    /* if (typeof weight === "string") {
+        if (typeof password !== "string") {
+          throw "password must be sting"
+        }
+      
+        if (typeof dog_name !== "string") {
+          throw "dog's name must be sting"
+        }
+      
+        if (typeof dog_gender !== "string") {
+          throw "dog's gender must be sting"
+        }
+      
+        if (typeof dog_breed !== "string") {
+          throw "dog's breed must be sting"
+        }
+      
+        if (typeof dog_dob !== "string") {
+          throw "dog's date of birth must be sting"
+        }
+      
+        if (typeof vet_name !== "string") {
+          throw "vet name must be sting"
+        }
+      
+        if (typeof vet_phn !== "string") {
+          throw "vet phone number must be sting"
+        }
+      
+       /* if (typeof weight === "string") {
           throw "weight must be number"
         }*/
+      
+        if (typeof behavioral_information !== "string") {
+          throw "dog's behavioral_information must be sting"
+        }
+      
+        if (firstName.trim() === "") {
+          throw "first name cannot be empty string"
+        }
+        if (lastName.trim() === "") {
+          throw "last name cannot be empty string"
+        }
+      
+        if (email.trim() === "") {
+          throw "e-mail cannot be empty string"
+        }
+        if (phone_number.trim() === "") {
+          throw "phone numbe cannot be empty string"
+        }
+        if (gender.trim() === "") {
+          throw "gender cannot be empty string"
+        }
+        if (address.trim() === "") {
+          throw "address cannot be empty string"
+        }
+        if (city.trim() === "") {
+          throw "city cannot be empty string"
+        }
+        if (state.trim() === "") {
+          throw "state cannot be empty string"
+        }
+        if (zipcode.trim() === "") {
+          throw "zipcode cannot be empty string"
+        }
+        if (dob.trim() === "") {
+          throw "date of birth cannot be empty string"
+        }
+        if (password.trim() === "") {
+          throw "password cannot be empty string"
+        }
+        if (dog_name.trim() === "") {
+          throw "dog's name cannot be empty string"
+        }
+        if (dog_gender.trim() === "") {
+          throw "dog's gender cannot be empty string"
+        }
+        if (dog_breed.trim() === "") {
+          throw "dog's breed cannot be empty string"
+        }
+      
+        if (dog_dob.trim() === "") {
+          throw "dog's date of birth cannot be empty string"
+        }
+        if (weight.trim() === "") {
+          throw " dog's weight cannot be empty string"
+        }
+      
+        var emailRegex =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!email.valueOf().match(emailRegex)) {
+          throw "e-mail format is incorrect"
+  
+        }
+      
+        var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
+        if (!password.valueOf().match(passRegex)) {
+          throw  "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
 
-    if (typeof behavioral_information !== "string") {
-      throw "dog's behavioral_information must be sting";
-    }
+        }
+        var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+        if (!phone_number.valueOf().match(phnregex)) {
+          throw "your phone number format is incorrect"
+        
+        }
+        
+     
+        let obj={}
 
-    if (firstName.trim() === "") {
-      throw "first name cannot be empty string";
-    }
-    if (lastName.trim() === "") {
-      throw "last name cannot be empty string";
-    }
+        const passhash = await bcrypt.hash(password, saltRounds);
+        const dogOwnerCollection = await dogOwners();
+        let newcustomer = {
+          firstName:firstName,
+          lastName:lastName,
+          email:email.toLocaleLowerCase(),
+          phone_number:phone_number,
+          gender:gender,
+          address:address,
+          city:city,
+          state:state,
+          zipcode:zipcode,
+          dob:dob,
+          password:passhash,
+          dog_name:dog_name,
+          dog_gender:dog_gender,
+          dog_breed:dog_breed,
+          dog_dob:dog_dob,
+          vet_name:vet_name,
+          vet_phn:vet_phn,
+          weight:weight,
+          behavioral_information:behavioral_information 
+        };
 
-    if (email.trim() === "") {
-      throw "e-mail cannot be empty string";
-    }
-    if (phone_number.trim() === "") {
-      throw "phone numbe cannot be empty string";
-    }
-    if (gender.trim() === "") {
-      throw "gender cannot be empty string";
-    }
-    if (address.trim() === "") {
-      throw "address cannot be empty string";
-    }
-    if (city.trim() === "") {
-      throw "city cannot be empty string";
-    }
-    if (state.trim() === "") {
-      throw "state cannot be empty string";
-    }
-    if (zipcode.trim() === "") {
-      throw "zipcode cannot be empty string";
-    }
-    if (dob.trim() === "") {
-      throw "date of birth cannot be empty string";
-    }
-    if (password.trim() === "") {
-      throw "password cannot be empty string";
-    }
-    if (dog_name.trim() === "") {
-      throw "dog's name cannot be empty string";
-    }
-    if (dog_gender.trim() === "") {
-      throw "dog's gender cannot be empty string";
-    }
-    if (dog_breed.trim() === "") {
-      throw "dog's breed cannot be empty string";
-    }
+        const addedUser = await dogOwnerCollection.findOne({ email: email.toLocaleLowerCase() });
+        if (addedUser !== null) throw 'User Already exists';
+        const insertInfo = await dogOwnerCollection.insertOne(newcustomer);
+        if (insertInfo.insertedCount === 0) throw 'Failed to add user';
+        
+        obj['userInserted'] = true;
+        
 
-    if (dog_dob.trim() === "") {
-      throw "dog's date of birth cannot be empty string";
-    }
-    if (weight.trim() === "") {
-      throw " dog's weight cannot be empty string";
-    }
+        return obj;
+      },
 
-    var emailRegex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!email.valueOf().match(emailRegex)) {
-      throw "e-mail format is incorrect";
-    }
 
-    var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
-    if (!password.valueOf().match(passRegex)) {
-      throw "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long.";
-    }
-    var phnregex =
-      /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-    if (!phone_number.valueOf().match(phnregex)) {
-      throw "your phone number format is incorrect";
-    }
+      async getsitterDataforDashboard() {
 
-    let obj = {};
 
-    const passhash = await bcrypt.hash(password, saltRounds);
-    const dogOwnerCollection = await dogOwners();
-    let newcustomer = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email.toLocaleLowerCase(),
-      phone_number: phone_number,
-      gender: gender,
-      address: address,
-      city: city,
-      state: state,
-      zipcode: zipcode,
-      dob: dob,
-      password: passhash,
-      dog_name: dog_name,
-      dog_gender: dog_gender,
-      dog_breed: dog_breed,
-      dog_dob: dog_dob,
-      vet_name: vet_name,
-      vet_phn: vet_phn,
-      weight: weight,
-      behavioral_information: behavioral_information,
-    };
-
-    const addedUser = await dogOwnerCollection.findOne({
-      email: email.toLocaleLowerCase(),
-    });
-    if (addedUser !== null) throw "User Already exists";
-    const insertInfo = await dogOwnerCollection.insertOne(newcustomer);
-    if (insertInfo.insertedCount === 0) throw "Failed to add user";
-
-    obj["userInserted"] = true;
-
-    return obj;
-  },
-
-  async getsitterDataforDashboard() {
-    const sittersCollection = await sitters();
-    const sitterList = await sittersCollection.find({}).limit(20).toArray();
-
-    if (sitterList.length == 0) {
-      throw [400, `No Sitters Found Right Now....!`];
-    } else {
-      return sitterList;
-    }
+        const sittersCollection = await sitters();
+        const sitterList = await sittersCollection.find({}).limit(20).toArray();
+        
+        if(sitterList.length == 0){
+         throw [400, `No Sitters Found Right Now....!`]
+        }
+        else{
+          return sitterList;
+        }
+       
+        
   },
 
   async getAllSittersByPriceAsc() {
+    
     const sittersCollection = await sitters();
-    return await sittersCollection.find({}).sort({ price: 1 }).toArray();
-  },
-  async filterresult(serachterm, zipcode, rating, pricerange) {
-    const sittersCollection = await sitters();
+return await sittersCollection.find({}).sort({ price: 1 }).toArray();
+},
 
-    const namearray = serachterm.split(" ");
-    var fname = namearray[0];
-    var lname = namearray[1];
+async getAllSittersSortedByPriceDec() {
+  const sittersCollection = await sitters();
+return await sittersCollection.find({}).sort({ price: -1 }).toArray();
+},
 
-    const pricearray = pricerange.split("-");
-    var lbound = parseInt(pricearray[0]);
-    var ubound = parseInt(pricearray[1]);
+async findByPriceRange(low, high){
+  if (!low || typeof low !== 'number') throw ' You must provide lowest price';
+  if (!high || typeof high !== 'number') throw ' You must provide highest price';
+  const sittersCollection = await sitters();
+  return await sittersCollection.find({ 'price': {$gte: low, $lte: high} }).toArray();
+},
 
-    if (
-      serachterm == "" &&
-      zipcode == "" &&
-      rating == "0" &&
-      pricerange == "0"
-    ) {
-      const sitterList = await sittersCollection.find({}).toArray();
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm != "" &&
-      zipcode == "" &&
-      rating == "0" &&
-      pricerange == "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({ firstName: fname })
-        .toArray();
+async getCuerrntCustomerInfo(email){
+  if (!email || email.trim()==="") throw ' email not available';
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm != "" &&
-      zipcode != "" &&
-      rating == "0" &&
-      pricerange == "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({ $and: [{ firstName: fname }, { zipcode: zipcode }] })
-        .toArray();
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm != "" &&
-      zipcode != "" &&
-      rating != "0" &&
-      pricerange == "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({
-          $and: [
-            { firstName: fname },
-            { zipcode: zipcode },
-            { overall_rating: rating },
-          ],
-        })
-        .toArray();
+  const dogOwnerCollection = await dogOwners();
+  const custInfo = await dogOwnerCollection.findOne({ email: email });
+  if (custInfo === null) throw 'User not found';
+     
+  return custInfo;
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm != "" &&
-      zipcode != "" &&
-      rating != "0" &&
-      pricerange != "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({
-          $and: [
-            { firstName: fname },
-            { zipcode: zipcode },
-            { overall_rating: rating },
-            { price: { $gt: lbound } },
-            { price: { $lt: ubound } },
-          ],
-        })
-        .toArray();
+},
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm == "" &&
-      zipcode != "" &&
-      rating == "0" &&
-      pricerange == "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({ zipcode: zipcode })
-        .toArray();
+async filterresult(serachterm,zipcode,rating,pricerange)
+{
+const sittersCollection = await sitters();
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm == "" &&
-      zipcode != "" &&
-      rating != "0" &&
-      pricerange == "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({ $and: [{ zipcode: zipcode }, { overall_rating: rating }] })
-        .toArray();
+  const namearray = serachterm.split(" ");
+  var fname=namearray[0];
+  var lname=namearray[1];
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm == "" &&
-      zipcode != "" &&
-      rating != "0" &&
-      pricerange != "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({
-          $and: [
-            { zipcode: zipcode },
-            { overall_rating: rating },
-            { price: { $gt: lbound } },
-            { price: { $lt: ubound } },
-          ],
-        })
-        .toArray();
+  const pricearray =pricerange.split("-")
+  var lbound=parseInt(pricearray[0])
+  var ubound=parseInt(pricearray[1])
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm == "" &&
-      zipcode == "" &&
-      rating != "0" &&
-      pricerange == "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({ overall_rating: rating })
-        .toArray();
+  if(serachterm=='' && zipcode=='' && rating=="0" && pricerange=="0")
+  {
+   const sitterList = await sittersCollection.find({}).toArray();
+   
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode=='' && rating=="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({firstName:fname}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode!='' && rating=="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [ {firstName:fname},{ zipcode:zipcode }]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode!='' && rating!="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [ {firstName:fname},{ zipcode:zipcode },{overall_rating:rating} ]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode!='' && rating!="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [ {firstName:fname},{ zipcode:zipcode },{overall_rating:rating}, {price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm == "" &&
-      zipcode == "" &&
-      rating != "0" &&
-      pricerange != "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({
-          $and: [
-            { overall_rating: rating },
-            { price: { $gt: lbound } },
-            { price: { $lt: ubound } },
-          ],
-        })
-        .toArray();
+  else if (serachterm=='' && zipcode!='' && rating=="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ zipcode:zipcode}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode!='' && rating!="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [{ zipcode:zipcode },{overall_rating:rating}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode!='' && rating!="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [{ zipcode:zipcode },{overall_rating:rating},{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm == "" &&
-      zipcode == "" &&
-      rating == "0" &&
-      pricerange != "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({
-          $and: [{ price: { $gt: lbound } }, { price: { $lt: ubound } }],
-        })
-        .toArray();
+  else if (serachterm=='' && zipcode=='' && rating!="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({overall_rating:rating}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode=='' && rating!="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [{overall_rating:rating},{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode=='' && rating=="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({$and:[{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm != "" &&
-      zipcode != "" &&
-      rating == "0" &&
-      pricerange != "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({
-          $and: [
-            { firstName: fname },
-            { zipcode: zipcode },
-            { price: { $gt: lbound } },
-            { price: { $lt: ubound } },
-          ],
-        })
-        .toArray();
+  else if (serachterm!='' && zipcode!='' && rating=="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({$and:[{firstName:fname},{ zipcode:zipcode },{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    } else if (
-      serachterm == "" &&
-      zipcode != "" &&
-      rating == "0" &&
-      pricerange != "0"
-    ) {
-      const sitterList = await sittersCollection
-        .find({
-          $and: [
-            { zipcode: zipcode },
-            { price: { $gt: lbound } },
-            { price: { $lt: ubound } },
-          ],
-        })
-        .toArray();
+  else if (serachterm=='' && zipcode!='' && rating=="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({$and:[{ zipcode:zipcode },{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
 
-      if (sitterList.length == 0) {
-        return [];
-      }
-      return sitterList;
-    }
-  },
-  async UpdateOwner(
-    firstName,
-    lastName,
-    email,
-    phone_number,
-    gender,
-    address,
-    city,
-    state,
-    zipcode,
-    dob
-  ) {
-    if (!firstName) {
-      throw "You must provide first name";
-    }
 
-    if (!lastName) {
-      throw "You must provide last name";
-    }
-    if (!email) {
-      throw "You must provide e-mail";
-    }
+},
+async UpdateOwner(
+  firstName,
+  lastName,
+  email,
+  phone_number,
+  gender,
+  address,
+  city,
+  state,
+  zipcode,
+  dob
+){
 
-    if (!phone_number) {
-      throw "You must provide phone number";
-    }
+  if (!firstName) {
+    throw "You must provide first name"
+  }
 
-    if (!gender) {
-      throw "You must provide gender";
-    }
+  if (!lastName) {
+    throw "You must provide last name"
+  }
+  if (!email) {
+    throw "You must provide e-mail"
+  }
 
-    if (!address) {
-      throw "You must provide address";
-    }
+  if (!phone_number) {
+    throw "You must provide phone number"
+  }
 
-    if (!city) {
-      throw "You must provide city";
-    }
+  if (!gender) {
+    throw "You must provide gender"
+  }
 
-    if (!state) {
-      throw "You must provide state";
-    }
+  if (!address) {
+    throw "You must provide address"
+  }
 
-    if (!zipcode) {
-      throw "You must provide zipcode";
-    }
+  if (!city) {
+    throw "You must provide city"
+  }
 
-    if (!dob) {
-      throw "You must provide date of birth";
-    }
+  if (!state) {
+    throw "You must provide state"
+  }
 
-    if (typeof firstName !== "string") {
-      throw "first name must be sting";
-    }
+  if (!zipcode) {
+    throw "You must provide zipcode"
+  }
 
-    if (typeof lastName !== "string") {
-      throw "last name must be sting";
-    }
+  if (!dob) {
+    throw "You must provide date of birth"
+  }
 
-    if (typeof email !== "string") {
-      throw "e-mail must be sting";
-    }
 
-    if (typeof phone_number !== "string") {
-      throw "phone number must be sting";
-    }
+  if (typeof firstName !== "string") {
+    throw "first name must be sting"
+  }
 
-    if (typeof gender !== "string") {
-      throw "gender must be sting";
-    }
+  if (typeof lastName !== "string") {
+    throw "last name must be sting"
+  }
 
-    if (typeof address !== "string") {
-      throw "address must be sting";
-    }
+  if (typeof email !== "string") {
+    throw "e-mail must be sting"
+  }
 
-    if (typeof city !== "string") {
-      throw "city must be sting";
-    }
+  if (typeof phone_number !== "string") {
+    throw "phone number must be sting"
+  }
 
-    if (typeof state !== "string") {
-      throw "state must be sting";
-    }
+  if (typeof gender !== "string") {
+    throw "gender must be sting"
+  }
 
-    if (typeof zipcode !== "string") {
-      throw "zipcode must be sting";
-    }
+  if (typeof address !== "string") {
+    throw "address must be sting"
+  }
 
-    if (firstName.trim() === "") {
-      throw "first name cannot be empty string";
-    }
-    if (lastName.trim() === "") {
-      throw "last name cannot be empty string";
-    }
+  if (typeof city !== "string") {
+    throw "city must be sting"
+  }
 
-    if (email.trim() === "") {
-      throw "e-mail cannot be empty string";
-    }
-    if (phone_number.trim() === "") {
-      throw "phone numbe cannot be empty string";
-    }
-    if (gender.trim() === "") {
-      throw "gender cannot be empty string";
-    }
-    if (address.trim() === "") {
-      throw "address cannot be empty string";
-    }
-    if (city.trim() === "") {
-      throw "city cannot be empty string";
-    }
-    if (state.trim() === "") {
-      throw "state cannot be empty string";
-    }
-    if (zipcode.trim() === "") {
-      throw "zipcode cannot be empty string";
-    }
-    if (dob.trim() === "") {
-      throw "date of birth cannot be empty string";
-    }
+  if (typeof state !== "string") {
+    throw "state must be sting"
+  }
 
-    var emailRegex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!email.valueOf().match(emailRegex)) {
-      throw "e-mail format is incorrect";
-    }
+  if (typeof zipcode !== "string") {
+    throw "zipcode must be sting"
+  }
 
-    var phnregex =
-      /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-    if (!phone_number.valueOf().match(phnregex)) {
-      throw "your phone number format is incorrect";
-    }
 
-    var dobregex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
-    if (!dob.valueOf().match(dobregex)) {
-      throw "your date of bith format is incorrect";
-    }
+  if (firstName.trim() === "") {
+    throw "first name cannot be empty string"
+  }
+  if (lastName.trim() === "") {
+    throw "last name cannot be empty string"
+  }
 
-    let obj = {};
+  if (email.trim() === "") {
+    throw "e-mail cannot be empty string"
+  }
+  if (phone_number.trim() === "") {
+    throw "phone numbe cannot be empty string"
+  }
+  if (gender.trim() === "") {
+    throw "gender cannot be empty string"
+  }
+  if (address.trim() === "") {
+    throw "address cannot be empty string"
+  }
+  if (city.trim() === "") {
+    throw "city cannot be empty string"
+  }
+  if (state.trim() === "") {
+    throw "state cannot be empty string"
+  }
+  if (zipcode.trim() === "") {
+    throw "zipcode cannot be empty string"
+  }
+  if (dob.trim() === "") {
+    throw "date of birth cannot be empty string"
+  }
+ 
 
-    const dogOwnerCollection = await dogOwners();
-    let oldcustomer = {
-      firstName: firstName.toLocaleLowerCase(),
-      lastName: lastName.toLocaleLowerCase(),
-      phone_number: phone_number,
-      gender: gender.toLocaleLowerCase(),
-      address: address.toLocaleLowerCase(),
-      city: city.toLocaleLowerCase(),
-      state: state.toLocaleLowerCase(),
-      zipcode: zipcode,
-      dob: dob,
-    };
+  var emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!email.valueOf().match(emailRegex)) {
+    throw "e-mail format is incorrect"
 
-    const updatedInfo = await dogOwnerCollection.updateOne(
-      { email: email },
-      { $set: oldcustomer }
-    );
-    if (updatedInfo.modifiedCount === 0) {
-      throw "could not update the customer successfully";
-    }
+  }
 
-    obj["userUpdated"] = true;
+ 
+  var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+  if (!phone_number.valueOf().match(phnregex)) {
+    throw "your phone number format is incorrect"
+  
+  }
 
-    return obj;
-  },
+  var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+  if (!dob.valueOf().match(dobregex)) {
 
-  async UpdateDog(
-    dog_name,
-    dog_gender,
-    email,
-    dog_breed,
-    dog_dob,
-    vet_name,
-    vet_phn,
-    weight,
-    behavioral_information
-  ) {
-    if (!dog_name) {
-      throw "You must provide dog name";
-    }
+    throw  "your date of bith format is incorrect"
 
-    if (!dog_gender) {
-      throw "You must provide dog gender";
-    }
-    if (!dog_breed) {
-      throw "You must provide dog breed";
-    }
+  }
+  
 
-    if (!dog_dob) {
-      throw "You must provide dog date of birth";
-    }
+  let obj={}
 
-    if (typeof dog_name !== "string") {
-      throw "dog name must be sting";
-    }
+  const dogOwnerCollection = await dogOwners();
+  let oldcustomer = {
+    firstName:firstName,
+    lastName:lastName,
+    phone_number:phone_number,
+    gender:gender,
+    address:address,
+    city:city,
+    state:state,
+    zipcode:zipcode,
+    dob:dob
+  };
 
-    if (typeof dog_gender !== "string") {
-      throw "dog gender must be sting";
-    }
+  const updatedInfo = await dogOwnerCollection.updateOne(
+    { email: email },
+    { $set: oldcustomer }
+  );
+  if (updatedInfo.modifiedCount === 0) {
+    throw 'could not update the customer successfully';
+  }
+  
+  obj['userUpdated'] = true;
+  
 
-    if (typeof dog_dob !== "string") {
-      throw "e-dog date of birth must be sting";
-    }
+  return obj;
+},
 
-    if (typeof vet_name !== "string") {
-      throw "Veterinarian name must be sting";
-    }
 
-    if (typeof vet_phn !== "string") {
-      throw "Veterinarian Phone Number must be sting";
-    }
+async UpdateDog(
+  dog_name,
+  dog_gender,
+  email,
+  dog_breed,
+  dog_dob,
+  vet_name,
+  vet_phn,
+  weight,
+  behavioral_information
+){
 
-    if (typeof behavioral_information !== "string") {
-      throw "Dog Behavioral Information must be sting";
-    }
+  if (!dog_name) {
+    throw "You must provide dog name"
+  }
 
-    if (dog_name.trim() === "") {
-      throw "first name cannot be empty string";
-    }
-    if (dog_gender.trim() === "") {
-      throw "last name cannot be empty string";
-    }
+  if (!dog_gender) {
+    throw "You must provide dog gender"
+  }
+  if (!dog_breed) {
+    throw "You must provide dog breed"
+  }
 
-    if (dog_breed.trim() === "") {
-      throw "e-mail cannot be empty string";
-    }
-    if (dog_dob.trim() === "") {
-      throw "phone numbe cannot be empty string";
-    }
-    if (weight.trim() === "") {
-      throw "gender cannot be empty string";
-    }
+  if (!dog_dob) {
+    throw "You must provide dog date of birth"
+  }
 
-    var dobregex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
-    if (!dog_dob.valueOf().match(dobregex)) {
-      throw "your date of bith format is incorrect";
-    }
 
-    let obj = {};
+  if (typeof dog_name !== "string") {
+    throw "dog name must be sting"
+  }
 
-    const dogOwnerCollection = await dogOwners();
-    let oldcustomer = {
-      dog_name: dog_name.toLocaleLowerCase(),
-      dog_gender: dog_gender.toLocaleLowerCase(),
-      dog_breed: dog_breed.toLocaleLowerCase(),
-      dog_dob: dog_dob,
-      vet_name: vet_name.toLocaleLowerCase(),
-      vet_phn: vet_phn,
-      weight: weight,
-      behavioral_information: behavioral_information.toLocaleLowerCase(),
-    };
+  if (typeof dog_gender !== "string") {
+    throw "dog gender must be sting"
+  }
 
-    const updatedInfo = await dogOwnerCollection.updateOne(
-      { email: email },
-      { $set: oldcustomer }
-    );
-    if (updatedInfo.modifiedCount === 0) {
-      throw "could not update the Dog details successfully";
-    }
+  if (typeof dog_dob !== "string") {
+    throw "e-dog date of birth must be sting"
+  }
 
-    obj["DogUpdated"] = true;
+  if (typeof vet_name !== "string") {
+    throw "Veterinarian name must be sting"
+  }
 
-    return obj;
-  },
+  if (typeof vet_phn !== "string") {
+    throw "Veterinarian Phone Number must be sting"
+  }
 
-  async getAllSittersSortedByPriceDec() {
-    const sittersCollection = await sitters();
-    return await sittersCollection.find({}).sort({ price: -1 }).toArray();
-  },
+  if (typeof behavioral_information !== "string") {
+    throw "Dog Behavioral Information must be sting"
+  }
 
-  async findByPriceRange(low, high) {
-    if (!low || typeof low !== "number") throw " You must provide lowest price";
-    if (!high || typeof high !== "number")
-      throw " You must provide highest price";
-    const sittersCollection = await sitters();
-    return await sittersCollection
-      .find({ price: { $gte: low, $lte: high } })
-      .toArray();
-  },
+  if (dog_name.trim() === "") {
+    throw "first name cannot be empty string"
+  }
+  if (dog_gender.trim() === "") {
+    throw "last name cannot be empty string"
+  }
 
-  async getDogownerEmail(email) {
-    let emailRegex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!email.valueOf().match(emailRegex)) {
-      throw "e-mail format is incorrect";
-    }
-    const dogOwnerCollection = await dogOwners();
-    const addedUser = await dogOwnerCollection.findOne({
-      email: email.toLocaleLowerCase(),
-    });
-    if (addedUser === null) throw "User does not exists";
-    delete addedUser.password;
-    //addedUser.password = "";
-    addedUser._id = addedUser._id.toString();
-    return addedUser;
-  },
-};
+  if (dog_breed.trim() === "") {
+    throw "e-mail cannot be empty string"
+  }
+  if (dog_dob.trim() === "") {
+    throw "phone numbe cannot be empty string"
+  }
+  if (weight.trim() === "") {
+    throw "gender cannot be empty string"
+  }
+ 
+
+
+  var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+  if (!dog_dob.valueOf().match(dobregex)) {
+
+    throw  "your date of bith format is incorrect"
+
+  }
+  
+
+  let obj={}
+
+  const dogOwnerCollection = await dogOwners();
+  let oldcustomer = {
+    dog_name:dog_name,
+    dog_gender:dog_gender,
+    dog_breed:dog_breed,
+    dog_dob:dog_dob,
+    vet_name:vet_name,
+    vet_phn:vet_phn,
+    weight:weight,
+    behavioral_information:behavioral_information
+  };
+
+  const updatedInfo = await dogOwnerCollection.updateOne(
+    { email: email },
+    { $set: oldcustomer }
+  );
+  if (updatedInfo.modifiedCount === 0) {
+    throw 'could not update the Dog details successfully';
+  }
+  
+  obj['DogUpdated'] = true;
+  
+
+  return obj;
+},
+
+
+
+
+
+}
