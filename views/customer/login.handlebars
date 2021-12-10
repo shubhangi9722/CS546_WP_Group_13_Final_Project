@@ -1,26 +1,59 @@
 <head>
-    <meta charset="utf-8">
+     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <title>Customer Login</title>
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/dog-owner-login.css">
 </head>
-
 <body>
     <h2>Customer Login</h2><br>
-    <div class="login">
+    <div class="container">
         <form id="login" method="post" action="/customerSignin">
-            <label><b>E-mail
-                </b>
-            </label>
-            <input type="email" name="email" id="email" placeholder="E-mail" value="{{email}}">
-            <br><br>
-            <label><b>Password
-                </b>
-            </label>
-            <input type="Password" name="password" id="Pass" placeholder="Password" value="{{password}}">
-            <br><br>
-            <input type="submit" name="log" id="log" value="Login">
-            <br><br>
-            <a href="/customerSignup">Need to register? Click here to sign-up</a>
+         <div class="tab">
+          <p
+            style="text-align: center; font-weight: normal; font-size: xX-large"
+          >
+            Bow-Wow 🐶 Owner Login
+          </p>
+          <div class="normalOrientation">
+            <label for="email">📧 Email:</label>
+            <input
+              class="textbox"
+              type="email"
+              required
+              id="email"
+              name="email"
+              value="{{email}}"
+              placeholder="E-mail"
+            />
+          </div>
+          <br />
+          <div class="normalOrientation">
+            <label for="pwd">🔒 Password</label>
+            <input
+              class="textbox"
+              type="password"
+              id="pass"
+              required
+              name="password"
+              value="{{password}}"
+              placeholder="Password"
+            />
+          </div>
+          <br /><br />
+          <input
+            type="submit"
+            value="Login"
+            name="log"
+            id="log"
+            style="width: 30%; align-self: center"
+          />
+          <br />
+          <a href="customerSignup" style="align-self: flex-end"
+            >Need to register? Click here to sign-up</a
+          ><br />
+        </div>
         </form>
         <br><br>
         {{#if hasErrors}}

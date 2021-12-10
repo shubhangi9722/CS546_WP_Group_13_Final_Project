@@ -23,6 +23,7 @@ router.get('/', async (req, res) => {
 
   router.post('/', async (req, res) => {
     const rest_params=req.body;
+   
     let errors =[];
     if(!rest_params.email)
     {

@@ -1,0 +1,307 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/public/css/dog-owner-signup.css" />
+  <title>Bow-Wow 🐶</title>
+</head>
+<body>
+  <div class="container">
+    <p style="text-align: center; font-weight: normal; font-size: xX-large">
+      Bow-Wow 🐶 Owner Sign up
+    </p>
+    <form action="/customerSignup" id="signup" method="post">
+      <!-- One "tab" for each step in the form: -->
+      <div class="tab">
+        <p style="text-align: center; font-size: x-large">
+          Personal Detail ✍️
+        </p>
+        <div class="rowOrientation">
+          <div class="normalOrientation name">
+            <label for="firstName">First Name* :</label>
+            <input
+              class="textbox"
+              type="text"
+              required
+              id="firstName"
+              value="{{firstName}}"
+              name="firstName"
+            />
+          </div>
+          <div class="normalOrientation name">
+            <label for="lastName">Last Name* :</label>
+            <input
+              class="textbox"
+              type="text"
+              required
+              id="lastName"
+              name="lastName"
+              value="{{lastName}}"
+            />
+          </div>
+        </div>
+        <br />
+        <div class="normalOrientation">
+          <label for="email">E-mail* :</label>
+          <input
+            class="textbox"
+            type="email"
+            required
+            id="email"
+            name="email"
+            value="{{email}}"
+          />
+        </div>
+        <br />
+        <div class="normalOrientation">
+          <label for="phone_number">Phone Number* :</label>
+          <input
+            class="textbox"
+            type="text"
+            required
+            id="phone_number"
+            name="phone_number"
+            value="{{phone_number}}"
+          />
+        </div>
+        <br />
+        <div class="rowOrientation">
+          <div class="normalOrientation age">
+            <label for="dob">Date of Birth* :</label>
+            <input
+              class="textbox"
+              type="text"
+              name="dob"
+              id="dob"
+              placeholder="MM/DD/YYYY"
+              value="{{dob}}"
+            />
+          </div>
+          <div class="normalOrientation gender">
+            <label for="gender">Gender* :</label>
+            <div>
+              <input type="radio" checked id="male" name="gender" value="m" />
+              <label for="male">Male</label>
+              <input type="radio" id="female" name="gender" value="f" />
+              <label for="female">Female</label>
+              <input type="radio" id="others" name="gender" value="o" />
+              <label for="others">Others</label>
+            </div>
+          </div>
+        </div>
+        <br />
+        <div class="normalOrientation">
+          <label for="Pass">Password* :</label>
+          <input
+            class="textbox"
+            type="password"
+            id="Pass"
+            required
+            name="password"
+            onchange="validatePassword()"
+          />
+        </div>
+        <br />
+        <div class="normalOrientation">
+          <label for="cnfpwd">Confirm Password*</label>
+          <input
+            class="textbox"
+            type="password"
+            required
+            onchange="validatePassword()"
+            id="cnfpwd"
+            name="cnfpwd"
+          />
+          <br />
+        </div>
+      </div>
+      <!-- second tab: -->
+      <div class="tab">
+        <p style="text-align: center; font-size: x-large">
+          Address Detail 🏡
+        </p>
+        <div class="normalOrientation">
+          <label for="address">Address* :</label>
+          <input
+            type="address"
+            class="textbox"
+            required
+            id="address"
+            value="{{address}}"
+            name="address"
+          />
+        </div>
+        <br />
+        <div class="normalOrientation age">
+          <label for="zipcode">Zipcode* :</label>
+          <input
+            type="text"
+            class="textbox"
+            required
+            id="zipcode"
+            name="zipcode"
+            value="{{zipcode}}"
+          />
+        </div>
+        <br />
+      </div>
+      <!-- third tab: -->
+      <div class="tab">
+        <p style="text-align: center; font-size: x-large">Dog Detail 🐾</p>
+        <div class="normalOrientation">
+          <label for="dog_name">Dog Name* :</label>
+          <input
+            type="text"
+            class="textbox"
+            required
+            id="dog_name"
+            name="dog_name"
+            value="{{dog_name}}"
+          />
+        </div>
+        <br />
+        <div class="normalOrientation">
+          <label for="dog_breed">Dog Breed*:</label>
+          <input
+            type="text"
+            class="textbox"
+            required
+            id="dog_breed"
+            name="dog_breed"
+            value="{{dog_breed}}"
+          />
+        </div>
+        <br />
+        <div class="normalOrientation gender">
+          <label for="dog_gender">Dog Gender* :</label>
+          <div>
+            <input
+              type="radio"
+              checked
+              id="dmale"
+              name="dog_gender"
+              value="m"
+            />
+            <label for="dmale">Male</label>
+            <input type="radio" id="dfemale" name="dog_gender" value="f" />
+            <label for="dfemale">Female</label>
+          </div>
+        </div>
+        <br />
+        <div class="rowOrientation">
+          <div class="normalOrientation age">
+            <label for="weight">Dog Weight* :</label>
+            <input
+              type="number"
+              id="weight"
+              class="textbox"
+              required
+              name="weight"
+              min="1"
+              step="0.01"
+              value="{{weight}}"
+            />
+          </div>
+          <div class="normalOrientation gender">
+            <label for="dog_dob">Dog Date of Birth* :</label>
+            <input
+              type="text"
+              id="dog_dob"
+              required
+              class="textbox"
+              placeholder="MM/DD/YYYY"
+              name="dog_dob"
+              value="{{dog_dob}}"
+            />
+          </div>
+        </div>
+        <br />
+      </div>
+      <!-- fourth tab: -->
+      <div class="tab">
+        <p style="text-align: center; font-size: x-large">Veterinarian Detail
+          🩺💉</p>
+        <div class="normalOrientation">
+          <label for="vet_name">Veterinarian Name:</label>
+          <input
+            class="textbox"
+            type="text"
+            required
+            id="vet_name"
+            name="vet_name"
+            value="{{vet_name}}"
+          />
+        </div>
+        <br />
+        <div class="normalOrientation">
+          <label for="vcontact">Veterinarian Phone Number:</label>
+          <input
+            class="textbox"
+            type="text"
+            required
+            id="vet_phn"
+            name="vet_phn"
+            value="{{vet_phn}}"
+          />
+        </div>
+        <br />
+      </div>
+      <!-- fifth tab: -->
+      <div class="tab">
+        <p style="text-align: center; font-size: x-large">
+          Additional Detail 🦮🐕‍🦺🐕
+        </p>
+        <div class="normalOrientation">
+          <label for="behavioral_information">Dog Behavioral Information:</label>
+          <textarea
+            id="behavioral_information"
+            class="textbox"
+            required
+            name="behavioral_information"
+            value="{{behavioral_information}}"
+            rows="5"
+          ></textarea>
+        </div>
+        <br />
+      </div>
+      <!-- Next and previous button  -->
+      <div style="overflow: auto">
+        <div style="float: right; padding: 2rem">
+          <button type="button" id="prevBtn" onclick="nextPrev(-1)">
+            👈 Previous
+          </button>
+          <button type="button" id="nextBtn" onclick="nextPrev(1)">
+            👉 Next
+          </button>
+        </div>
+      </div>
+      <!-- for errors -->
+      <br /><br />
+      {{#if hasErrors}}
+        <ul>
+          {{#each error}}
+            <li class="errors">{{this}}.</li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#if hasserverErrors}}
+        <ul>
+          <li class="errors">{{error}}.</li>
+        </ul>
+      {{/if}}
+      <!-- Circles which indicates the steps of the form: -->
+      <div style="text-align: center; margin-top: 40px">
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+      </div>
+      <br /><br />
+      <a href="/customerSignin">Already have an account? Click here to log-in</a>
+      <br /><br />
+    </form>
+    <br /><br />
+    <script src="/public/scripts/dog-owner-signup.js"></script>
+  </div>
+</body>

@@ -4,18 +4,18 @@ const data = require("../data");
 const sitterData = data.sitter;
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
-var zipcodes = require('zipcodes');
+var zipcodes = require("zipcodes");
 
 //sitter Signup Page
 router.get("/", async (req, res) => {
   try {
-    res.render("sitter/signup");
+    //res.render("sitter/signup");
+    res.render("sitter/signupnew");
   } catch (e) {
     console.log(e);
     res.status(500).send();
   }
 });
-
 
 //sitter Signup post
 router.post("/", async (req, res) => {
@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
     errors.push("You must provide address");
   }
 
- /* if (!rest_params.city) {
+  /* if (!rest_params.city) {
     errors.push("You must provide city");
   }
 
@@ -64,10 +64,21 @@ router.post("/", async (req, res) => {
     errors.push("You must provide password");
   }
 
-  // if (!rest_params.active_status) {
-  //   errors.push(typeof rest_params.active_status);
-  // }
+  if (!rest_params.service_availability) {
+    errors.push("You must provide service availability");
+  }
 
+  if (!rest_params.price) {
+    errors.push("You must provide some price");
+  }
+
+  if (!rest_params.about) {
+    errors.push("You must provide some information about yourself");
+  }
+
+
+
+  
   if (typeof rest_params.firstName !== "string") {
     errors.push("first name must be string");
   }
@@ -92,7 +103,7 @@ router.post("/", async (req, res) => {
     errors.push("address must be string");
   }
 
-/*  if (typeof rest_params.city !== "string") {
+  /*  if (typeof rest_params.city !== "string") {
     errors.push("city must be sting");
   }
 
@@ -108,7 +119,21 @@ router.post("/", async (req, res) => {
   if (typeof rest_params.password !== "string") {
     errors.push("password must be string");
   }
-  
+
+  if (typeof rest_params.service_availability !== "string") {
+    errors.push("service availability must be string");
+  }
+
+  if (typeof rest_params.price !== "string") {
+    errors.push("price must be string");
+  }
+
+  if (typeof rest_params.about !== "string") {
+    errors.push("about must be string");
+  }
+
+
+
   if (rest_params.firstName.trim() === "") {
     errors.push("first name cannot be empty string");
   }
@@ -144,35 +169,45 @@ router.post("/", async (req, res) => {
     errors.push("password cannot be empty string");
   }
 
-  
+  // if (rest_params.service_availability.trim() === "") {
+  //   errors.push("service availability cannot be empty string");
+  // }
 
-  var emailRegex =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (!rest_params.email.valueOf().match(emailRegex)) {
-    errors.push(
-      "e-mail format is incorrect"
-    );
+  // if (rest_params.price.trim() === "") {
+  //   errors.push("price cannot be empty string");
+  // }
+
+  if (rest_params.about.trim() === "") {
+    errors.push("about cannot be empty string");
   }
 
-  var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
+  let dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+    if (!rest_params.dob.valueOf().match(dobregex)) {
+      errors.push ("Date of birth format is incorrect");
+    }
+
+  let emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!rest_params.email.valueOf().match(emailRegex)) {
+    errors.push("e-mail format is incorrect");
+  }
+
+  let passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
   if (!rest_params.password.valueOf().match(passRegex)) {
     errors.push(
       "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
     );
   }
-  var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+  let phnregex =
+    /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
-    errors.push(
-      "your phone number format is incorrect"
-    );
+    errors.push("your phone number format is incorrect");
   }
-  var zipvalid=/^\d{5}$/
+  let zipvalid = /^\d{5}$/;
   if (!rest_params.zipcode.valueOf().match(zipvalid)) {
-    errors.push(
-      "your zipcode is incorrect"
-    );
+    errors.push("your zipcode is incorrect");
   }
-  
+
   // if (rest_params.active_status === "Yes" || rest_params.active_status === "No") {
   //   active_status = rest_params.active_status;
   // } else {
@@ -181,17 +216,21 @@ router.post("/", async (req, res) => {
 
   if (errors.length > 0) {
     res.statusCode = 400;
-    res.render("sitter/signup", {
-      firstName:rest_params.firstName,
-      lastName:rest_params.lastName,
-      dob:rest_params.dob,
-      email:rest_params.email,
-      phone_number:rest_params.phone_number,
-      gender:rest_params.gender,
-      address:rest_params.address,
-      zipcode:rest_params.zipcode,
-      password:rest_params.password,
+    //res.render("sitter/signup"
+    res.render("sitter/signupnew", {
+      firstName: rest_params.firstName,
+      lastName: rest_params.lastName,
+      dob: rest_params.dob,
+      email: rest_params.email,
+      phone_number: rest_params.phone_number,
+      gender: rest_params.gender,
+      address: rest_params.address,
+      zipcode: rest_params.zipcode,
+      password: rest_params.password,
       //active_status:rest_params.active_status,
+      service_availability: rest_params.service_availability,
+      price: rest_params.price,
+      about: rest_params.about,
       error: errors,
       hasErrors: true,
     });
@@ -207,14 +246,16 @@ router.post("/", async (req, res) => {
       gender,
       address,
       zipcode,
-      password, 
+      password,
+      service_availability,
+      price,
+      about
       //active_status
     } = rest_params;
 
-    var zipcitystate= await zipcodes.lookup(zipcode);
-    
+    let zipcitystate = await zipcodes.lookup(zipcode);
 
-    const rest = await  sitterData.createSitter(
+    const rest = await sitterData.createSitter(
       firstName,
       lastName,
       dob,
@@ -226,26 +267,33 @@ router.post("/", async (req, res) => {
       zipcitystate.state,
       zipcode,
       password,
+      service_availability,
+      price,
+      about
       //active_status
     );
 
     if (rest.userInserted === true) {
-      req.session.user = { email: email, usertype:'sitter'};
+      req.session.user = { email: email, usertype: "sitter" };
       res.redirect("/sitterDashboard");
     }
   } catch (error) {
     res.statusCode = 400;
-    res.render("sitter/signup", {
+    //res.render("sitter/signup"
+    res.render("sitter/signupnew", {
       error: error,
-      firstName:rest_params.firstName,
-      lastName:rest_params.lastName,
-      dob:rest_params.dob,
-      email:rest_params.email,
-      phone_number:rest_params.phone_number,
-      gender:rest_params.gender,
-      address:rest_params.address,
-      zipcode:rest_params.zipcode,
-      password:rest_params.password,
+      firstName: rest_params.firstName,
+      lastName: rest_params.lastName,
+      dob: rest_params.dob,
+      email: rest_params.email,
+      phone_number: rest_params.phone_number,
+      gender: rest_params.gender,
+      address: rest_params.address,
+      zipcode: rest_params.zipcode,
+      password: rest_params.password,
+      service_availability: rest_params.service_availability,
+      price: rest_params.price,
+      about: rest_params.about,
       //active_status:rest_params.active_status,
       hasserverErrors: true,
     });
