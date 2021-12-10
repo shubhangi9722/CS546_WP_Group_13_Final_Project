@@ -9,10 +9,11 @@ router.post("/Createbooking", async (req, res) => {
   //Error handling
   console.log(req.body);
   try {
+    console.log(req.session.user.email);
     const sitterdata = await sitterData.getSitterEmail(req.body.sitteremail);
     let sitter_id = sitterdata._id;
     console.log(sitterdata);
-    const Ownerdata = await customerData.getDogownerEmail(
+    const Ownerdata = await bookingData.getDogOwnerEmail(
       req.session.user.email
     );
     let owner_id = Ownerdata._id;
@@ -39,6 +40,8 @@ router.post("/Createbooking", async (req, res) => {
   }
   //console.log(e.message);
 });
+
+//Sitter details
 router.get("/getsitterEmail/:email", async (req, res) => {
   try {
     const sitterdata = await sitterData.getSitterEmail(req.params.email);
@@ -46,6 +49,24 @@ router.get("/getsitterEmail/:email", async (req, res) => {
   } catch (e) {
     res.status(500).send();
   }
+});
+
+//Owner details
+router.get("/getOwnerEmail/:email", async (req, res) => {
+  try {
+    const sitterdata = await bookingData.getDogOwnerEmail(req.params.email);
+    return res.json(sitterdata);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+//All Booking
+router.get("/owner/:id", async (req, res) => {
+  let owner_id = req.params.id;
+  console.log(owner_id);
+  const sitterdata = await bookingData.GetbookingOwner(owner_id);
+  console.log(sitterdata);
+  return res.json(sitterdata);
 });
 
 module.exports = router;
