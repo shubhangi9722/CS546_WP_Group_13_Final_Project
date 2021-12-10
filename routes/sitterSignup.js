@@ -64,10 +64,21 @@ router.post("/", async (req, res) => {
     errors.push("You must provide password");
   }
 
-  // if (!rest_params.active_status) {
-  //   errors.push(typeof rest_params.active_status);
-  // }
+  if (!rest_params.service_availability) {
+    errors.push("You must provide service availability");
+  }
 
+  if (!rest_params.price) {
+    errors.push("You must provide some price");
+  }
+
+  if (!rest_params.about) {
+    errors.push("You must provide some information about yourself");
+  }
+
+
+
+  
   if (typeof rest_params.firstName !== "string") {
     errors.push("first name must be string");
   }
@@ -109,6 +120,20 @@ router.post("/", async (req, res) => {
     errors.push("password must be string");
   }
 
+  if (typeof rest_params.service_availability !== "string") {
+    errors.push("service availability must be string");
+  }
+
+  if (typeof rest_params.price !== "string") {
+    errors.push("price must be string");
+  }
+
+  if (typeof rest_params.about !== "string") {
+    errors.push("about must be string");
+  }
+
+
+
   if (rest_params.firstName.trim() === "") {
     errors.push("first name cannot be empty string");
   }
@@ -144,24 +169,41 @@ router.post("/", async (req, res) => {
     errors.push("password cannot be empty string");
   }
 
-  var emailRegex =
+  // if (rest_params.service_availability.trim() === "") {
+  //   errors.push("service availability cannot be empty string");
+  // }
+
+  // if (rest_params.price.trim() === "") {
+  //   errors.push("price cannot be empty string");
+  // }
+
+  if (rest_params.about.trim() === "") {
+    errors.push("about cannot be empty string");
+  }
+
+  let dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+    if (!rest_params.dob.valueOf().match(dobregex)) {
+      errors.push ("Date of birth format is incorrect");
+    }
+
+  let emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!rest_params.email.valueOf().match(emailRegex)) {
     errors.push("e-mail format is incorrect");
   }
 
-  var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
+  let passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
   if (!rest_params.password.valueOf().match(passRegex)) {
     errors.push(
       "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
     );
   }
-  var phnregex =
+  let phnregex =
     /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
     errors.push("your phone number format is incorrect");
   }
-  var zipvalid = /^\d{5}$/;
+  let zipvalid = /^\d{5}$/;
   if (!rest_params.zipcode.valueOf().match(zipvalid)) {
     errors.push("your zipcode is incorrect");
   }
@@ -186,6 +228,9 @@ router.post("/", async (req, res) => {
       zipcode: rest_params.zipcode,
       password: rest_params.password,
       //active_status:rest_params.active_status,
+      service_availability: rest_params.service_availability,
+      price: rest_params.price,
+      about: rest_params.about,
       error: errors,
       hasErrors: true,
     });
@@ -202,10 +247,13 @@ router.post("/", async (req, res) => {
       address,
       zipcode,
       password,
+      service_availability,
+      price,
+      about
       //active_status
     } = rest_params;
 
-    var zipcitystate = await zipcodes.lookup(zipcode);
+    let zipcitystate = await zipcodes.lookup(zipcode);
 
     const rest = await sitterData.createSitter(
       firstName,
@@ -218,7 +266,10 @@ router.post("/", async (req, res) => {
       zipcitystate.city,
       zipcitystate.state,
       zipcode,
-      password
+      password,
+      service_availability,
+      price,
+      about
       //active_status
     );
 
@@ -240,6 +291,9 @@ router.post("/", async (req, res) => {
       address: rest_params.address,
       zipcode: rest_params.zipcode,
       password: rest_params.password,
+      service_availability: rest_params.service_availability,
+      price: rest_params.price,
+      about: rest_params.about,
       //active_status:rest_params.active_status,
       hasserverErrors: true,
     });
