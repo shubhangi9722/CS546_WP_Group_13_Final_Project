@@ -7,7 +7,7 @@ var zipcodes = require("zipcodes");
 
 router.get("/", async (req, res) => {
   try {
-    if (!req.session.user) {
+    if (req.session.user.usertype=="sitter" || !req.session.user) {
       res.render("customer/error");
     } else {
       res.render("customer/customerdashboard", {
