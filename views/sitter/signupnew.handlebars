@@ -149,10 +149,10 @@
       <!-- third tab: -->
       <div class="tab">
         <p style="text-align: center; font-size: x-large">
-          Please provide your availability based on services
+          Please provide Price based on service
         </p>
         <div class="normalOrientation">
-          <label for="status">Service Availability* :</label>
+          <label for="price">State Price (in $(dollars))* :</label>
           <!--<input
             type="radio"
             name="status"
@@ -167,23 +167,26 @@
             placeholder="Enter your status"
             value="No"
           />No-->
-          <select name="service" id="service" value="{{service_availability}}">
-                <option value="none">select</option>
-                <option value="Dog Walking">Dog Walking</option>
-                <option value="Day Care">Day Care</option>
-                <option value="Night Care">Night Care</option>
-                <option value="Home visit">Home visit</option>
-            </select>
+          <input 
+          type="text" 
+          class="textbox"
+          required
+          value="{{price}}" 
+          id="price"
+          name="price" 
+          min="30"
+          max="70"
+          placeholder="Enter your price range here"/>
         </div>
-        <br/>
+        <br />
       </div>
       <!-- fourth tab: -->
       <div class="tab">
         <p style="text-align: center; font-size: x-large">
-          Please provide Price based on service
+          Tell us something about yourself 📝
         </p>
         <div class="normalOrientation">
-          <label for="status">State Price* :</label>
+          <label for="bio">Write here:</label>
           <!--<input
             type="radio"
             name="status"
@@ -198,32 +201,13 @@
             placeholder="Enter your status"
             value="No"
           />No-->
-          <input type="text" name="range" id="range" placeholder="Enter your price range here" value="{{price}}">
-        </div>
-        <br />
-      </div>
-      <!-- fifth tab: -->
-      <div class="tab">
-        <p style="text-align: center; font-size: x-large">
-          Tell us something about yourself
-        </p>
-        <div class="normalOrientation">
-          <label for="status">Write here:</label>
-          <!--<input
-            type="radio"
-            name="status"
-            id="status"
-            placeholder="Enter your status"
-            value="Yes"
-          />Yes
-          <input
-            type="radio"
-            name="status"
-            id="status"
-            placeholder="Enter your status"
-            value="No"
-          />No-->
-         <input type="text" name="about" id="about" placeholder="Start writing here" value="{{about}}">
+         <input type="text" 
+         class="textbox" 
+         required
+         value="{{bio}}"
+         id="bio"
+         name="bio" 
+         placeholder="Start writing here"/>
         </div>
         <br />
       </div>
@@ -258,7 +242,7 @@
         <span class="step"></span>
         <span class="step"></span>
         <span class="step"></span>
-        <span class="step"></span>
+        <!--<span class="step"></span>-->
       </div>
       <br /><br />
       <a href="/sitterSignin">Already have an account? Click here to log-in</a>

@@ -58,10 +58,8 @@ module.exports = {
     state,
     zipcode,
     password,
-    service_availability,
     price,
-    bio
-
+    bio,
     //active_status,
   ) {
     if (!firstName) {
@@ -107,11 +105,6 @@ module.exports = {
       throw "You must provide password";
     }
 
-    if (!service_availability) {
-
-      throw "You must state your availabiity";
-    }
-
     if (!price) {
       throw "You must enter price based on your availability";
     }
@@ -119,55 +112,50 @@ module.exports = {
     if (!bio) {
       throw "You must provide some details about yourself";
     }
-	
 
 
     if (typeof firstName !== "string") {
-      throw "first name must be sting";
+      throw "first name must be string";
     }
 
     if (typeof lastName !== "string") {
-      throw "last name must be sting";
+      throw "last name must be string";
     }
 
     if (typeof email !== "string") {
-      throw "e-mail must be sting";
+      throw "e-mail must be string";
     }
 
     if (typeof phone_number !== "string") {
-      throw "phone number must be sting";
+      throw "phone number must be string";
     }
 
     if (typeof gender !== "string") {
-      throw "gender must be sting";
+      throw "gender must be string";
     }
 
     if (typeof address !== "string") {
-      throw "address must be sting";
+      throw "address must be string";
     }
 
     if (typeof city !== "string") {
-      throw "city must be sting";
+      throw "city must be string";
     }
 
     if (typeof state !== "string") {
-      throw "state must be sting";
+      throw "state must be string";
     }
 
     if (typeof zipcode !== "string") {
-      throw "zipcode must be sting";
+      throw "zipcode must be string";
     }
 
     if (typeof dob !== "string") {
-      throw "date of birth must be sting";
+      throw "date of birth must be string";
     }
 
     if (typeof password !== "string") {
-      throw "password must be sting";
-    }
-
-    if (typeof service_availability !== "string") {
-      throw "service provided must be a string";
+      throw "password must be string";
     }
 
     if (typeof price !== "string") {
@@ -253,6 +241,8 @@ module.exports = {
     const passhash = await bcrypt.hash(password, saltRounds);
     const sittersCollection = await sitters();
 
+    let priceInt = parseInt(price); 
+
     let newsitter = {
       firstName:firstName.toLocaleLowerCase(),
       lastName:lastName.toLocaleLowerCase(),
@@ -265,12 +255,12 @@ module.exports = {
       state:state.toLocaleLowerCase(),
       zipcode:zipcode,
       password:passhash,
-      service_availability:service_availability.toLocaleLowerCase(),
-		  price:price.toLocaleLowerCase(),
+		  price:priceInt,
 		  bio:bio.toLocaleLowerCase(),
       //active_status:active_status,
       overall_rating: 0,
       reviews: [],
+      active_status: 1
     };
 
     // if (active_status ==="Yes" || active_status === "No"){
@@ -310,7 +300,7 @@ module.exports = {
 
 
   async updateSitter(firstName, lastName, email, phone_number, gender, address, city, state, 
-    zipcode, service_availability, price, bio) {
+    zipcode, price, bio) {
 
       if (!firstName) {
         throw "You must provide first name"
@@ -347,10 +337,6 @@ module.exports = {
         throw "You must provide zipcode"
       }
 
-      if (!service_availability) {
-        throw "You must provide service_availability"
-      }
-
       if (!price) {
         throw "You must provide price"
       }
@@ -362,47 +348,47 @@ module.exports = {
     
     
       if (typeof firstName !== "string") {
-        throw "first name must be sting"
+        throw "first name must be string"
       }
     
       if (typeof lastName !== "string") {
-        throw "last name must be sting"
+        throw "last name must be string"
       }
     
       if (typeof email !== "string") {
-        throw "e-mail must be sting"
+        throw "e-mail must be string"
       }
     
       if (typeof phone_number !== "string") {
-        throw "phone number must be sting"
+        throw "phone number must be string"
       }
     
       if (typeof gender !== "string") {
-        throw "gender must be sting"
+        throw "gender must be string"
       }
     
       if (typeof address !== "string") {
-        throw "address must be sting"
+        throw "address must be string"
       }
     
       if (typeof city !== "string") {
-        throw "city must be sting"
+        throw "city must be string"
       }
     
       if (typeof state !== "string") {
-        throw "state must be sting"
+        throw "state must be string"
       }
     
       if (typeof zipcode !== "string") {
-        throw "zipcode must be sting"
+        throw "zipcode must be string"
       }
 
       if (typeof price !== "string") {
-        throw "zipcode must be sting"
+        throw "price must be string"
       }
 
       if (typeof bio !== "string") {
-        throw "zipcode must be sting"
+        throw "bio must be string"
       }
 
     
@@ -435,10 +421,6 @@ module.exports = {
       if (zipcode.trim() === "") {
         throw "zipcode cannot be empty string"
       }
-     
-      if (price.trim() === "") {
-        throw "date of birth cannot be empty string"
-      }
 
       if (bio.trim() === "") {
         throw "date of birth cannot be empty string"
@@ -457,8 +439,11 @@ module.exports = {
         throw "your phone number format is incorrect" 
       }
     
+
       
       let updatedSitter={};
+
+      let priceInt = parseInt(price); 
 
       const sitterCollection = await sitters();
       let oldSitterdetails = {
@@ -470,8 +455,7 @@ module.exports = {
       city:city.toLocaleLowerCase(),
       state:state.toLocaleLowerCase(),
       zipcode:zipcode,
-      service_availability: service_availability,
-      price: price.toLocaleLowerCase(),
+      price: priceInt,
       bio: bio.toLocaleLowerCase()
     };
 
@@ -488,6 +472,9 @@ module.exports = {
     updatedSitter['sitterUpdated'] = true;
     return updatedSitter;
   },
+
+
+
   async getCuerrntSitterInfo(email){
     if (!email || email.trim()==="") throw ' email not available';
   
