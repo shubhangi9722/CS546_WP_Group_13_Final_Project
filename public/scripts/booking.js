@@ -36,7 +36,7 @@ function bookthissitter(data) {
     url: "/booking/getsitterEmail/" + data,
     success: function (response) {
       df["sitteremail"] = response.email;
-      df["service_charge"] = "$25";
+      df["service_charge"] = response.price;
       var res = JSON.stringify(response);
       var c = $(`<div class="col-sm-6">${res}</div>`);
       c.appendTo(row);
@@ -163,7 +163,7 @@ function bookthissitter(data) {
         if (response.booking == "Succesful") {
           alert("Your booking has been created");
         } else {
-          alert("Sorry somerthing went wrong ");
+          alert("Please Select some Other Date");
         }
       },
     });
@@ -176,4 +176,66 @@ function bookthissitter(data) {
     "<div id ='info'><p>Day Care has fixed timing from 10am to 8pm and</p><p>Night Care has fixed timing from 9pm to 9am</p><p>Please select date</p></div>"
   );
   $("#mainbinder").append(center);
+}
+
+function GetMyBookings(email) {
+  var data = {};
+  data[email] = email;
+
+  //get id from email
+  $.ajax({
+    method: "GET",
+    url: "/booking/getOwnerEmail/" + email,
+    success: function (response) {
+      console.log(response._id);
+      var id = response._id;
+      if (id) {
+        GetbookingsOwner(id);
+      } else {
+        alert("Sorry somerthing went wrong ");
+      }
+    },
+  });
+}
+//get all bookings from id
+function GetbookingsOwner(id) {
+  $.ajax({
+    method: "GET",
+    url: "/booking/owner/" + id,
+    success: function (response) {
+      if (response) {
+        var row = $('<div class="row"></div>');
+        for (var i = 0; i < response.length; i++) {
+          var column = $(`<div class="column">`);
+          var card = $(
+            `<div class="card text-center" id="card" id="bookingcard"></div>`
+          );
+          var b = response[i];
+          // {{#each trips}}
+          var a = $(` <a href="#!">${b}</a>`);
+          //card.append(a);
+          var s = moment(b.start_date_time);
+          var e = moment(b.end_date_time);
+          var bookinginfo = $(`<div class="row"><div class="booking-info">
+              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
+              <p> Rating :${b.OverallRating}</p>
+              <p>Service:${b.service} <h6>Charge:</h6>${b.service_charge}<p>
+              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+              <p>Status:${b.status}</p>
+              <a href="#!" class="button" hidden>Delete</a>
+              </div></div>`);
+          //        {{/each}}
+          card.append(bookinginfo);
+          column.append(card);
+          column.appendTo(row);
+        }
+
+        $("#mainbinder").empty();
+        $("#mainbinder").append(row);
+        console.log(response);
+      } else {
+        alert("Sorry somerthing went wrong ");
+      }
+    },
+  });
 }
