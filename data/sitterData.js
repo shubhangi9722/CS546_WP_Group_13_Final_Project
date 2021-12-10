@@ -487,7 +487,18 @@ module.exports = {
     
     updatedSitter['sitterUpdated'] = true;
     return updatedSitter;
-  }
+  },
+  async getCuerrntSitterInfo(email){
+    if (!email || email.trim()==="") throw ' email not available';
+  
+  
+    const sitterCollection = await sitters();
+    const sitterInfo = await sitterCollection.findOne({ email: email });
+    if (sitterInfo === null) throw 'User not found';
+       
+    return sitterInfo;
+  
+  },
 
 
 };

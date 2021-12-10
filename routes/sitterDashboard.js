@@ -212,4 +212,21 @@ router.get('/', async (req, res) => {
 
 })  
 
+
+
+router.get("/getSitterDetails/:email", async (req, res) => {
+  if (!req.params.email) {
+    res.status(400).json({ error: "You must provide email" });
+    return;
+  }
+  try {
+    const CustomerProfile = await CustomerData.getCuerrntSitterInfo(
+      req.params.email
+    );
+
+    return res.json(CustomerProfile);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
 module.exports = router;
