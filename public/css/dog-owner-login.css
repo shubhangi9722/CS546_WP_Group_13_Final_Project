@@ -6,6 +6,7 @@ body {
   justify-content: center;
   height: 100vh;
   flex-direction: column;
+  background-color: lavender;
 }
 
 .container {

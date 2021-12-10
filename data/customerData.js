@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const dogOwners = mongoCollections.dogOwners;
 const sitters = mongoCollections.sitters;
 const bcrypt = require('bcryptjs');
-const saltRounds = 16;
+const saltRounds = 10;
 const { ObjectId } = require('mongodb');
 
 module.exports={
@@ -268,6 +268,13 @@ module.exports={
           throw " dog's weight cannot be empty string"
         }
       
+        var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+          if (!dob.valueOf().match(dobregex) || !dog_dob.valueOf().match(dobregex)) {
+
+            throw  "your date of birth format is incorrect"
+
+          }
+
         var emailRegex =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!email.valueOf().match(emailRegex)) {
@@ -292,25 +299,25 @@ module.exports={
         const passhash = await bcrypt.hash(password, saltRounds);
         const dogOwnerCollection = await dogOwners();
         let newcustomer = {
-          firstName:firstName,
-          lastName:lastName,
+          firstName:firstName.toLocaleLowerCase(),
+          lastName:lastName.toLocaleLowerCase(),
           email:email.toLocaleLowerCase(),
           phone_number:phone_number,
-          gender:gender,
-          address:address,
-          city:city,
-          state:state,
+          gender:gender.toLocaleLowerCase(),
+          address:address.toLocaleLowerCase(),
+          city:city.toLocaleLowerCase(),
+          state:state.toLocaleLowerCase(),
           zipcode:zipcode,
           dob:dob,
           password:passhash,
-          dog_name:dog_name,
-          dog_gender:dog_gender,
-          dog_breed:dog_breed,
+          dog_name:dog_name.toLocaleLowerCase(),
+          dog_gender:dog_gender.toLocaleLowerCase(),
+          dog_breed:dog_breed.toLocaleLowerCase(),
           dog_dob:dog_dob,
-          vet_name:vet_name,
+          vet_name:vet_name.toLocaleLowerCase(),
           vet_phn:vet_phn,
           weight:weight,
-          behavioral_information:behavioral_information 
+          behavioral_information:behavioral_information.toLocaleLowerCase() 
         };
 
         const addedUser = await dogOwnerCollection.findOne({ email: email.toLocaleLowerCase() });
@@ -371,6 +378,440 @@ async getCuerrntCustomerInfo(email){
   return custInfo;
 
 },
+
+async filterresult(serachterm,zipcode,rating,pricerange)
+{
+const sittersCollection = await sitters();
+
+  const namearray = serachterm.split(" ");
+  var fname=namearray[0];
+  var lname=namearray[1];
+
+  const pricearray =pricerange.split("-")
+  var lbound=parseInt(pricearray[0])
+  var ubound=parseInt(pricearray[1])
+
+  if(serachterm=='' && zipcode=='' && rating=="0" && pricerange=="0")
+  {
+   const sitterList = await sittersCollection.find({}).toArray();
+   
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode=='' && rating=="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({firstName:fname}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode!='' && rating=="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [ {firstName:fname},{ zipcode:zipcode }]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode!='' && rating!="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [ {firstName:fname},{ zipcode:zipcode },{overall_rating:rating} ]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if(serachterm!='' && zipcode!='' && rating!="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [ {firstName:fname},{ zipcode:zipcode },{overall_rating:rating}, {price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+
+  else if (serachterm=='' && zipcode!='' && rating=="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ zipcode:zipcode}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode!='' && rating!="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [{ zipcode:zipcode },{overall_rating:rating}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode!='' && rating!="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [{ zipcode:zipcode },{overall_rating:rating},{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+
+  else if (serachterm=='' && zipcode=='' && rating!="0" && pricerange=="0")
+  {
+    const sitterList = await sittersCollection.find({overall_rating:rating}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode=='' && rating!="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({ $and: [{overall_rating:rating},{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+  else if (serachterm=='' && zipcode=='' && rating=="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({$and:[{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+
+  else if (serachterm!='' && zipcode!='' && rating=="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({$and:[{firstName:fname},{ zipcode:zipcode },{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+
+  else if (serachterm=='' && zipcode!='' && rating=="0" && pricerange!="0")
+  {
+    const sitterList = await sittersCollection.find({$and:[{ zipcode:zipcode },{price:{$gt:lbound}},{price:{$lt:ubound}}]}).toArray();
+    
+  if(sitterList.length == 0)
+  {
+    return [];
+  }
+  return sitterList;
+  }
+
+
+},
+async UpdateOwner(
+  firstName,
+  lastName,
+  email,
+  phone_number,
+  gender,
+  address,
+  city,
+  state,
+  zipcode,
+  dob
+){
+
+  if (!firstName) {
+    throw "You must provide first name"
+  }
+
+  if (!lastName) {
+    throw "You must provide last name"
+  }
+  if (!email) {
+    throw "You must provide e-mail"
+  }
+
+  if (!phone_number) {
+    throw "You must provide phone number"
+  }
+
+  if (!gender) {
+    throw "You must provide gender"
+  }
+
+  if (!address) {
+    throw "You must provide address"
+  }
+
+  if (!city) {
+    throw "You must provide city"
+  }
+
+  if (!state) {
+    throw "You must provide state"
+  }
+
+  if (!zipcode) {
+    throw "You must provide zipcode"
+  }
+
+  if (!dob) {
+    throw "You must provide date of birth"
+  }
+
+
+  if (typeof firstName !== "string") {
+    throw "first name must be sting"
+  }
+
+  if (typeof lastName !== "string") {
+    throw "last name must be sting"
+  }
+
+  if (typeof email !== "string") {
+    throw "e-mail must be sting"
+  }
+
+  if (typeof phone_number !== "string") {
+    throw "phone number must be sting"
+  }
+
+  if (typeof gender !== "string") {
+    throw "gender must be sting"
+  }
+
+  if (typeof address !== "string") {
+    throw "address must be sting"
+  }
+
+  if (typeof city !== "string") {
+    throw "city must be sting"
+  }
+
+  if (typeof state !== "string") {
+    throw "state must be sting"
+  }
+
+  if (typeof zipcode !== "string") {
+    throw "zipcode must be sting"
+  }
+
+
+  if (firstName.trim() === "") {
+    throw "first name cannot be empty string"
+  }
+  if (lastName.trim() === "") {
+    throw "last name cannot be empty string"
+  }
+
+  if (email.trim() === "") {
+    throw "e-mail cannot be empty string"
+  }
+  if (phone_number.trim() === "") {
+    throw "phone numbe cannot be empty string"
+  }
+  if (gender.trim() === "") {
+    throw "gender cannot be empty string"
+  }
+  if (address.trim() === "") {
+    throw "address cannot be empty string"
+  }
+  if (city.trim() === "") {
+    throw "city cannot be empty string"
+  }
+  if (state.trim() === "") {
+    throw "state cannot be empty string"
+  }
+  if (zipcode.trim() === "") {
+    throw "zipcode cannot be empty string"
+  }
+  if (dob.trim() === "") {
+    throw "date of birth cannot be empty string"
+  }
+ 
+
+  var emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!email.valueOf().match(emailRegex)) {
+    throw "e-mail format is incorrect"
+
+  }
+
+ 
+  var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+  if (!phone_number.valueOf().match(phnregex)) {
+    throw "your phone number format is incorrect"
+  
+  }
+
+  var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+  if (!dob.valueOf().match(dobregex)) {
+
+    throw  "your date of bith format is incorrect"
+
+  }
+  
+
+  let obj={}
+
+  const dogOwnerCollection = await dogOwners();
+  let oldcustomer = {
+    firstName:firstName.toLocaleLowerCase(),
+    lastName:lastName.toLocaleLowerCase(),
+    phone_number:phone_number,
+    gender:gender.toLocaleLowerCase(),
+    address:address.toLocaleLowerCase(),
+    city:city.toLocaleLowerCase(),
+    state:state.toLocaleLowerCase(),
+    zipcode:zipcode,
+    dob:dob
+  };
+
+  const updatedInfo = await dogOwnerCollection.updateOne(
+    { email: email },
+    { $set: oldcustomer }
+  );
+  if (updatedInfo.modifiedCount === 0) {
+    throw 'could not update the customer successfully';
+  }
+  
+  obj['userUpdated'] = true;
+  
+
+  return obj;
+},
+
+
+async UpdateDog(
+  dog_name,
+  dog_gender,
+  email,
+  dog_breed,
+  dog_dob,
+  vet_name,
+  vet_phn,
+  weight,
+  behavioral_information
+){
+
+  if (!dog_name) {
+    throw "You must provide dog name"
+  }
+
+  if (!dog_gender) {
+    throw "You must provide dog gender"
+  }
+  if (!dog_breed) {
+    throw "You must provide dog breed"
+  }
+
+  if (!dog_dob) {
+    throw "You must provide dog date of birth"
+  }
+
+
+  if (typeof dog_name !== "string") {
+    throw "dog name must be sting"
+  }
+
+  if (typeof dog_gender !== "string") {
+    throw "dog gender must be sting"
+  }
+
+  if (typeof dog_dob !== "string") {
+    throw "e-dog date of birth must be sting"
+  }
+
+  if (typeof vet_name !== "string") {
+    throw "Veterinarian name must be sting"
+  }
+
+  if (typeof vet_phn !== "string") {
+    throw "Veterinarian Phone Number must be sting"
+  }
+
+  if (typeof behavioral_information !== "string") {
+    throw "Dog Behavioral Information must be sting"
+  }
+
+  if (dog_name.trim() === "") {
+    throw "first name cannot be empty string"
+  }
+  if (dog_gender.trim() === "") {
+    throw "last name cannot be empty string"
+  }
+
+  if (dog_breed.trim() === "") {
+    throw "e-mail cannot be empty string"
+  }
+  if (dog_dob.trim() === "") {
+    throw "phone numbe cannot be empty string"
+  }
+  if (weight.trim() === "") {
+    throw "gender cannot be empty string"
+  }
+ 
+
+
+  var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+  if (!dog_dob.valueOf().match(dobregex)) {
+
+    throw  "your date of bith format is incorrect"
+
+  }
+  
+
+  let obj={}
+
+  const dogOwnerCollection = await dogOwners();
+  let oldcustomer = {
+    dog_name:dog_name.toLocaleLowerCase(),
+    dog_gender:dog_gender.toLocaleLowerCase(),
+    dog_breed:dog_breed.toLocaleLowerCase(),
+    dog_dob:dog_dob,
+    vet_name:vet_name.toLocaleLowerCase(),
+    vet_phn:vet_phn,
+    weight:weight,
+    behavioral_information:behavioral_information.toLocaleLowerCase()
+  };
+
+  const updatedInfo = await dogOwnerCollection.updateOne(
+    { email: email },
+    { $set: oldcustomer }
+  );
+  if (updatedInfo.modifiedCount === 0) {
+    throw 'could not update the Dog details successfully';
+  }
+  
+  obj['DogUpdated'] = true;
+  
+
+  return obj;
+},
+
+
+
 
 
 }

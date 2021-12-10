@@ -149,11 +149,11 @@
       <!-- third tab: -->
       <div class="tab">
         <p style="text-align: center; font-size: x-large">
-          Please provide your answer as "true" or "false" for status 🪶
+          Please provide your availability based on services
         </p>
         <div class="normalOrientation">
-          <label for="status">Status* :</label>
-          <input
+          <label for="status">Service Availability* :</label>
+          <!--<input
             type="radio"
             name="status"
             id="status"
@@ -166,18 +166,75 @@
             id="status"
             placeholder="Enter your status"
             value="No"
-          />No
+          />No-->
+          <select name="service" id="service" value="{{service_availability}}">
+                <option value="none">select</option>
+                <option value="Dog Walking">Dog Walking</option>
+                <option value="Day Care">Day Care</option>
+                <option value="Night Care">Night Care</option>
+                <option value="Home visit">Home visit</option>
+            </select>
+        </div>
+        <br/>
+      </div>
+      <!-- fourth tab: -->
+      <div class="tab">
+        <p style="text-align: center; font-size: x-large">
+          Please provide Price based on service
+        </p>
+        <div class="normalOrientation">
+          <label for="status">State Price* :</label>
+          <!--<input
+            type="radio"
+            name="status"
+            id="status"
+            placeholder="Enter your status"
+            value="Yes"
+          />Yes
+          <input
+            type="radio"
+            name="status"
+            id="status"
+            placeholder="Enter your status"
+            value="No"
+          />No-->
+          <input type="text" name="range" id="range" placeholder="Enter your price range here" value="{{price}}">
+        </div>
+        <br />
+      </div>
+      <!-- fifth tab: -->
+      <div class="tab">
+        <p style="text-align: center; font-size: x-large">
+          Tell us something about yourself
+        </p>
+        <div class="normalOrientation">
+          <label for="status">Write here:</label>
+          <!--<input
+            type="radio"
+            name="status"
+            id="status"
+            placeholder="Enter your status"
+            value="Yes"
+          />Yes
+          <input
+            type="radio"
+            name="status"
+            id="status"
+            placeholder="Enter your status"
+            value="No"
+          />No-->
+         <input type="text" name="about" id="about" placeholder="Start writing here" value="{{about}}">
         </div>
         <br />
       </div>
       <!-- Next and previous button  -->
       <div style="overflow: auto">
-        <div style="float: right; padding: 1rem">
+        <div style="float: right; padding: 2rem">
           <button type="button" id="prevBtn" onclick="nextPrev(-1)">
             👈 Previous
           </button>
           <button type="button" id="nextBtn" onclick="nextPrev(1)">
-            Next 👉
+           👉 Next 
           </button>
         </div>
       </div>
@@ -197,6 +254,8 @@
       {{/if}}
       <!-- Circles which indicates the steps of the form: -->
       <div style="text-align: center; margin-top: 40px">
+        <span class="step"></span>
+        <span class="step"></span>
         <span class="step"></span>
         <span class="step"></span>
         <span class="step"></span>
