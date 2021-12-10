@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const data = require("../data/sitterData");
-const bookingData = require("../data/bookingData");
+const data = require("../data");
+const bookingData = data.booking;
 const sitterData = data.sitter;
 let zipcodes = require('zipcodes');
 
@@ -153,10 +153,10 @@ router.get('/', async (req, res) => {
     return;
   }
 
-  // if (rest_params.price.trim() === "") {
-  //   res.status(400).json({ error: "price cannot be empty string" });
-  //   return;
-  // }
+   if (rest_params.price.trim() === "") {
+     res.status(400).json({ error: "price cannot be empty string" });
+     return;
+   }
 
   if (rest_params.bio.trim() === "") {
     res.status(400).json({ error: "bio cannot be empty string" });
@@ -219,11 +219,24 @@ router.get("/getSitterDetails/:email", async (req, res) => {
     return;
   }
   try {
-    const CustomerProfile = await CustomerData.getCuerrntSitterInfo(
-      req.params.email
-    );
+    const SitterProfile = await sitterData.getCuerrntSitterInfo(req.params.email);
 
-    return res.json(CustomerProfile);
+    return res.json(SitterProfile);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
+
+router.get("/deleteSitterProfile/:email", async (req, res) => {
+  if (!req.params.email) {
+    res.status(400).json({ error: "You must provide email" });
+    return;
+  }
+  try {
+    const obj = await sitterData.DeleteSitter(req.params.email);
+
+    return res.json(obj);
   } catch (e) {
     res.status(500).send();
   }
