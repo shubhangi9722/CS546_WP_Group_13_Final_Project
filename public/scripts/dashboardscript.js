@@ -43,47 +43,6 @@ function getSomeSitter() {
   });
 }
 
-function bookthissitter(data) {
-  $("#mainbinder").empty();
-
-  //$("#mainbinder").append(data);
-  var center = $('<div class="card text-center" id="card"></div>');
-  var bookingform = $('<form method="post"></form>');
-  var checkinout = $(
-    '<div id = "datetime"><label for="checkin-date" id ="bookinglable">Check-in Date</label><input type="datetime-local" id="checkin-date" name="checkin" required></div><br><br><label for="checkout-date" >Check-out Date</label><input type="datetime-local" id="checkout-date" name="checkout" required></div></div><br><br>'
-  );
-  var serviceoptions = $(
-    '<label for="service-selection" id="bookinglable">Select Service</label><select id="service-selection" name="service_selection" required><option value="">Choose a service from the List</option><option value="DogWalking">Dog Walking</option><option value="HouseSitting">House Sitting</option><option value="Daycare">Day care</option><option value="night care">night care</option></select></div><br><br>'
-  );
-  var textarea = $(
-    '<label for="message" id="bookinglable">Anything Else?</label><textarea id="bookingtextarea" name="visitor_message" placeholder="Tell us anything else that might be important." required></textarea></div><br><br>'
-  );
-  var bookbutton = $(
-    '<a href ="#!" class="btn btn-primary" type="submit" id="bookthis">Book The Sitter</button><br>'
-  );
-  var backbutton = $(
-    '<a href ="#!" class="btn btn-primary" type="submit" id="backbutton">Back</button>'
-  );
-  serviceoptions.appendTo(bookingform);
-  checkinout.appendTo(bookingform);
-  textarea.appendTo(bookingform);
-  bookbutton.appendTo(bookingform);
-  bookbutton.on("click", function (event) {
-    $("#mainbinder").append(data);
-    var formData = {};
-    $.ajax({
-      method: "POST",
-      url: "/customerDashboard/Createbooking/",
-      data: formData,
-      success: function (response) {},
-    });
-  });
-  backbutton.attr("onclick", "getSomeSitter()");
-  backbutton.appendTo(bookingform);
-  bookingform.appendTo(center);
-  $("#mainbinder").append(center);
-}
-
 function GetOwnerDetails(email) {
   $.ajax({
     method: "GET",

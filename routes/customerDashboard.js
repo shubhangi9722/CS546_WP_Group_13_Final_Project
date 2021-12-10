@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
-const bookingData = require("../data/bookingData");
+const bookingData = data.booking;
 const CustomerData = data.customer;
+const sitterData = data.sitter;
 
 router.get("/", async (req, res) => {
   try {
@@ -23,17 +24,6 @@ router.get("/getsitterfordashboard", async (req, res) => {
     const SitterData = await CustomerData.getsitterDataforDashboard();
 
     return res.json(SitterData);
-  } catch (e) {
-    res.status(500).send();
-  }
-});
-
-router.post("/Createbooking", async (req, res) => {
-  //Error handling
-
-  try {
-    const booking = await bookingData.createBooking();
-    return res.json({ booking: "Succesful" });
   } catch (e) {
     res.status(500).send();
   }
