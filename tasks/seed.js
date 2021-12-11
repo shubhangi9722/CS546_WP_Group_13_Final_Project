@@ -2,6 +2,12 @@ const dbConnection = require("../config/mongoConnections");
 const data = require("../data/sitterData");
 
 async function main() {
+  //const db = await dbConnection();
+  //await db.dropDatabase();
+
+  //const db = await dbConnection();
+  //await db.dropDatabase();
+
   const db = await dbConnection.connectToDb();
   //await db.dropDatabase();
   const users = await data.createSitter(
@@ -16,7 +22,8 @@ async function main() {
     "NY",
     "11102",
     "12345678",
-    "65",
+    "Dog Walking",
+    "$65 per hour",
     "I am gregg, all dog owners trust me with their dogs."
   );
   console.log(users);
