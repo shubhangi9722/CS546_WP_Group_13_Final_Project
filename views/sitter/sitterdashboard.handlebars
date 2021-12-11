@@ -46,6 +46,7 @@
                <div class="container-fluid" id="mainbinder"></div>
           </div>
      </div>
+     <input type="hidden" id="sitterbooking_get" name="bookingdata" value="{{email}}">
      <!-- Bootstrap core JS-->
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -55,8 +56,8 @@
      <script src="/public/scripts/sitterbookings.js"></script>
           <script>
           $(document).ready(function () {
-               $('#error').hide();
-                
+               var eval=$('#sitterbooking_get').val();
+                getsomebookings(eval);
           });
      </script>
      
