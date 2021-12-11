@@ -209,18 +209,20 @@ router.post("/", async (req, res) => {
     errors.push(" dog's weight cannot be empty string");
   }
 
-  var emailRegex =
+  let emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!rest_params.email.valueOf().match(emailRegex)) {
     errors.push("e-mail format is incorrect");
   }
 
-  var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
+  let passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
   if (!rest_params.password.valueOf().match(passRegex)) {
     errors.push(
       "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
     );
   }
+
+  
   var phnregex =
     /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
