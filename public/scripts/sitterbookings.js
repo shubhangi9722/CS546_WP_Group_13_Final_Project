@@ -64,10 +64,18 @@ function Accept(bookingid) {
       console.log(response);
       if (response.updated == true) {
         alert("this booking has been accepted");
+        setTimeout(function(){  location.reload(); }, 7000);
       }
-      console.log(response);
+      
+      else{
+        alert("something went wrong")
+      }
+      
       //Adding a button to completed accept and reject bookings button
     },
+    error: function(response){
+      alert(response.responseJSON);
+  }
   });
 }
 
@@ -77,11 +85,19 @@ function Rejected(bookingid) {
     url: "/sitterbooking/rejected/" + bookingid,
     success: function (response) {
       if (response.updated == true) {
-        alert("thhis booking has been Rejected");
+        alert("this booking has been Rejected");
+        setTimeout(function(){  location.reload(); }, 7000);
       }
-      console.log(response);
+      else{
+        alert("something went wong");
+      }
+     
       //Adding a button to completed accept and reject bookings button
     },
+    error: function(response){
+      alert(response.responseJSON);
+  }
+    
   });
 }
 
@@ -98,5 +114,6 @@ function upcommingbookings(email) {
       console.log(response);
       //Adding a button to completed accept and reject bookings button
     },
+    
   });
 }

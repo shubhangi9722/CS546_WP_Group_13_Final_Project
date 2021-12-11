@@ -29,20 +29,26 @@ router.get("/getsomebookings/:email", async (req, res) => {
   }
 });
 router.post("/accept/:id", async (req, res) => {
-  console.log(req.params.id);
-  const accept = bookingData.UpdateStatusBooking(req.params.id, "Accepted");
-  if (accept.Update == false) {
-    return { Update: false };
+  try{
+  const accept = await bookingData.UpdateStatusBooking(req.params.id, "Accepted");
+  return res.json(accept)
   }
-  return { Update: true };
+  catch(e)
+  {
+    return res.status(400).json(e)
+  }
 });
 
 router.post("/rejected/:id", async (req, res) => {
-  const accept = bookingData.UpdateStatusBooking(req.params.id, "Rejected");
-  if (accept.Update == false) {
-    return { Update: false };
+  try{
+  const accept = await bookingData.UpdateStatusBooking(req.params.id, "Rejected");
+ return res.json(accept)
   }
-  return { Update: true };
+  catch(e)
+  {
+    return res.status(400).json(e)
+  }
+
 });
 
 module.exports = router;

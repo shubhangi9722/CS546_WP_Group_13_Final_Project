@@ -326,7 +326,7 @@ module.exports = {
 
   //////////////////////Status
   async UpdateStatusBooking(booking_id, status) {
-    try {
+    
       if (!status) {
         throw "status not present";
       }
@@ -344,13 +344,13 @@ module.exports = {
         throw "booking_id not found";
       }
       if (typeof booking_id !== "string") {
-        throw new Error("booking_id not a string");
+        throw "booking_id not a string"
       }
       let parsedId;
       try {
         parsedId = ObjectId(booking_id);
       } catch (err) {
-        throw new Error(`id ${booking_id} is not a valid ObjectId.`);
+        throw `id ${booking_id} is not a valid ObjectId.`
       }
       let updatedBooking = {
         status: status,
@@ -367,12 +367,13 @@ module.exports = {
         { $set: updatedBooking }
       );
       if (updatedInfo.modifiedCount === 0) {
-        throw new Error("Could not update Booking");
+        throw "Could not update Booking"
       }
-      return { Update: true };
-    } catch (e) {
-      return { Update: false };
-    }
+      let obj={};
+      obj["updated"] = true;
+
+      return obj;
+    
   },
 
   async delete(booking_id) {
