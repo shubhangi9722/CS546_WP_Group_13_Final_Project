@@ -387,4 +387,15 @@ router.post('/UpdateDog', async (req, res) => {
 }); 
 
 
+router.get("/getsitterReview", async (req, res) => {
+  try {
+  //  const SitterData = await CustomerData.getsitterDataforDashboard();
+    res.render('sitter/sitterReviews');
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
+
+
 module.exports = router;
