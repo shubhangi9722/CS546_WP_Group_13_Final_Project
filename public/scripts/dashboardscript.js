@@ -26,7 +26,7 @@ function getSomeSitter() {
           );
 
           var book = $(
-            '<a href="#!" id ="book" class="btn btn-primary")">Book</a></div><div class="card-footer text-muted"></div></div>'
+            '<a href="#!" id ="book" class="btn btn-primary">Book</a></div><div class="card-footer text-muted"></div></div>'
           );
           main.appendTo(center);
           book.appendTo(center);
@@ -103,7 +103,35 @@ $("#searchForm").submit((event) => {
       $("#mainbinder").empty();
       if (response.length != 0) {
         for (var i = 0; i < response.length; i++) {
-          $("#mainbinder").append('<div class="card text-center"><div class="card-header"></div><div class="card-body"><h5 class="card-title">'+response[i].firstName+' '+response[i].lastName+'</h5><p class="card-text">'+response[i].bio+'</p><label for="rating">Rating:'+response[i].overall_rating+' </label><br><label for="price">Price:'+response[i].price+'$</label><br><a href="#" class="btn btn-primary"  onclick="bookthissitter(\''+response.email+'\')>Book</a></div><div class="card-footer text-muted"></div></div>');
+          var center = $("<div/>", {
+            class: "card text-center",
+            id: "card" + i,
+          });
+          var center = $('<div class="card text-center" id="card"></div>');
+          var main = $(
+            '<div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+              response[i].firstName +
+              " " +
+              response[i].lastName +
+              '</h5><p class="card-text">' +
+              response[i].bio +
+              '</p><label for="rating">Rating:' +
+              response[i].overall_rating +
+              ' </label><br><label for="price">Price:' +
+              response[i].price +
+              "</label>"
+          );
+
+          var book = $(
+            '<a href="#!" id ="book" class="btn btn-primary">Book</a></div><div class="card-footer text-muted"></div></div>'
+          );
+          main.appendTo(center);
+          book.appendTo(center);
+          // book.on("click", function (e) {
+          //   bookthissitter(response[i].email);
+          // });
+          book.attr("onclick", `bookthissitter('${response[i].email}')`);
+          $("#mainbinder").append(center);
         }
 
       } else {
