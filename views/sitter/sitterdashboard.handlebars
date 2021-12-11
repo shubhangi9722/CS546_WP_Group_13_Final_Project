@@ -18,9 +18,9 @@
           <div class="border-end bg-white" id="sidebar-wrapper">
                <div class="sidebar-heading border-bottom bg-light">Welcome, {{email}}</div>
                <div class="list-group list-group-flush">
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getRequests()" >Home</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Booking
-                         History</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getsomebookings('{{email}}')" >Home</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Booking History</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="upcommingbookings('{{email}}')">Upcomming Bookings</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetSiiterDetails('{{email}}')">My Profile</a>
                </div>
           </div>
@@ -52,4 +52,12 @@
      <!-- Core theme JS-->
      <script src="/public/scripts/btscript.js"></script>
      <script src="/public/scripts/sitterdashboardscript.js"></script>
+     <script src="/public/scripts/sitterbookings.js"></script>
+          <script>
+          $(document).ready(function () {
+               $('#error').hide();
+                
+          });
+     </script>
+     
 </body>

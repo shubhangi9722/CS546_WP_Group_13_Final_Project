@@ -26,7 +26,7 @@ module.exports = {
 
     const sittersCollection = await sitters();
     const addedUser = await sittersCollection.findOne({
-      $and: [ {email: email.toLocaleLowerCase()},{ active_status:1 }]
+      $and: [{ email: email.toLocaleLowerCase() }, { active_status: 1 }],
     });
     let compareToMatch = false;
     if (addedUser !== null) {
@@ -45,7 +45,6 @@ module.exports = {
     }
   },
 
-
   async createSitter(
     firstName,
     lastName,
@@ -59,7 +58,7 @@ module.exports = {
     zipcode,
     password,
     price,
-    bio,
+    bio
     //active_status,
   ) {
     if (!firstName) {
@@ -113,7 +112,6 @@ module.exports = {
       throw "You must provide some details about yourself";
     }
 
-
     if (typeof firstName !== "string") {
       throw "first name must be string";
     }
@@ -166,9 +164,6 @@ module.exports = {
       throw "bio provided must be a string";
     }
 
-
-
-    
     if (firstName.trim() === "") {
       throw "first name cannot be empty string";
     }
@@ -213,11 +208,11 @@ module.exports = {
     if (bio.trim() === "") {
       throw "bio cannot be empty string";
     }
-   
-    let dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
-      if (!dob.valueOf().match(dobregex)) {
-        throw  "Date of birth format is incorrect"
-      }
+
+    let dobregex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+    if (!dob.valueOf().match(dobregex)) {
+      throw "Date of birth format is incorrect";
+    }
 
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -241,26 +236,26 @@ module.exports = {
     const passhash = await bcrypt.hash(password, saltRounds);
     const sittersCollection = await sitters();
 
-    let priceInt = parseInt(price); 
+    let priceInt = parseInt(price);
 
     let newsitter = {
-      firstName:firstName.toLocaleLowerCase(),
-      lastName:lastName.toLocaleLowerCase(),
-      dob:dob,
-      email:email.toLocaleLowerCase(),
-      phone_number:phone_number,
-      gender:gender.toLocaleLowerCase(),
-      address:address.toLocaleLowerCase(),
-      city:city.toLocaleLowerCase(),
-      state:state.toLocaleLowerCase(),
-      zipcode:zipcode,
-      password:passhash,
-		  price:priceInt,
-		  bio:bio.toLocaleLowerCase(),
+      firstName: firstName.toLocaleLowerCase(),
+      lastName: lastName.toLocaleLowerCase(),
+      dob: dob,
+      email: email.toLocaleLowerCase(),
+      phone_number: phone_number,
+      gender: gender.toLocaleLowerCase(),
+      address: address.toLocaleLowerCase(),
+      city: city.toLocaleLowerCase(),
+      state: state.toLocaleLowerCase(),
+      zipcode: zipcode,
+      password: passhash,
+      price: priceInt,
+      bio: bio.toLocaleLowerCase(),
       //active_status:active_status,
       overall_rating: 0,
       reviews: [],
-      active_status: 1
+      active_status: 1,
     };
 
     // if (active_status ==="Yes" || active_status === "No"){
@@ -280,230 +275,228 @@ module.exports = {
     return obj;
   },
 
-
   async getSitterEmail(email) {
+    try {
+      let emailRegex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!email.valueOf().match(emailRegex)) {
+        throw "e-mail format is incorrect";
+      }
+      const sittersCollection = await sitters();
+      const addedUser = await sittersCollection.findOne({
+        email: email.toLocaleLowerCase(),
+      });
+      if (addedUser === null) throw "User does not exists";
+      delete addedUser.password;
+      //addedUser.password = "";
+      addedUser._id = addedUser._id.toString();
+      return addedUser;
+    } catch (e) {
+      return e.message;
+    }
+  },
+
+  async updateSitter(
+    firstName,
+    lastName,
+    email,
+    phone_number,
+    gender,
+    address,
+    city,
+    state,
+    zipcode,
+    price,
+    bio
+  ) {
+    if (!firstName) {
+      throw "You must provide first name";
+    }
+
+    if (!lastName) {
+      throw "You must provide last name";
+    }
+    if (!email) {
+      throw "You must provide e-mail";
+    }
+
+    if (!phone_number) {
+      throw "You must provide phone number";
+    }
+
+    if (!gender) {
+      throw "You must provide gender";
+    }
+
+    if (!address) {
+      throw "You must provide address";
+    }
+
+    if (!city) {
+      throw "You must provide city";
+    }
+
+    if (!state) {
+      throw "You must provide state";
+    }
+
+    if (!zipcode) {
+      throw "You must provide zipcode";
+    }
+
+    if (!price) {
+      throw "You must provide price";
+    }
+
+    if (!bio) {
+      throw "You must provide some details about yourself";
+    }
+
+    if (typeof firstName !== "string") {
+      throw "first name must be string";
+    }
+
+    if (typeof lastName !== "string") {
+      throw "last name must be string";
+    }
+
+    if (typeof email !== "string") {
+      throw "e-mail must be string";
+    }
+
+    if (typeof phone_number !== "string") {
+      throw "phone number must be string";
+    }
+
+    if (typeof gender !== "string") {
+      throw "gender must be string";
+    }
+
+    if (typeof address !== "string") {
+      throw "address must be string";
+    }
+
+    if (typeof city !== "string") {
+      throw "city must be string";
+    }
+
+    if (typeof state !== "string") {
+      throw "state must be string";
+    }
+
+    if (typeof zipcode !== "string") {
+      throw "zipcode must be string";
+    }
+
+    if (typeof price !== "string") {
+      throw "price must be string";
+    }
+
+    if (typeof bio !== "string") {
+      throw "bio must be string";
+    }
+
+    if (firstName.trim() === "") {
+      throw "first name cannot be empty string";
+    }
+    if (lastName.trim() === "") {
+      throw "last name cannot be empty string";
+    }
+
+    if (email.trim() === "") {
+      throw "e-mail cannot be empty string";
+    }
+    if (phone_number.trim() === "") {
+      throw "phone numbe cannot be empty string";
+    }
+    if (gender.trim() === "") {
+      throw "gender cannot be empty string";
+    }
+    if (address.trim() === "") {
+      throw "address cannot be empty string";
+    }
+    if (city.trim() === "") {
+      throw "city cannot be empty string";
+    }
+    if (state.trim() === "") {
+      throw "state cannot be empty string";
+    }
+    if (zipcode.trim() === "") {
+      throw "zipcode cannot be empty string";
+    }
+
+    if (bio.trim() === "") {
+      throw "date of birth cannot be empty string";
+    }
+
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!email.valueOf().match(emailRegex)) {
       throw "e-mail format is incorrect";
     }
-    const sittersCollection = await sitters();
-    const addedUser = await sittersCollection.findOne({
-      email: email.toLocaleLowerCase(),
-    });
-    if (addedUser === null) throw "User does not exists";
-    delete addedUser.password;
-    //addedUser.password = "";
-    addedUser._id = addedUser._id.toString();
-    return addedUser;
-  },
 
+    let phnregex =
+      /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+    if (!phone_number.valueOf().match(phnregex)) {
+      throw "your phone number format is incorrect";
+    }
 
-  async updateSitter(firstName, lastName, email, phone_number, gender, address, city, state, 
-    zipcode, price, bio) {
+    let updatedSitter = {};
 
-      if (!firstName) {
-        throw "You must provide first name"
-      }
-    
-      if (!lastName) {
-        throw "You must provide last name"
-      }
-      if (!email) {
-        throw "You must provide e-mail"
-      }
-    
-      if (!phone_number) {
-        throw "You must provide phone number"
-      }
-    
-      if (!gender) {
-        throw "You must provide gender"
-      }
-    
-      if (!address) {
-        throw "You must provide address"
-      }
-    
-      if (!city) {
-        throw "You must provide city"
-      }
-    
-      if (!state) {
-        throw "You must provide state"
-      }
-    
-      if (!zipcode) {
-        throw "You must provide zipcode"
-      }
+    let priceInt = parseInt(price);
 
-      if (!price) {
-        throw "You must provide price"
-      }
-
-      if (!bio) {
-        throw "You must provide some details about yourself"
-      }
-
-    
-    
-      if (typeof firstName !== "string") {
-        throw "first name must be string"
-      }
-    
-      if (typeof lastName !== "string") {
-        throw "last name must be string"
-      }
-    
-      if (typeof email !== "string") {
-        throw "e-mail must be string"
-      }
-    
-      if (typeof phone_number !== "string") {
-        throw "phone number must be string"
-      }
-    
-      if (typeof gender !== "string") {
-        throw "gender must be string"
-      }
-    
-      if (typeof address !== "string") {
-        throw "address must be string"
-      }
-    
-      if (typeof city !== "string") {
-        throw "city must be string"
-      }
-    
-      if (typeof state !== "string") {
-        throw "state must be string"
-      }
-    
-      if (typeof zipcode !== "string") {
-        throw "zipcode must be string"
-      }
-
-      if (typeof price !== "string") {
-        throw "price must be string"
-      }
-
-      if (typeof bio !== "string") {
-        throw "bio must be string"
-      }
-
-    
-    
-      if (firstName.trim() === "") {
-        throw "first name cannot be empty string"
-      }
-      if (lastName.trim() === "") {
-        throw "last name cannot be empty string"
-      }
-    
-      if (email.trim() === "") {
-        throw "e-mail cannot be empty string"
-      }
-      if (phone_number.trim() === "") {
-        throw "phone numbe cannot be empty string"
-      }
-      if (gender.trim() === "") {
-        throw "gender cannot be empty string"
-      }
-      if (address.trim() === "") {
-        throw "address cannot be empty string"
-      }
-      if (city.trim() === "") {
-        throw "city cannot be empty string"
-      }
-      if (state.trim() === "") {
-        throw "state cannot be empty string"
-      }
-      if (zipcode.trim() === "") {
-        throw "zipcode cannot be empty string"
-      }
-
-      if (bio.trim() === "") {
-        throw "date of birth cannot be empty string"
-      }
-
-
-      let emailRegex =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (!email.valueOf().match(emailRegex)) {
-        throw "e-mail format is incorrect"
-      }
-    
-     
-      let phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
-      if (!phone_number.valueOf().match(phnregex)) {
-        throw "your phone number format is incorrect" 
-      }
-    
-
-      
-      let updatedSitter={};
-
-      let priceInt = parseInt(price); 
-
-      const sitterCollection = await sitters();
-      let oldSitterdetails = {
-      firstName:firstName.toLocaleLowerCase(),
-      lastName:lastName.toLocaleLowerCase(),
-      phone_number:phone_number,
-      gender:gender.toLocaleLowerCase(),
-      address:address.toLocaleLowerCase(),
-      city:city.toLocaleLowerCase(),
-      state:state.toLocaleLowerCase(),
-      zipcode:zipcode,
+    const sitterCollection = await sitters();
+    let oldSitterdetails = {
+      firstName: firstName.toLocaleLowerCase(),
+      lastName: lastName.toLocaleLowerCase(),
+      phone_number: phone_number,
+      gender: gender.toLocaleLowerCase(),
+      address: address.toLocaleLowerCase(),
+      city: city.toLocaleLowerCase(),
+      state: state.toLocaleLowerCase(),
+      zipcode: zipcode,
       price: priceInt,
-      bio: bio.toLocaleLowerCase()
+      bio: bio.toLocaleLowerCase(),
     };
-
 
     const updatedInfo = await sitterCollection.updateOne(
       { email: email },
       { $set: oldSitterdetails }
     );
-    
+
     if (updatedInfo.modifiedCount === 0) {
-      throw 'Sorry, could not update sitter details successfully';
+      throw "Sorry, could not update sitter details successfully";
     }
-    
-    updatedSitter['sitterUpdated'] = true;
+
+    updatedSitter["sitterUpdated"] = true;
     return updatedSitter;
   },
 
+  async getCuerrntSitterInfo(email) {
+    if (!email || email.trim() === "") throw " email not available";
 
-
-  async getCuerrntSitterInfo(email){
-    if (!email || email.trim()==="") throw ' email not available';
-  
-  
     const sitterCollection = await sitters();
     const sitterInfo = await sitterCollection.findOne({ email: email });
-    if (sitterInfo === null) throw 'User not found';
-       
+    if (sitterInfo === null) throw "User not found";
+
     return sitterInfo;
-  
   },
 
-  
-  async DeleteSitter(email){
-    if (!email || email.trim()==="") throw ' email not available';
-  
+  async DeleteSitter(email) {
+    if (!email || email.trim() === "") throw " email not available";
+
     let oldSitterdetails = {
-      active_status:0
+      active_status: 0,
     };
-  
+
     const sitterCollection = await sitters();
-    const sitterInfo = await sitterCollection.updateOne( { email: email },
-      { $set: oldSitterdetails });
-    if (sitterInfo === null) throw 'User not found';
-    sitterInfo['sitterDeleted'] = true;
-       
+    const sitterInfo = await sitterCollection.updateOne(
+      { email: email },
+      { $set: oldSitterdetails }
+    );
+    if (sitterInfo === null) throw "User not found";
+    sitterInfo["sitterDeleted"] = true;
+
     return sitterInfo;
-  
   },
-
-
 };
