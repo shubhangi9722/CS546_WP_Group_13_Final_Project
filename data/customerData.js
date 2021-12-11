@@ -282,6 +282,14 @@ module.exports = {
       throw "your phone number format is incorrect";
     }
 
+    if (vet_phn != "") {
+      let phnregex =
+        /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+      if (!vet_phn.valueOf().match(phnregex)) {
+        throw "your vet phone number format is incorrect";
+      }
+    }
+
     let obj = {};
 
     const passhash = await bcrypt.hash(password, saltRounds);

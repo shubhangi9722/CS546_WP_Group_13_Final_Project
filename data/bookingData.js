@@ -74,6 +74,7 @@ async function getOwnerNameId(id) {
   const sitterCollection = await dogOwners();
   const addedUser = await sitterCollection.findOne({ _id: parsedId });
   if (addedUser !== null) {
+    delete addedUser._id;
     delete addedUser.password;
     return addedUser;
   }

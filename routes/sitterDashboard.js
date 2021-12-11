@@ -25,168 +25,170 @@ router.get('/', async (req, res) => {
 
   router.post('/updateSitter', async (req, res) => {
     const rest_params = req.body;
- 
+ try{
   if (!rest_params.firstName) {
-    res.status(400).json({ error: "You must provide first name" });
-    return ;
+    throw "You must provide first name" 
+    
   }
 
   if (!rest_params.lastName) {
-    res.status(400).json({ error: "You must provide last name" });
-    return;
+    throw "You must provide last name" 
+    
   }
   if (!rest_params.email) {
-    res.status(400).json({ error: "You must provide e-mail" });
-    return;
+    throw "You must provide e-mail" 
+    
   }
 
   if (!rest_params.phone_number) {
-    res.status(400).json({ error: "You must provide phone number" });
-    return;
+    throw "You must provide phone number" 
+    
   }
 
   if (!rest_params.gender) {
-    res.status(400).json({ error: "You must provide gender" });
-    return;
+    throw "You must provide gender" 
+    
   }
 
   if (!rest_params.address) {
-    res.status(400).json({ error: "You must provide adress" });
-    return;
+    throw "You must provide adress" 
+    
   }
 
   if (!rest_params.zipcode) {
-    res.status(400).json({ error: "You must provide zipcode" });
-    return;
+    throw "You must provide zipcode" 
+    
   }
 
   // if (!rest_params.service_availability) {
-  //   res.status(400).json({ error: "You must provide date of birth" });
-  //   return;
+  //   throw "You must provide date of birth" 
+  //   
   // }
 
   if (!rest_params.price) {
-    res.status(400).json({ error: "You must provide price" });
-    return;
+    throw "You must provide price" 
+    
   }
 
   if (!rest_params.bio) {
-    res.status(400).json({ error: "You must provide bio" });
-    return;
+    throw "You must provide bio" 
+    
   }
 
 
   if (typeof rest_params.firstName !== "string") {
-    res.status(400).json({ error: "first name must be string" });
-    return;
+    throw "first name must be string" 
+    
   }
 
   if (typeof rest_params.lastName !== "string") {
-    res.status(400).json({ error: "last name must be string" });
-    return;
+    throw "last name must be string" 
+    
   }
 
   if (typeof rest_params.email !== "string") {
-    res.status(400).json({ error: "e-mail must be string" });
-    return;
+    throw "e-mail must be string" 
+    
   }
 
   if (typeof rest_params.phone_number !== "string") {
-    res.status(400).json({ error: "phone number must be string" });
-    return;
+    throw "phone number must be string" 
+    
   }
 
   if (typeof rest_params.gender !== "string") {
-    res.status(400).json({ error: "gender must be string" });
-    return;
+    throw "gender must be string" 
+    
   }
 
   if (typeof rest_params.address !== "string") {
-    res.status(400).json({ error: "adress must be string" });
-    return;
+    throw "adress must be string" 
+    
   }
 
 
   if (typeof rest_params.zipcode !== "string") {
-    res.status(400).json({ error: "zipcode must be string" });
-    return;
+    throw "zipcode must be string" 
+    
   }
 
   if (typeof rest_params.price !== "string") {
-    res.status(400).json({ error: "price must be string" });
-    return;
+    throw "price must be string" 
+    
   }
 
   if (typeof rest_params.bio !== "string") {
-    res.status(400).json({ error: "bio must be string" });
-    return;
+    throw "bio must be string" 
+    
   }
 
   if (rest_params.firstName.trim() === "") {
-    res.status(400).json({ error: "first name cannot be empty string" });
-    return;
+    throw "first name cannot be empty string" 
+    
   }
   if (rest_params.lastName.trim() === "") {
-    res.status(400).json({ error: "last name cannot be empty string" });
-    return;
+    throw "last name cannot be empty string" 
+    
   }
 
   if (rest_params.email.trim() === "") {
-    res.status(400).json({ error: "e-mail cannot be empty string" });
-    return;
+    throw "e-mail cannot be empty string" 
+    
   }
   if (rest_params.phone_number.trim() === "") {
-    res.status(400).json({ error: "phone number cannot be empty string" });
-    return;
+    throw "phone number cannot be empty string" 
+    
   }
   if (rest_params.gender.trim() === "") {
-    res.status(400).json({ error: "gender cannot be empty string" });
-    return;
+    throw "gender cannot be empty string" 
+    
   }
   if (rest_params.address.trim() === "") {
-    res.status(400).json({ error: "address cannot be empty string" });
-    return;
+    throw "address cannot be empty string" 
+    
   }
 
   if (rest_params.zipcode.trim() === "") {
-    res.status(400).json({ error: "zipcode cannot be empty string" });
-    return;
+    throw "zipcode cannot be empty string" 
+    
   }
 
    if (rest_params.price.trim() === "") {
-     res.status(400).json({ error: "price cannot be empty string" });
-     return;
+     throw "price cannot be empty string" 
+     
    }
 
   if (rest_params.bio.trim() === "") {
-    res.status(400).json({ error: "bio cannot be empty string" });
-    return;
+    throw "bio cannot be empty string" 
+    
   }
 
   let emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!rest_params.email.valueOf().match(emailRegex)) {
-    res.status(400).json({ error: 
-      "e-mail format is incorrect"
-    });
-    return;
+    throw  "e-mail format is incorrect"
+    
+    
   }
 
   let phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
-    res.status(400).json({ error: 
-      "your phone number format is incorrect"
-    });
-    return;
+    throw "your phone number format is incorrect"
+    
+    
   }
 
   let zipvalid=/^\d{5}$/
   if (!rest_params.zipcode.valueOf().match(zipvalid)) {
-    res.status(400).json({ error: 
-      "your zipcode is incorrect"
-    });
-    return;
+    throw "your zipcode is incorrect"
+ 
+    
   }
+}
+catch (e) {
+  return res.status(400).json(e)
+}
+
 
   
   try {
@@ -206,7 +208,7 @@ router.get('/', async (req, res) => {
     );
     return res.json(update);   
   } catch (e) {
-    res.status(500).send();
+    return res.status(400).json(e)
   }
 
 })  

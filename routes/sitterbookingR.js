@@ -29,6 +29,7 @@ router.get("/getsomebookings/:email", async (req, res) => {
   }
 });
 router.post("/accept/:id", async (req, res) => {
+  console.log(req.params.id);
   const accept = bookingData.UpdateStatusBooking(req.params.id, "Accepted");
   if (accept.Update == false) {
     return { Update: false };
