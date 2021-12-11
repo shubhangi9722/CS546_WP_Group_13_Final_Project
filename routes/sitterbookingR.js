@@ -10,7 +10,7 @@ router.get("/getsomebookings/:email", async (req, res) => {
   //first get id sitter by email
   try {
     const sitterdata = await sitterData.getSitterEmail(req.params.email);
-    console.log(sitterdata);
+    //console.log(sitterdata);
     if (sitterdata._id) {
       let id = sitterdata._id;
       //get Requested bookings by Sitter id
@@ -28,17 +28,24 @@ router.get("/getsomebookings/:email", async (req, res) => {
     res.status(500).send();
   }
 });
-router.post("/accept/:id", async (req, res) => {
+router.get("/accept/:id", async (req, res) => {
   console.log(req.params.id);
-  const accept = bookingData.UpdateStatusBooking(req.params.id, "Accepted");
+  const accept = await bookingData.UpdateStatusBooking(
+    req.params.id,
+    "Accepted"
+  );
+  console.log(accept);
   if (accept.Update == false) {
     return { Update: false };
   }
   return { Update: true };
 });
 
-router.post("/rejected/:id", async (req, res) => {
-  const accept = bookingData.UpdateStatusBooking(req.params.id, "Rejected");
+router.get("/rejected/:id", async (req, res) => {
+  const accept = await bookingData.UpdateStatusBooking(
+    req.params.id,
+    "Rejected"
+  );
   if (accept.Update == false) {
     return { Update: false };
   }

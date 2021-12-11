@@ -10,6 +10,7 @@
      <!-- Core theme CSS (includes Bootstrap)-->
      <link href="/public/css/SitterDashboard.css" rel="stylesheet" />
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -19,8 +20,8 @@
                <div class="sidebar-heading border-bottom bg-light">Welcome, {{email}}</div>
                <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getsomebookings('{{email}}')" >Home</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Booking History</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="upcommingbookings('{{email}}')">Upcomming Bookings</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"onclick="getsomebookingsHist('{{email}}')">Booking History</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="UpcommingBookings('{{email}}')">Upcomming Bookings</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetSiiterDetails('{{email}}')">My Profile</a>
                </div>
           </div>
