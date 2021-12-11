@@ -3,7 +3,7 @@ const router = express.Router();
 const data = require("../data");
 const customerData = data.customer;
 const bcrypt = require("bcryptjs");
-const saltRounds = 16;
+const saltRounds = 10;
 var zipcodes = require("zipcodes");
 
 //Customer Signup Page
@@ -226,10 +226,22 @@ router.post("/", async (req, res) => {
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
     errors.push("your phone number format is incorrect");
   }
+
+
+  var phnregex =
+    /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+  if (!rest_params.vet_phn.valueOf().match(phnregex)) {
+    errors.push("your dogs veterinarian phone number format is incorrect");
+  }
+
+
+
   var zipvalid = /^\d{5}$/;
   if (!rest_params.zipcode.valueOf().match(zipvalid)) {
     errors.push("your zipcode is incorrect");
   }
+
+
   console.log("error length", errors.length);
   console.log("error", errors);
   if (errors.length > 0) {
