@@ -686,7 +686,7 @@ async UpdateOwner(
     { $set: oldcustomer }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw 'could not update the customer successfully';
+    throw 'customer already upto date';
   }
   
   obj['userUpdated'] = true;
@@ -773,6 +773,17 @@ async UpdateDog(
     throw  "your date of bith format is incorrect"
 
   }
+
+  if(vet_phn!='')
+  {
+    var phnregex =/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+  if (!vet_phn.valueOf().match(phnregex)) {
+    
+    throw "your veterinarian phone number format is incorrect";
+  }
+  
+  }
+  
   
 
   let obj={}
@@ -794,7 +805,7 @@ async UpdateDog(
     { $set: oldcustomer }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw 'could not update the Dog details successfully';
+    throw 'info already uptodate';
   }
   
   obj['DogUpdated'] = true;
