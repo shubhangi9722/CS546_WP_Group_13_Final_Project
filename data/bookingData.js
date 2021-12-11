@@ -61,6 +61,25 @@ async function getSitterNameId(id) {
   }
   return false;
 }
+async function getOwnerNameId(id) {
+  if (typeof id !== "string") {
+    throw new Error("Sitter id not a string");
+  }
+  let parsedId;
+  try {
+    parsedId = ObjectId(id);
+  } catch (err) {
+    throw new Error(`id ${id} is not a valid ObjectId.`);
+  }
+  const sitterCollection = await dogOwners();
+  const addedUser = await sitterCollection.findOne({ _id: parsedId });
+  if (addedUser !== null) {
+    delete addedUser.password;
+    return addedUser;
+  }
+  return false;
+}
+
 module.exports = {
   async createBooking(
     owner_id,
@@ -233,25 +252,46 @@ module.exports = {
     return { BookingCreated: true };
   },
 
+  /////////////////////////////////////////////////////////////////////////////////////////////
   async GetbookingSitter(sitter_id) {
-    if (!sitter_id) {
-      throw "sitter id not found";
+    try {
+      if (!sitter_id) {
+        throw "sitter id not found";
+      }
+      if (!isSitter_id(sitter_id)) {
+        throw new Error(`id ${sitter_id} is not Valid`);
+      }
+      const bookingsCollection = await bookings();
+      const b = await bookingsCollection
+        .find({ Sitter_id: sitter_id })
+        .toArray();
+      if (b.length == 0) {
+        throw "Booking does not exists";
+      }
+      let bOwner = [];
+      for (x of b) {
+        x.start_date_time = moment(x.start_date_time).format(
+          "YYYY-MM-DD HH:mm"
+        );
+        x.end_date_time = moment(x.end_date_time).format("YYYY-MM-DD HH:mm");
+        x.end_date_time = moment(x.end_date_time).format("YYYY-MM-DD HH:mm");
+        let addedUser = await getOwnerNameId(x.Owner_id);
+        if (addedUser == false) {
+          throw "No Owner found";
+        }
+        let obj = {
+          ...x,
+          ...addedUser,
+        };
+        bOwner.push(obj);
+      }
+      return bOwner;
+    } catch (e) {
+      return false;
     }
-    if (!isSitter_id(sitter_id)) {
-      throw new Error(`id ${sitter_id} is not Valid`);
-    }
-    const bookingsCollection = await bookings();
-    const b = await bookingsCollection.find({ Sitter_id: sitter_id }).toArray();
-    if (b.length == 0) {
-      throw "Booking does not exists";
-    }
-    for (x of b) {
-      x.start_date_time = moment(x.start_date_time).format("YYYY-MM-DD HH:mm");
-      x.end_date_time = moment(x.end_date_time).format("YYYY-MM-DD HH:mm");
-    }
-    return b;
   },
-  ////////////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async GetbookingOwner(owner_id) {
     try {
@@ -285,49 +325,53 @@ module.exports = {
 
   //////////////////////Status
   async UpdateStatusBooking(booking_id, status) {
-    if (!status) {
-      throw "status not present";
-    }
-    if (typeof status !== "string") {
-      throw "Status should be a string";
-    }
-    if (
-      status !== "Accepted" &&
-      status !== "Rejected" &&
-      status !== "Completed"
-    ) {
-      throw "Not valid status";
-    }
-    if (!booking_id) {
-      throw "booking_id not found";
-    }
-    if (typeof booking_id !== "string") {
-      throw new Error("booking_id not a string");
-    }
-    let parsedId;
     try {
-      parsedId = ObjectId(booking_id);
-    } catch (err) {
-      throw new Error(`id ${booking_id} is not a valid ObjectId.`);
-    }
-    let updatedBooking = {
-      status: status,
-    };
+      if (!status) {
+        throw "status not present";
+      }
+      if (typeof status !== "string") {
+        throw "Status should be a string";
+      }
+      if (
+        status !== "Accepted" &&
+        status !== "Rejected" &&
+        status !== "Completed"
+      ) {
+        throw "Not valid status";
+      }
+      if (!booking_id) {
+        throw "booking_id not found";
+      }
+      if (typeof booking_id !== "string") {
+        throw new Error("booking_id not a string");
+      }
+      let parsedId;
+      try {
+        parsedId = ObjectId(booking_id);
+      } catch (err) {
+        throw new Error(`id ${booking_id} is not a valid ObjectId.`);
+      }
+      let updatedBooking = {
+        status: status,
+      };
 
-    const bookingsCollection = await bookings();
-    const booking = await bookingsCollection.findOne({ _id: parsedId });
-    if (booking.status === status) {
-      throw `Status is already ${status}`;
+      const bookingsCollection = await bookings();
+      const booking = await bookingsCollection.findOne({ _id: parsedId });
+      if (booking.status === status) {
+        throw `Status is already ${status}`;
+      }
+      if (booking === null) throw new Error(`No booking exists with id`);
+      const updatedInfo = await bookingsCollection.updateOne(
+        { _id: parsedId },
+        { $set: updatedBooking }
+      );
+      if (updatedInfo.modifiedCount === 0) {
+        throw new Error("Could not update Booking");
+      }
+      return { Update: true };
+    } catch (e) {
+      return { Update: false };
     }
-    if (booking === null) throw new Error(`No booking exists with id`);
-    const updatedInfo = await bookingsCollection.updateOne(
-      { _id: parsedId },
-      { $set: updatedBooking }
-    );
-    if (updatedInfo.modifiedCount === 0) {
-      throw new Error("Could not update Booking");
-    }
-    return { Update: true };
   },
 
   async delete(booking_id) {
