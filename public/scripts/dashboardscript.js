@@ -26,7 +26,7 @@ function getSomeSitter() {
           );
 
           var book = $(
-            '<a href="#!" id ="book" class="btn btn-primary")">Book</a></div><div class="card-footer text-muted"></div></div>'
+            '<a href="#!" id ="book" class="btn btn-primary">Book</a></div><div class="card-footer text-muted"></div></div>'
           );
           main.appendTo(center);
           book.appendTo(center);
@@ -43,46 +43,6 @@ function getSomeSitter() {
   });
 }
 
-function bookthissitter(data) {
-  $("#mainbinder").empty();
-
-  //$("#mainbinder").append(data);
-  var center = $('<div class="card text-center" id="card"></div>');
-  var bookingform = $('<form method="post"></form>');
-  var checkinout = $(
-    '<div id = "datetime"><label for="checkin-date" id ="bookinglable">Check-in Date</label><input type="datetime-local" id="checkin-date" name="checkin" required></div><br><br><label for="checkout-date" >Check-out Date</label><input type="datetime-local" id="checkout-date" name="checkout" required></div></div><br><br>'
-  );
-  var serviceoptions = $(
-    '<label for="service-selection" id="bookinglable">Select Service</label><select id="service-selection" name="service_selection" required><option value="">Choose a service from the List</option><option value="DogWalking">Dog Walking</option><option value="HouseSitting">House Sitting</option><option value="Daycare">Day care</option><option value="night care">night care</option></select></div><br><br>'
-  );
-  var textarea = $(
-    '<label for="message" id="bookinglable">Anything Else?</label><textarea id="bookingtextarea" name="visitor_message" placeholder="Tell us anything else that might be important." required></textarea></div><br><br>'
-  );
-  var bookbutton = $(
-    '<a href ="#!" class="btn btn-primary" type="submit" id="bookthis">Book The Sitter</button><br>'
-  );
-  var backbutton = $(
-    '<a href ="#!" class="btn btn-primary" type="submit" id="backbutton">Back</button>'
-  );
-  serviceoptions.appendTo(bookingform);
-  checkinout.appendTo(bookingform);
-  textarea.appendTo(bookingform);
-  bookbutton.appendTo(bookingform);
-  bookbutton.on("click", function (event) {
-    $("#mainbinder").append(data);
-    var formData = {};
-    $.ajax({
-      method: "POST",
-      url: "/customerDashboard/Createbooking/",
-      data: formData,
-      success: function (response) {},
-    });
-  });
-  backbutton.attr("onclick", "getSomeSitter()");
-  backbutton.appendTo(bookingform);
-  bookingform.appendTo(center);
-  $("#mainbinder").append(center);
-}
 
 
 function GetOwnerDetails(email)
@@ -100,6 +60,7 @@ function GetOwnerDetails(email)
         },
       });
       //onclick="updateowner(\''+response.email+'\')"
+
 }
 
 function GetOwnerDogDetails(email)
@@ -142,241 +103,233 @@ $("#searchForm").submit((event) => {
       $("#mainbinder").empty();
       if (response.length != 0) {
         for (var i = 0; i < response.length; i++) {
-          $("#mainbinder").append('<div class="card text-center"><div class="card-header"></div><div class="card-body"><h5 class="card-title">'+response[i].firstName+' '+response[i].lastName+'</h5><p class="card-text">'+response[i].bio+'</p><label for="rating">Rating:'+response[i].overall_rating+' </label><br><label for="price">Price:'+response[i].price+'$</label><br><a href="#" class="btn btn-primary">Book</a></div><div class="card-footer text-muted"></div></div>');
+          var center = $("<div/>", {
+            class: "card text-center",
+            id: "card" + i,
+          });
+          var center = $('<div class="card text-center" id="card"></div>');
+          var main = $(
+            '<div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+              response[i].firstName +
+              " " +
+              response[i].lastName +
+              '</h5><p class="card-text">' +
+              response[i].bio +
+              '</p><label for="rating">Rating:' +
+              response[i].overall_rating +
+              ' </label><br><label for="price">Price:' +
+              response[i].price +
+              "</label>"
+          );
+
+          var book = $(
+            '<a href="#!" id ="book" class="btn btn-primary">Book</a></div><div class="card-footer text-muted"></div></div>'
+          );
+          main.appendTo(center);
+          book.appendTo(center);
+          // book.on("click", function (e) {
+          //   bookthissitter(response[i].email);
+          // });
+          book.attr("onclick", `bookthissitter('${response[i].email}')`);
+          $("#mainbinder").append(center);
         }
+
       } else {
         $("#mainbinder").append('<p>No sitter found try again</p>');
       }
     },
+   });
 });
-});
-
-function updateowner(email)
-{
-  var firstName=$('#firstName').val().trim()
-  var lastName=$('#lastName').val().trim()
-  var email=$('#email').val().trim()
-  var phone_number=$('#phone_number').val().trim()
-  var gender=$('#gender').val().trim()
-  var address=$('#address').val().trim()
-  var zipcode=$('#zipcode').val().trim()
-  var dob=$('#dob').val().trim()
-
-  if(firstName=='')
-  {
-    alert('First Name Cannot be empty');
-  }
-  if(lastName=='')
-  {
-    alert('Lats Name Cannot be empty');
-  }
-  if(email=='')
-  {
-    alert('Email Cannot be empty');
-  }
-  if(phone_number=='')
-  {
-    alert('Phone Number Cannot be empty');
-  }
-  if(gender=='')
-  {
-    alert('Select a gender be empty');
-  }
-  if(address=='')
-  {
-    alert('Address Cannot be empty');
-  }
-  if(zipcode=='')
-  {
-    alert('ZipCode Cannot be empty');
-  }
-  if(dob=='')
-  {
-    alert('Date of Birth Cannot be empty');
-  }
-
-  
-  if(typeof firstName!=='string')
-  {
-    alert('First Name must be a string');
-  }
-  if(typeof lastName!=='string')
-  {
-    alert('Last Name must be a string');
-  }
-  if(typeof email!=='string')
-  {
-    alert('Email must be a string');
-  }
-  if(typeof phone_number!=='string')
-  {
-    alert('Phone Number must be a string');
-  }
-  if(typeof gender!=='string')
-  {
-    alert('gender must be string');
-  }
-  if( typeof address!=='string')
-  {
-    alert('Address must be string');
-  }
-  if(typeof zipcode!=='string')
-  {
-    alert('ZipCode must be string');
-  }
-  if(typeof dob!=='string')
-  {
-    alert('Date of Birth must be string');
-  }
 
 
-  var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+function updateowner(email) {
+  var firstName = $("#firstName").val().trim();
+  var lastName = $("#lastName").val().trim();
+  var email = $("#email").val().trim();
+  var phone_number = $("#phone_number").val().trim();
+  var gender = $("#gender").val().trim();
+  var address = $("#address").val().trim();
+  var zipcode = $("#zipcode").val().trim();
+  var dob = $("#dob").val().trim();
+
+  if (firstName == "") {
+    alert("First Name Cannot be empty");
+  }
+  if (lastName == "") {
+    alert("Lats Name Cannot be empty");
+  }
+  if (email == "") {
+    alert("Email Cannot be empty");
+  }
+  if (phone_number == "") {
+    alert("Phone Number Cannot be empty");
+  }
+  if (gender == "") {
+    alert("Select a gender be empty");
+  }
+  if (address == "") {
+    alert("Address Cannot be empty");
+  }
+  if (zipcode == "") {
+    alert("ZipCode Cannot be empty");
+  }
+  if (dob == "") {
+    alert("Date of Birth Cannot be empty");
+  }
+
+  if (typeof firstName !== "string") {
+    alert("First Name must be a string");
+  }
+  if (typeof lastName !== "string") {
+    alert("Last Name must be a string");
+  }
+  if (typeof email !== "string") {
+    alert("Email must be a string");
+  }
+  if (typeof phone_number !== "string") {
+    alert("Phone Number must be a string");
+  }
+  if (typeof gender !== "string") {
+    alert("gender must be string");
+  }
+  if (typeof address !== "string") {
+    alert("Address must be string");
+  }
+  if (typeof zipcode !== "string") {
+    alert("ZipCode must be string");
+  }
+  if (typeof dob !== "string") {
+    alert("Date of Birth must be string");
+  }
+
+  var phnregex =
+    /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
   if (!phone_number.valueOf().match(phnregex)) {
-    alert(
-      "your phone number format is incorrect"
-    );
+    alert("your phone number format is incorrect");
   }
-  var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+  var dobregex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
   if (!dob.valueOf().match(dobregex)) {
-    alert(
-      "your date of bith format is incorrect"
-    );
+    alert("your date of bith format is incorrect");
   }
 
-  var zipvalid=/^\d{5}$/
+  var zipvalid = /^\d{5}$/;
   if (!zipcode.valueOf().match(zipvalid)) {
-    alert(
-      "your zipcode is incorrect"
-    );
+    alert("your zipcode is incorrect");
   }
 
 
-var ownerobj={
-      firstName:firstName,
-      lastName:lastName,
-      email:email,
-      phone_number:phone_number,
-      gender:gender,
-      address:address,
-      zipcode:zipcode,
-      dob:dob
-}
-var data= JSON.stringify(ownerobj);
+  var ownerobj = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phone_number: phone_number,
+    gender: gender,
+    address: address,
+    zipcode: zipcode,
+    dob: dob,
+  };
+  var data = JSON.stringify(ownerobj);
 
-$.ajax({
-  type: "POST",
-  url: "customerDashboard/UpdateOwner",
-  data: data,
-  contentType: "application/json; charset=utf-8",
-  dataType: "json",
-  success: function (response) {
-    if(response.userUpdated==true)
-    {
-     alert("Your Profile is updated")
-    }
-
-    else{
-      alert("Sorry somerthing went wrong ")
-    }
-  },
-});
+  $.ajax({
+    type: "POST",
+    url: "customerDashboard/UpdateOwner",
+    data: data,
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (response) {
+      if (response.userUpdated == true) {
+        alert("Your Profile is updated");
+      } else {
+        alert("Sorry somerthing went wrong ");
+      }
+    },
+    error: function(response){
+      alert(response.responseJSON);
+  }
+  });
 }
 
+function updatdog(email) {
+  var dog_name = $("#dog_name").val().trim();
+  var dog_gender = $("#dog_gender").val().trim();
+  var dog_breed = $("#dog_breed").val().trim();
+  var dog_dob = $("#dog_dob").val().trim();
+  var vet_name = $("#vet_name").val().trim();
+  var vet_phn = $("#vet_phn").val().trim();
+  var weight = $("#weight").val().trim();
+  var behavioral_information = $("#behavioral_information").val().trim();
 
-
-
-function updatdog(email)
-{
-
- var dog_name=$('#dog_name').val().trim()
- var dog_gender=$('#dog_gender').val().trim()
- var dog_breed=$('#dog_breed').val().trim()
- var dog_dob=$('#dog_dob').val().trim()
- var vet_name=$('#vet_name').val().trim()
- var vet_phn=$('#vet_phn').val().trim()
- var weight=$('#weight').val().trim()
- var behavioral_information=$('#behavioral_information').val().trim()
- 
-
-  if(dog_name=='')
-  {
-    alert('Dog name Cannot be empty');
+  if (dog_name == "") {
+    alert("Dog name Cannot be empty");
   }
-  if(dog_gender=='')
-  {
-    alert('Dog gender Cannot be empty');
+  if (dog_gender == "") {
+    alert("Dog gender Cannot be empty");
   }
-  if(dog_breed=='')
-  {
-    alert('Dog breed Cannot be empty');
+  if (dog_breed == "") {
+    alert("Dog breed Cannot be empty");
   }
-  if(dog_dob=='')
-  {
-    alert('Dog date of birth Cannot be empty');
+  if (dog_dob == "") {
+    alert("Dog date of birth Cannot be empty");
   }
-  if(weight=='')
-  {
-    alert('Dog Weight Cannot be empty');
+  if (weight == "") {
+    alert("Dog Weight Cannot be empty");
   }
 
-  if(typeof dog_name!=='string')
-  {
-    alert('Dog Name must be a string');
+  if (typeof dog_name !== "string") {
+    alert("Dog Name must be a string");
   }
-  if(typeof dog_gender!=='string')
-  {
-    alert('Dog gender must be a string');
+  if (typeof dog_gender !== "string") {
+    alert("Dog gender must be a string");
   }
-  if(typeof dog_breed!=='string')
-  {
-    alert('Dog breed must be a string');
+  if (typeof dog_breed !== "string") {
+    alert("Dog breed must be a string");
   }
-  if(typeof dog_dob!=='string')
-  {
-    alert('Dog date of birth must be a string');
+  if (typeof dog_dob !== "string") {
+    alert("Dog date of birth must be a string");
   }
 
-
-
-  var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
+  var dobregex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
   if (!dog_dob.valueOf().match(dobregex)) {
-    alert(
-      "your date of bith format is incorrect"
-    );
+    alert("your date of bith format is incorrect");
+  }
+  if(vet_phn!='')
+  {
+    var phnregex =
+    /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+  if (!vet_phn.valueOf().match(phnregex)) {
+    alert("your veterinarian phone number format is incorrect");
+  }
+  
   }
 
+  var ownerobj = {
+    email: email,
+    dog_name: dog_name,
+    dog_gender: dog_gender,
+    dog_breed: dog_breed,
+    dog_dob: dog_dob,
+    vet_name: vet_name,
+    vet_phn: vet_phn,
+    weight: weight,
+    behavioral_information: behavioral_information,
+  };
+  var data = JSON.stringify(ownerobj);
 
-
-var ownerobj={
-  email:email,
-  dog_name:dog_name,
-  dog_gender:dog_gender,
-  dog_breed:dog_breed,
-  dog_dob:dog_dob,
-  vet_name:vet_name,
-  vet_phn:vet_phn,
-  weight:weight,
-  behavioral_information:behavioral_information
-}
-var data= JSON.stringify(ownerobj);
-
-$.ajax({
-  type: "POST",
-  url: "customerDashboard/UpdateDog",
-  data: data,
-  contentType: "application/json; charset=utf-8",
-  dataType: "json",
-  success: function (response) {
-    if(response.DogUpdated==true)
-    {
-     alert("Your dog's profile is updated")
-    }
-
-    else{
-      alert("Sorry somerthing went wrong ")
-    }
-  },
-});
-
-
+  $.ajax({
+    type: "POST",
+    url: "customerDashboard/UpdateDog",
+    data: data,
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (response) {
+      if (response.DogUpdated == true) {
+        alert("Your dog's profile is updated");
+      } else {
+        alert("Sorry somerthing went wrong ");
+      }
+    },
+    error: function(response){
+      alert(response.responseJSON);
+  }
+  });
 }

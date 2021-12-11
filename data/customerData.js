@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const dogOwners = mongoCollections.dogOwners;
 const sitters = mongoCollections.sitters;
 const bcrypt = require('bcryptjs');
-const saltRounds = 10;
+const saltRounds = 16;
 const { ObjectId } = require('mongodb');
 
 module.exports={
@@ -268,13 +268,6 @@ module.exports={
           throw " dog's weight cannot be empty string"
         }
       
-        var dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
-          if (!dob.valueOf().match(dobregex) || !dog_dob.valueOf().match(dobregex)) {
-
-            throw  "your date of birth format is incorrect"
-
-          }
-
         var emailRegex =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!email.valueOf().match(emailRegex)) {
@@ -299,25 +292,25 @@ module.exports={
         const passhash = await bcrypt.hash(password, saltRounds);
         const dogOwnerCollection = await dogOwners();
         let newcustomer = {
-          firstName:firstName.toLocaleLowerCase(),
-          lastName:lastName.toLocaleLowerCase(),
+          firstName:firstName,
+          lastName:lastName,
           email:email.toLocaleLowerCase(),
           phone_number:phone_number,
-          gender:gender.toLocaleLowerCase(),
-          address:address.toLocaleLowerCase(),
-          city:city.toLocaleLowerCase(),
-          state:state.toLocaleLowerCase(),
+          gender:gender,
+          address:address,
+          city:city,
+          state:state,
           zipcode:zipcode,
           dob:dob,
           password:passhash,
-          dog_name:dog_name.toLocaleLowerCase(),
-          dog_gender:dog_gender.toLocaleLowerCase(),
-          dog_breed:dog_breed.toLocaleLowerCase(),
+          dog_name:dog_name,
+          dog_gender:dog_gender,
+          dog_breed:dog_breed,
           dog_dob:dog_dob,
-          vet_name:vet_name.toLocaleLowerCase(),
+          vet_name:vet_name,
           vet_phn:vet_phn,
           weight:weight,
-          behavioral_information:behavioral_information.toLocaleLowerCase() 
+          behavioral_information:behavioral_information 
         };
 
         const addedUser = await dogOwnerCollection.findOne({ email: email.toLocaleLowerCase() });
@@ -677,13 +670,13 @@ async UpdateOwner(
 
   const dogOwnerCollection = await dogOwners();
   let oldcustomer = {
-    firstName:firstName.toLocaleLowerCase(),
-    lastName:lastName.toLocaleLowerCase(),
+    firstName:firstName,
+    lastName:lastName,
     phone_number:phone_number,
-    gender:gender.toLocaleLowerCase(),
-    address:address.toLocaleLowerCase(),
-    city:city.toLocaleLowerCase(),
-    state:state.toLocaleLowerCase(),
+    gender:gender,
+    address:address,
+    city:city,
+    state:state,
     zipcode:zipcode,
     dob:dob
   };
@@ -693,7 +686,7 @@ async UpdateOwner(
     { $set: oldcustomer }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw 'could not update the customer successfully';
+    throw 'customer already upto date';
   }
   
   obj['userUpdated'] = true;
@@ -780,20 +773,31 @@ async UpdateDog(
     throw  "your date of bith format is incorrect"
 
   }
+
+  if(vet_phn!='')
+  {
+    var phnregex =/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+  if (!vet_phn.valueOf().match(phnregex)) {
+    
+    throw "your veterinarian phone number format is incorrect";
+  }
+  
+  }
+  
   
 
   let obj={}
 
   const dogOwnerCollection = await dogOwners();
   let oldcustomer = {
-    dog_name:dog_name.toLocaleLowerCase(),
-    dog_gender:dog_gender.toLocaleLowerCase(),
-    dog_breed:dog_breed.toLocaleLowerCase(),
+    dog_name:dog_name,
+    dog_gender:dog_gender,
+    dog_breed:dog_breed,
     dog_dob:dog_dob,
-    vet_name:vet_name.toLocaleLowerCase(),
+    vet_name:vet_name,
     vet_phn:vet_phn,
     weight:weight,
-    behavioral_information:behavioral_information.toLocaleLowerCase()
+    behavioral_information:behavioral_information
   };
 
   const updatedInfo = await dogOwnerCollection.updateOne(
@@ -801,7 +805,7 @@ async UpdateDog(
     { $set: oldcustomer }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw 'could not update the Dog details successfully';
+    throw 'info already uptodate';
   }
   
   obj['DogUpdated'] = true;

@@ -64,15 +64,11 @@ router.post("/", async (req, res) => {
     errors.push("You must provide password");
   }
 
-  if (!rest_params.service_availability) {
-    errors.push("You must provide service availability");
-  }
-
   if (!rest_params.price) {
     errors.push("You must provide some price");
   }
 
-  if (!rest_params.about) {
+  if (!rest_params.bio) {
     errors.push("You must provide some information about yourself");
   }
 
@@ -120,16 +116,12 @@ router.post("/", async (req, res) => {
     errors.push("password must be string");
   }
 
-  if (typeof rest_params.service_availability !== "string") {
-    errors.push("service availability must be string");
-  }
-
   if (typeof rest_params.price !== "string") {
     errors.push("price must be string");
   }
 
-  if (typeof rest_params.about !== "string") {
-    errors.push("about must be string");
+  if (typeof rest_params.bio !== "string") {
+    errors.push("bio must be string");
   }
 
 
@@ -177,8 +169,8 @@ router.post("/", async (req, res) => {
   //   errors.push("price cannot be empty string");
   // }
 
-  if (rest_params.about.trim() === "") {
-    errors.push("about cannot be empty string");
+  if (rest_params.bio.trim() === "") {
+    errors.push("bio cannot be empty string");
   }
 
   let dobregex=/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
@@ -228,9 +220,9 @@ router.post("/", async (req, res) => {
       zipcode: rest_params.zipcode,
       password: rest_params.password,
       //active_status:rest_params.active_status,
-      service_availability: rest_params.service_availability,
+      //service_availability: rest_params.service_availability,
       price: rest_params.price,
-      about: rest_params.about,
+      bio: rest_params.bio,
       error: errors,
       hasErrors: true,
     });
@@ -247,9 +239,9 @@ router.post("/", async (req, res) => {
       address,
       zipcode,
       password,
-      service_availability,
+      //service_availability,
       price,
-      about
+      bio
       //active_status
     } = rest_params;
 
@@ -267,9 +259,9 @@ router.post("/", async (req, res) => {
       zipcitystate.state,
       zipcode,
       password,
-      service_availability,
+      //service_availability,
       price,
-      about
+      bio
       //active_status
     );
 
@@ -291,9 +283,9 @@ router.post("/", async (req, res) => {
       address: rest_params.address,
       zipcode: rest_params.zipcode,
       password: rest_params.password,
-      service_availability: rest_params.service_availability,
+      //service_availability: rest_params.service_availability,
       price: rest_params.price,
-      about: rest_params.about,
+      bio: rest_params.bio,
       //active_status:rest_params.active_status,
       hasserverErrors: true,
     });
