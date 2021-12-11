@@ -181,7 +181,6 @@ function bookthissitter(data) {
 function GetMyBookings(email) {
   var data = {};
   data[email] = email;
-
   //get id from email
   $.ajax({
     method: "GET",
@@ -190,52 +189,153 @@ function GetMyBookings(email) {
       console.log(response._id);
       var id = response._id;
       if (id) {
-        GetbookingsOwner(id);
-      } else {
-        alert("Sorry somerthing went wrong ");
+        try {
+          GetbookingsOwner(id);
+        } catch (e) {
+          alert(e.message);
+        }
       }
     },
   });
 }
 //get all bookings from id
 function GetbookingsOwner(id) {
-  $.ajax({
-    method: "GET",
-    url: "/booking/owner/" + id,
-    success: function (response) {
-      if (response) {
-        var row = $('<div class="row"></div>');
-        for (var i = 0; i < response.length; i++) {
-          var column = $(`<div class="column">`);
-          var card = $(
-            `<div class="card text-center" id="card" id="bookingcard"></div>`
-          );
-          var b = response[i];
-          // {{#each trips}}
-          var a = $(` <a href="#!">${b}</a>`);
-          //card.append(a);
-          var s = moment(b.start_date_time);
-          var e = moment(b.end_date_time);
-          var bookinginfo = $(`<div class="row"><div class="booking-info">
+  try {
+    $.ajax({
+      method: "GET",
+      url: "/booking/owner/" + id,
+      success: function (response) {
+        console.log(response);
+        if (response == "No Bookings Found") {
+          alert("Please book a sitter first");
+          getSomeSitter();
+        }
+        if (response) {
+          var row = $('<div class="row"></div>');
+          for (var i = 0; i < response.length; i++) {
+            var b = response[i];
+            var count = 0;
+            if (b.status == "Accepted") {
+              var count = 1;
+              var column = $(`<div class="column">`);
+              var card = $(
+                `<div class="card text-center" id="card" id="bookingcard"></div>`
+              );
+
+              // {{#each trips}}
+              var a = $(` <a href="#!">${b}</a>`);
+              //card.append(a);
+              var s = moment(b.start_date_time);
+              var e = moment(b.end_date_time);
+              var bookinginfo = $(`<div class="row"><div class="booking-info">
               <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
-              <p> Rating :${b.OverallRating}</p>
-              <p>Service:${b.service} <h6>Charge:</h6>${b.service_charge}<p>
+              <p> </h6>Rating:</h6> ${b.OverallRating}</p>
+              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
               <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
               <p>Status:${b.status}</p>
               <a href="#!" class="button" hidden>Delete</a>
               </div></div>`);
-          //        {{/each}}
-          card.append(bookinginfo);
-          column.append(card);
-          column.appendTo(row);
-        }
 
-        $("#mainbinder").empty();
-        $("#mainbinder").append(row);
-        console.log(response);
-      } else {
-        alert("Sorry somerthing went wrong ");
+              card.append(bookinginfo);
+              column.append(card);
+              column.appendTo(row);
+            }
+          }
+          if (count == 0) {
+            alert("No Accepted booking found");
+            getSomeSitter();
+          }
+          $("#mainbinder").empty();
+          $("#mainbinder").append(row);
+          console.log(response);
+        } else {
+          alert("Sorry somerthing went wrong ");
+        }
+      },
+    });
+  } catch (e) {
+    alert(e.message);
+    getSomeSitter();
+  }
+}
+///////////////////////////////
+function GetMyBookingsPending(email) {
+  var data = {};
+  data[email] = email;
+  //get id from email
+  $.ajax({
+    method: "GET",
+    url: "/booking/getOwnerEmail/" + email,
+    success: function (response) {
+      console.log(response._id);
+      var id = response._id;
+      if (id) {
+        try {
+          GetbookingsOwnerPending(id);
+        } catch (e) {
+          alert(e.message);
+        }
       }
     },
   });
+}
+
+function GetbookingsOwnerPending(id) {
+  try {
+    $.ajax({
+      method: "GET",
+      url: "/booking/owner/" + id,
+      success: function (response) {
+        console.log(response);
+        if (response == "No Bookings Found") {
+          alert("Please book a sitter first");
+          getSomeSitter();
+        }
+        if (response) {
+          var row = $('<div class="row"></div>');
+          for (var i = 0; i < response.length; i++) {
+            var b = response[i];
+            var count = 0;
+            if (b.status != "Accepted") {
+              var count = 1;
+              var column = $(`<div class="column">`);
+              var card = $(
+                `<div class="card text-center" id="card" id="bookingcard"></div>`
+              );
+
+              // {{#each trips}}
+              var a = $(` <a href="#!">${b}</a>`);
+              //card.append(a);
+              var s = moment(b.start_date_time);
+              var e = moment(b.end_date_time);
+              var bookinginfo = $(`<div class="row"><div class="booking-info">
+              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
+              <p> </h6>Rating:</h6> ${b.OverallRating}</p>
+              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
+              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+              <p>Status:${b.status}</p>
+              <a href="#!" class="button" hidden>Delete</a>
+              </div></div>`);
+
+              card.append(bookinginfo);
+              column.append(card);
+              column.appendTo(row);
+            }
+          }
+          if (count == 0) {
+            alert("No Accepted booking found");
+            getSomeSitter();
+          }
+          $("#mainbinder").empty();
+          $("#mainbinder").append(row);
+          console.log(response);
+        } else {
+          alert("Sorry somerthing went wrong ");
+        }
+      },
+    });
+  } catch (e) {
+    alert(e.message);
+    getSomeSitter();
+  }
 }
