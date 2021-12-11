@@ -91,15 +91,15 @@ module.exports = {
     if ((await isSitter_id(sitter_id)) == false) {
       throw new Error(`id ${sitter_id} is not Valid`);
     }
-    if (typeof service_charge !== "string") {
+    if (typeof service_charge !== "number") {
       throw "Service Charge not a valid string";
     }
     if (typeof service !== "string") {
       throw "Service not a valid string";
     }
-    if (service_charge.charAt(0) !== "$") {
-      throw "Service charge not a valid string";
-    }
+    // if (service_charge.charAt(0) !== "$") {
+    //   throw "Service charge not a valid string";
+    // }
 
     //service_charge.replace("$", "");
     let services = ["DogWalking", "Housevisit", "Daycare", "Nightcare"];
@@ -109,7 +109,7 @@ module.exports = {
     //daycare checkindate  10am to 8pm
     //nigthcare checkindate 8pm to 8am
 
-    var currency_value = parseFloat(service_charge.substr(1));
+    let currency_value = service_charge;
     start_date_time = start_date_time.toString();
     end_date_time = end_date_time.toString();
     // start_date_time.replace("/", "-");
@@ -126,7 +126,9 @@ module.exports = {
     }
     if (service == services[0]) {
       currency_value = currency_value / 2;
+      currency_value = parseFloat(currency_value).toFixed(2);
       service_charge = `$${currency_value}`;
+
       if (!s.isSame(e, "date")) {
         throw "Dates cannot be different";
       }
@@ -144,6 +146,7 @@ module.exports = {
         }
       }
       currency_value = (currency_value * (e.diff(s) / 60000)) / 60;
+      currency_value = parseFloat(currency_value).toFixed(2);
       service_charge = `$${currency_value}`;
       console.log(service_charge);
     } else if (service == services[2]) {
@@ -152,6 +155,7 @@ module.exports = {
       // }
       console.log(s);
       console.log(e);
+      currency_value = parseFloat(currency_value).toFixed(2);
       service_charge = `$${currency_value * 10}`;
       if (!s.isSame(e, "date")) {
         throw "Dates cannot be different";
@@ -166,6 +170,7 @@ module.exports = {
       // if (currency_value > 300.0 || currency_value < 50.0) {
       //   throw "service charge not valid";
       // }
+      currency_value = parseFloat(currency_value).toFixed(2);
       service_charge = `$${currency_value * 12}`;
       if (s.isSame(e, "date")) {
         throw "Dates cannot be same";
@@ -238,7 +243,7 @@ module.exports = {
     const bookingsCollection = await bookings();
     const b = await bookingsCollection.find({ Sitter_id: sitter_id }).toArray();
     if (b.length == 0) {
-      throw "Booking doesnot exists";
+      throw "Booking does not exists";
     }
     for (x of b) {
       x.start_date_time = moment(x.start_date_time).format("YYYY-MM-DD HH:mm");
@@ -249,26 +254,33 @@ module.exports = {
   ////////////////////////////////////////////////////////////////////////////////
 
   async GetbookingOwner(owner_id) {
-    if (!owner_id) {
-      throw "owner id not found";
+    try {
+      if (!owner_id) {
+        throw "owner id not found";
+      }
+      if (!isOwner_id(owner_id)) {
+        throw new Error(`id ${owner_id} is not Valid`);
+      }
+      const bookingsCollection = await bookings();
+      const b = await bookingsCollection.find({ Owner_id: owner_id }).toArray();
+      if (b.length === 0) {
+        throw "No Bookings Found";
+      }
+      for (x of b) {
+        x.start_date_time = moment(x.start_date_time).format(
+          "YYYY-MM-DD HH:mm"
+        );
+        x.end_date_time = moment(x.end_date_time).format("YYYY-MM-DD HH:mm");
+        let addedUser = await getSitterNameId(x.Sitter_id);
+        x["firstName"] = addedUser.firstName;
+        x["lastName"] = addedUser.lastName;
+        x["OverallRating"] = addedUser.OverallRating;
+      }
+      return b;
+    } catch (e) {
+      console.log(e);
+      return e;
     }
-    if (!isOwner_id(owner_id)) {
-      throw new Error(`id ${owner_id} is not Valid`);
-    }
-    const bookingsCollection = await bookings();
-    const b = await bookingsCollection.find({ Owner_id: owner_id }).toArray();
-    if (b.length === 0) {
-      throw "No Bookings Found";
-    }
-    for (x of b) {
-      x.start_date_time = moment(x.start_date_time).format("YYYY-MM-DD HH:mm");
-      x.end_date_time = moment(x.end_date_time).format("YYYY-MM-DD HH:mm");
-      let addedUser = await getSitterNameId(x.Sitter_id);
-      x["firstName"] = addedUser.firstName;
-      x["lastName"] = addedUser.lastName;
-      x["OverallRating"] = addedUser.OverallRating;
-    }
-    return b;
   },
 
   //////////////////////Status
