@@ -177,7 +177,7 @@ function bookthissitter(data) {
   );
   $("#mainbinder").append(center);
 }
-
+/// Get My bookings Accepted future bookings
 function GetMyBookings(email) {
   var data = {};
   data[email] = email;
@@ -210,24 +210,29 @@ function GetbookingsOwner(id) {
           alert("Please book a sitter first");
           getSomeSitter();
         }
+        var count = 0;
         if (response) {
           var row = $('<div class="row"></div>');
           for (var i = 0; i < response.length; i++) {
             var b = response[i];
-            var count = 0;
-            if (b.status == "Accepted") {
-              var count = 1;
-              var column = $(`<div class="column">`);
-              var card = $(
-                `<div class="card text-center" id="card" id="bookingcard"></div>`
-              );
 
-              // {{#each trips}}
-              var a = $(` <a href="#!">${b}</a>`);
-              //card.append(a);
-              var s = moment(b.start_date_time);
-              var e = moment(b.end_date_time);
-              var bookinginfo = $(`<div class="row"><div class="booking-info">
+            if (b.status == "Accepted") {
+              var n = moment(b.start_date_time);
+              var m = moment();
+              console.log(moment(n).isBefore(m));
+              if (moment(m).isBefore(n)) {
+                var count = 1;
+                var column = $(`<div class="column">`);
+                var card = $(
+                  `<div class="card text-center" id="card" id="bookingcard"></div>`
+                );
+
+                // {{#each trips}}
+                var a = $(` <a href="#!">${b}</a>`);
+                //card.append(a);
+                var s = moment(b.start_date_time);
+                var e = moment(b.end_date_time);
+                var bookinginfo = $(`<div class="row"><div class="booking-info">
               <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
               <p> </h6>Rating:</h6> ${b.OverallRating}</p>
               <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
@@ -236,9 +241,10 @@ function GetbookingsOwner(id) {
               <a href="#!" class="button" hidden>Delete</a>
               </div></div>`);
 
-              card.append(bookinginfo);
-              column.append(card);
-              column.appendTo(row);
+                card.append(bookinginfo);
+                column.append(card);
+                column.appendTo(row);
+              }
             }
           }
           if (count == 0) {
@@ -258,7 +264,7 @@ function GetbookingsOwner(id) {
     getSomeSitter();
   }
 }
-///////////////////////////////
+//////////////////////////////////////////////// Get Pendings bookings Requested bookings//////////////////////////////////////////////////////////////
 function GetMyBookingsPending(email) {
   var data = {};
   data[email] = email;
@@ -293,9 +299,9 @@ function GetbookingsOwnerPending(id) {
         }
         if (response) {
           var row = $('<div class="row"></div>');
+          var count = 0;
           for (var i = 0; i < response.length; i++) {
             var b = response[i];
-            var count = 0;
             if (b.status != "Accepted") {
               var count = 1;
               var column = $(`<div class="column">`);
@@ -339,3 +345,111 @@ function GetbookingsOwnerPending(id) {
     getSomeSitter();
   }
 }
+///////////////////////////////////////////////GET booking history past bookings///////////////////////////////////////////////////////
+
+function GetMyBookingsHistory(email) {
+  var data = {};
+  data[email] = email;
+  //get id from email
+  $.ajax({
+    method: "GET",
+    url: "/booking/getOwnerEmail/" + email,
+    success: function (response) {
+      console.log(response._id);
+      var id = response._id;
+      if (id) {
+        try {
+          GetbookingsOwnerhistory(id);
+        } catch (e) {
+          alert(e.message);
+        }
+      }
+    },
+  });
+}
+
+function GetbookingsOwnerhistory(id) {
+  try {
+    $.ajax({
+      method: "GET",
+      url: "/booking/owner/" + id,
+      success: function (response) {
+        console.log(response);
+        if (response == "No Bookings Found") {
+          alert("Please book a sitter first");
+          getSomeSitter();
+        }
+        if (response) {
+          var row = $('<div class="row"></div>');
+          var count = 0;
+          for (var i = 0; i < response.length; i++) {
+            var b = response[i];
+            var n = moment(b.end_date_time);
+            var m = moment();
+            console.log(moment(n).isBefore(m));
+            if (moment(n).isBefore(m)) {
+              if (b.status == "Accepted") {
+                console.log("hello");
+                count = 1;
+                var column = $(`<div class="column">`);
+                var card = $(
+                  `<div class="card text-center" id="card${i}" id="bookingcard"></div>`
+                );
+                // {{#each trips}}
+                var a = $(` <a href="#!">${b}</a>`);
+                //card.append(a);
+                var s = moment(b.start_date_time);
+                var e = moment(b.end_date_time);
+                var bookinginfo = $(`<div class="row"><div class="booking-info">
+              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
+              <p> </h6>Rating:</h6> ${b.OverallRating}</p>
+              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
+              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+              <p>Status:${b.status}</p>
+              <button type="button" class="btn btn-primary" onclick="review('${i},${b._id}')">Review</button>
+              </div></div>`);
+                card.append(bookinginfo);
+                column.append(card);
+                column.appendTo(row);
+              }
+            }
+          }
+          if (count == 0) {
+            alert("No Previous Booking Found");
+            getSomeSitter();
+          }
+          $("#mainbinder").empty();
+          $("#mainbinder").append(row);
+          console.log(response);
+        } else {
+          alert("Sorry Somerthing went wrong ");
+        }
+      },
+    });
+  } catch (e) {
+    alert(e.message);
+    getSomeSitter();
+  }
+}
+function review(i, id) {
+  $(`#card${i}`).empty();
+  $(`#card${i}`).append(`
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Reviews</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    <br>
+    <label class="rating-label">
+    <strong>Rating</strong>
+    <select name="Rating" id="Rating">
+                                        <option value=1>1</option>
+                                        <option value=2>2</option>
+                                        <option value=3>3</option>
+                                        <option value=4>4</option>
+                                        <option value=5>5</option>
+    </select>
+    <button type="button" class="btn btn-primary" onclick="Sendreview()">Review</button>
+    <button type="button" class="btn btn-primary" onclick="getSomeSitter()">Back</button>
+  </div>`);
+}
+
+function SendReview() {}

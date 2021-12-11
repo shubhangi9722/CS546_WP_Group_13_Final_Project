@@ -36,7 +36,7 @@ router.post("/accept/:id", async (req, res) => {
   return { Update: true };
 });
 
-router.post("/accept/:id", async (req, res) => {
+router.post("/rejected/:id", async (req, res) => {
   const accept = bookingData.UpdateStatusBooking(req.params.id, "Rejected");
   if (accept.Update == false) {
     return { Update: false };
