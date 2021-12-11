@@ -1,16 +1,16 @@
 function getsomebookings(email) {
-  //   console.log(req.session.user.email);
-  //   let email = req.session.user.email;
   $.ajax({
     method: "GET",
     url: "/sitterbooking/getsomebookings/" + email,
     success: function (response) {
-      for (x in response) {
-        if (x.status == "Requested") {
+      for (var i=0; i<response.length; i++) {
+        if (response[i].status == "Requested") {
+          $("#mainbinder").append('<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">'+response[i].firstName+'&nbsp;'+response[i].lastName+'</h5><p class="card-text">'+response[i].behavioral_information+'</p><p class="card-text">Start Time:'+response[i].start_date_time+'</p><p class="card-text">End Time:'+response[i].end_date_time+'</p><p class="card-text">Dog Breed:'+response[i].dog_breed+'</p><p class="card-text">Customer Address:'+response[i].address+'</p><p class="card-text">Your Pay:'+response[i].service_charge+'</p><a href="#" class="btn btn-primary" onclick="Accept(\''+response._id+'\')">Accept</a>&nbsp;&nbsp;<a href="#" class="btn btn-primary" onclick="Rejected(\''+response._id+'\')">Deny</a> </div></div>');
+
         }
       }
-      console.log(response);
-      //Adding a button to completed accept and reject bookings button
+
+      
     },
   });
 }
