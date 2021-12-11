@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const dogOwners = mongoCollections.dogOwners;
 const sitters = mongoCollections.sitters;
 const bcrypt = require('bcryptjs');
-const saltRounds = 16;
+const saltRounds = 10;
 const { ObjectId } = require('mongodb');
 
 module.exports={
@@ -139,11 +139,26 @@ module.exports={
         if (!dog_dob) {
           throw "You must provide dog's date of birth"
         }
+
+        if (!vet_name) {
+          throw "You must provide dogs' vet name"
+        }
+      
+        if (!vet_phn) {
+          throw "You must provide dogs' vet phone number"
+        }
       
         if (!weight) {
           throw "You must provide dog's weight"
         }
       
+        if (!behavioral_information) {
+          throw "You must provide dog's behavioral information"
+        }
+
+
+
+
         if (typeof firstName !== "string") {
           throw "first name must be sting"
         }
@@ -216,6 +231,9 @@ module.exports={
         if (typeof behavioral_information !== "string") {
           throw "dog's behavioral_information must be sting"
         }
+
+
+
       
         if (firstName.trim() === "") {
           throw "first name cannot be empty string"
@@ -268,22 +286,28 @@ module.exports={
           throw " dog's weight cannot be empty string"
         }
       
-        var emailRegex =
+        let emailRegex =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!email.valueOf().match(emailRegex)) {
           throw "e-mail format is incorrect"
   
         }
       
-        var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
+        let passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
         if (!password.valueOf().match(passRegex)) {
           throw  "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
 
         }
-        var phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+        
+        let phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
         if (!phone_number.valueOf().match(phnregex)) {
           throw "your phone number format is incorrect"
         
+        }
+
+        let phnregex=/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+        if (!vet_phn.valueOf().match(phnregex)) {
+          throw "your vet phone number format is incorrect" 
         }
         
      
@@ -686,7 +710,7 @@ async UpdateOwner(
     { $set: oldcustomer }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw 'could not update the customer successfully';
+    throw 'customer already upto date';
   }
   
   obj['userUpdated'] = true;
@@ -773,6 +797,17 @@ async UpdateDog(
     throw  "your date of bith format is incorrect"
 
   }
+
+  if(vet_phn!='')
+  {
+    let phnregex =/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+  if (!vet_phn.valueOf().match(phnregex)) {
+    
+    throw "your veterinarian phone number format is incorrect";
+  }
+  
+  }
+  
   
 
   let obj={}
@@ -794,7 +829,7 @@ async UpdateDog(
     { $set: oldcustomer }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw 'could not update the Dog details successfully';
+    throw 'info already uptodate';
   }
   
   obj['DogUpdated'] = true;

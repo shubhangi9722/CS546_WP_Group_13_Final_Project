@@ -217,6 +217,7 @@ function updateowner(email) {
     alert("your zipcode is incorrect");
   }
 
+
   var ownerobj = {
     firstName: firstName,
     lastName: lastName,
@@ -242,6 +243,9 @@ function updateowner(email) {
         alert("Sorry somerthing went wrong ");
       }
     },
+    error: function(response){
+      alert(response.responseJSON);
+  }
   });
 }
 
@@ -288,6 +292,15 @@ function updatdog(email) {
   if (!dog_dob.valueOf().match(dobregex)) {
     alert("your date of bith format is incorrect");
   }
+  if(vet_phn!='')
+  {
+    var phnregex =
+    /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+  if (!vet_phn.valueOf().match(phnregex)) {
+    alert("your veterinarian phone number format is incorrect");
+  }
+  
+  }
 
   var ownerobj = {
     email: email,
@@ -315,5 +328,8 @@ function updatdog(email) {
         alert("Sorry somerthing went wrong ");
       }
     },
+    error: function(response){
+      alert(response.responseJSON);
+  }
   });
 }
