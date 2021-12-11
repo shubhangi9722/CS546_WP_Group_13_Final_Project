@@ -62,11 +62,20 @@ router.get("/getOwnerEmail/:email", async (req, res) => {
 });
 //All Booking
 router.get("/owner/:id", async (req, res) => {
-  let owner_id = req.params.id;
-  console.log(owner_id);
-  const sitterdata = await bookingData.GetbookingOwner(owner_id);
-  console.log(sitterdata);
-  return res.json(sitterdata);
+  try {
+    let owner_id = req.params.id;
+    console.log(owner_id);
+    const sitterdata = await bookingData.GetbookingOwner(owner_id);
+    if (sitterdata == "No Bookings found") {
+      throw "No Bookings found";
+    }
+    return res.json(sitterdata);
+  } catch (e) {
+    if (e.message.includes("No Bookings found")) {
+      return res.status(404).json({ bookings: false });
+    }
+    return res.status(500).send();
+  }
 });
 
 module.exports = router;
