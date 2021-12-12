@@ -372,6 +372,9 @@ module.exports = {
   async filterresult(serachterm, zipcode, rating, pricerange) {
     const sittersCollection = await sitters();
 
+    var overallrating =rating
+    
+
     const namearray = serachterm.split(" ");
     var fname = namearray[0];
     var lname = namearray[1];
@@ -431,7 +434,7 @@ module.exports = {
           $and: [
             { firstName: fname },
             { zipcode: zipcode },
-            { overall_rating: rating },
+            { overall_rating: parseInt(overallrating) },
           ],
         })
         .toArray();
@@ -451,7 +454,7 @@ module.exports = {
           $and: [
             { firstName: fname },
             { zipcode: zipcode },
-            { overall_rating: rating },
+            { overall_rating: parseInt(overallrating) },
             { price: { $gt: lbound } },
             { price: { $lt: ubound } },
           ],
@@ -483,7 +486,7 @@ module.exports = {
       pricerange == "0"
     ) {
       const sitterList = await sittersCollection
-        .find({ $and: [{ zipcode: zipcode }, { overall_rating: rating }] })
+        .find({ $and: [{ zipcode: zipcode }, { overall_rating: parseInt(overallrating) }] })
         .toArray();
 
       if (sitterList.length == 0) {
@@ -500,7 +503,7 @@ module.exports = {
         .find({
           $and: [
             { zipcode: zipcode },
-            { overall_rating: rating },
+            { overall_rating: parseInt(overallrating) },
             { price: { $gt: lbound } },
             { price: { $lt: ubound } },
           ],
@@ -518,7 +521,7 @@ module.exports = {
       pricerange == "0"
     ) {
       const sitterList = await sittersCollection
-        .find({ overall_rating: rating })
+        .find({ overall_rating: parseInt(overallrating) })
         .toArray();
 
       if (sitterList.length == 0) {
@@ -534,7 +537,7 @@ module.exports = {
       const sitterList = await sittersCollection
         .find({
           $and: [
-            { overall_rating: rating },
+            { overall_rating: parseInt(overallrating) },
             { price: { $gt: lbound } },
             { price: { $lt: ubound } },
           ],
