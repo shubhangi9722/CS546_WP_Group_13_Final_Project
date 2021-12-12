@@ -15,7 +15,7 @@ router.get("/getsomebookings/:email", async (req, res) => {
       let id = sitterdata._id;
       //get Requested bookings by Sitter id
       const sitterbookings = await bookingData.GetbookingSitter(id);
-      console.log(sitterbookings);
+      //console.log(sitterbookings);
       if (sitterbookings == false) {
         throw "No Bookings found";
       }
@@ -28,28 +28,29 @@ router.get("/getsomebookings/:email", async (req, res) => {
     res.status(500).send();
   }
 });
-router.get("/accept/:id", async (req, res) => {
-  console.log(req.params.id);
-  const accept = await bookingData.UpdateStatusBooking(
-    req.params.id,
-    "Accepted"
-  );
-  console.log(accept);
-  if (accept.Update == false) {
-    return { Update: false };
-  }
-  return { Update: true };
-});
 
-router.get("/rejected/:id", async (req, res) => {
-  const accept = await bookingData.UpdateStatusBooking(
-    req.params.id,
-    "Rejected"
-  );
-  if (accept.Update == false) {
-    return { Update: false };
+router.get("/accept/:id", async (req, res) => {
+  try {
+    const accept = await bookingData.UpdateStatusBooking(
+      req.params.id,
+      "Accepted"
+    );
+    console.log(accept);
+    return res.json(accept);
+  } catch (e) {
+    return res.status(400).json(e);
   }
-  return { Update: true };
+});
+router.get("/rejected/:id", async (req, res) => {
+  try {
+    const accept = await bookingData.UpdateStatusBooking(
+      req.params.id,
+      "Rejected"
+    );
+    return res.json(accept);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
 });
 
 module.exports = router;
