@@ -4,14 +4,16 @@ const data = require("../data");
 const bookingData = data.booking;
 const customerData = data.customer;
 const sitterData = data.sitter;
-const xss = require('xss');
+const xss = require("xss");
 
 router.post("/Createbooking", async (req, res) => {
   //Error handling
   //console.log(req.body);
   try {
     //console.log(req.session.user.email);
-    const sitterdata = await sitterData.getSitterEmail(xss(req.body.sitteremail));
+    const sitterdata = await sitterData.getSitterEmail(
+      xss(req.body.sitteremail)
+    );
     let sitter_id = sitterdata._id;
     //console.log(sitterdata);
     const Ownerdata = await bookingData.getDogOwnerEmail(
@@ -23,7 +25,7 @@ router.post("/Createbooking", async (req, res) => {
     let start_date_time = req.body.start_date_time;
     let end_date_time = req.body.end_date_time;
     let service = xss(req.body.service);
-    let service_charge = xss(req.body.service_charge);
+    let service_charge = sitterdata.price;
 
     const booking = await bookingData.createBooking(
       owner_id,
@@ -34,7 +36,7 @@ router.post("/Createbooking", async (req, res) => {
       service
     );
     if (booking.BookingCreated == true) {
-      return res.json({ booking: "Successful" });
+      return res.json({ booking: "Succesful" });
     }
   } catch (e) {
     return res.json({ message: "Cannot book for this date and time" });
@@ -55,7 +57,9 @@ router.get("/getsitterEmail/:email", async (req, res) => {
 //Owner details
 router.get("/getOwnerEmail/:email", async (req, res) => {
   try {
-    const sitterdata = await bookingData.getDogOwnerEmail(xss(req.params.email));
+    const sitterdata = await bookingData.getDogOwnerEmail(
+      xss(req.params.email)
+    );
     return res.json(sitterdata);
   } catch (e) {
     res.status(500).send();
@@ -79,26 +83,20 @@ router.get("/owner/:id", async (req, res) => {
   }
 });
 
-
 router.post("/sittersReview", async (req, res) => {
   //Error handling
-  try{
-   // console.log(req.body);
-   // console.log(req.session.user.email)
+  try {
+    // console.log(req.body);
+    // console.log(req.session.user.email)
     const Ownerdata = await bookingData.sitterReviews(
       xss(req.session.user.email),
-      xss(req.body.sitter_id), 
-      xss(req.body.ratingValue), 
+      xss(req.body.sitter_id),
+      xss(req.body.ratingValue),
       xss(req.body.reviewValue)
     );
     return res.json(Ownerdata);
-   // console.log(Ownerdata)
-  }
- catch(e) {
-
- }
-
+    // console.log(Ownerdata)
+  } catch (e) {}
 });
-
 
 module.exports = router;
