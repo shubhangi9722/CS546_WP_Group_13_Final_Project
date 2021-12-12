@@ -409,7 +409,7 @@ function GetbookingsOwnerhistory(id) {
               <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
               <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
               <p>Status:${b.status}</p>
-              <button type="button" class="btn btn-primary" onclick="review('${i},${b._id}','${b.Sitter_id}')">Review</button>
+              <button type="button" class="btn btn-primary" onclick="review('${i}', '${b._id}','${b.Sitter_id}')">Review</button>
               </div></div>`);
                 card.append(bookinginfo);
                 column.append(card);
@@ -434,12 +434,15 @@ function GetbookingsOwnerhistory(id) {
     getSomeSitter();
   }
 }
-function review(i, sitter_id) {
+function review(i,b_id, sitter_id) {
   console.log(i,sitter_id);
+  console.log(b_id);
   let html=`
   <div class="form-group">
     <label for="exampleFormControlTextarea1">Reviews</label>
     <input type="hidden" id="sitterID" value="${sitter_id}">
+    <input type="hidden" id="bookingID" value="${b_id}">
+    
     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
     <br>
     <label class="rating-label">
@@ -451,9 +454,11 @@ function review(i, sitter_id) {
                                         <option value=4>4</option>
                                         <option value=5>5</option>
     </select>
-    <button type="button" class="btn btn-primary" onclick="SendReview()">Review</button>
+    <button type="button" class="btn btn-primary" id="${b_id}" onclick="SendReview()">Review</button>
     <button type="button" class="btn btn-primary" onclick="getSomeSitter()">Back</button>
   </div>`
+
+  
   $(`#card${i}`).empty();
   $(`#card${i}`).append(html);
 }
@@ -462,6 +467,7 @@ function review(i, sitter_id) {
 function SendReview() {
 
 let dataObj = {
+  i: $(''),
   sitter_id: $('#sitterID').val(),
   ratingValue : $('#Rating').val(),
   reviewValue : $('#exampleFormControlTextarea1').val()
@@ -473,6 +479,11 @@ let dataObj = {
     contentType: "application/json",
     data: JSON.stringify(dataObj),
     success: function (response) {
+      if(response.reviewInserted == true){
+        alert("Review Succesful");
+        location.reload();
+
+      }
      console.log(respose);
     },
   });

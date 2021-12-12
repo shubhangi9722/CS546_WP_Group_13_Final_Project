@@ -90,6 +90,7 @@ router.post("/sittersReview", async (req, res) => {
       req.body.ratingValue, 
       req.body.reviewValue
     );
+    return res.json(Ownerdata);
    // console.log(Ownerdata)
   }
  catch(e) {
