@@ -499,4 +499,21 @@ module.exports = {
 
     return sitterInfo;
   },
+  async getreviews(email) {
+    if (!email || email.trim() === "") throw " email not available";
+    let emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!email.valueOf().match(emailRegex)) {
+      throw "e-mail format is incorrect";
+    }
+    const sittersCollection = await sitters();
+    const addedUser = await sittersCollection.findOne({
+      email: email.toLocaleLowerCase(),
+    });
+    if (addedUser === null) throw "User does not exists";
+    delete addedUser.password;
+    //addedUser.password = "";
+    addedUser._id = addedUser._id.toString();
+    return addedUser.reviews;
+  },
 };

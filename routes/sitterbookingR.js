@@ -53,4 +53,21 @@ router.get("/rejected/:id", async (req, res) => {
   }
 });
 
+router.get("/review/:email", async (req, res) => {
+  try {
+    email = req.params.email;
+    if (!email) {
+      throw "No email found";
+    }
+    if (typeof email != "string") {
+      throw "Email not string";
+    }
+    const accept = await sitterData.getreviews(req.params.email);
+    console.log(accept);
+    return res.json(accept);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
+});
+
 module.exports = router;
