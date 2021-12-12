@@ -1,4 +1,4 @@
-const mongoCollections = require("../config/mongoCollections");
+  const mongoCollections = require("../config/mongoCollections");
 const sitters = mongoCollections.sitters;
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
@@ -26,7 +26,7 @@ module.exports = {
 
     const sittersCollection = await sitters();
     const addedUser = await sittersCollection.findOne({
-      $and: [{ email: email.toLocaleLowerCase() }, { active_status: 1 }],
+      $and: [{ email: email.toLowerCase() }, { active_status: 1 }],
     });
     let compareToMatch = false;
     if (addedUser !== null) {
@@ -239,10 +239,10 @@ module.exports = {
     let priceInt = parseInt(price);
 
     let newsitter = {
-      firstName: firstName.toLocaleLowerCase(),
-      lastName: lastName.toLocaleLowerCase(),
+      firstName: firstName,
+      lastName: lastName,
       dob: dob,
-      email: email.toLocaleLowerCase(),
+      email: email.toLowerCase(),
       phone_number: phone_number,
       gender: gender.toLocaleLowerCase(),
       address: address.toLocaleLowerCase(),
@@ -251,7 +251,7 @@ module.exports = {
       zipcode: zipcode,
       password: passhash,
       price: priceInt,
-      bio: bio.toLocaleLowerCase(),
+      bio: bio,
       //active_status:active_status,
       overall_rating: 0,
       reviews: [],
@@ -284,7 +284,7 @@ module.exports = {
       }
       const sittersCollection = await sitters();
       const addedUser = await sittersCollection.findOne({
-        email: email.toLocaleLowerCase(),
+        email: email.toLowerCase(),
       });
       if (addedUser === null) throw "User does not exists";
       delete addedUser.password;
@@ -447,16 +447,16 @@ module.exports = {
 
     const sitterCollection = await sitters();
     let oldSitterdetails = {
-      firstName: firstName.toLocaleLowerCase(),
-      lastName: lastName.toLocaleLowerCase(),
+      firstName: firstName,
+      lastName: lastName,
       phone_number: phone_number,
-      gender: gender.toLocaleLowerCase(),
-      address: address.toLocaleLowerCase(),
-      city: city.toLocaleLowerCase(),
-      state: state.toLocaleLowerCase(),
+      gender: gender.toLowerCase(),
+      address: address.toLowerCase(),
+      city: city.toLowerCase(),
+      state: state.toLowerCase(),
       zipcode: zipcode,
       price: priceInt,
-      bio: bio.toLocaleLowerCase(),
+      bio: bio,
     };
 
     const updatedInfo = await sitterCollection.updateOne(

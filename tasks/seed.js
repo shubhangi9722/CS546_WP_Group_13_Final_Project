@@ -1,6 +1,7 @@
 const dbConnection = require("../config/mongoConnections");
 const data = require("../data/sitterData");
 const dogOwners = require('../data/customerData');
+const bookings = require('../data/bookingData');
 
 async function main() {
   const db = await dbConnection.connectToDb();
@@ -64,6 +65,36 @@ async function main() {
     // console.log(dog);
 
 
+    /**calling filter sitter function */
+    // const filter = await dogOwners.filterresult('Phoebe Buffay', '07030', 4, '40-60');
+    // console.log(filter);
+
+
+    /** calling find sitter by price range function*/
+    // const price = await dogOwners.findByPriceRange(40, 60);
+    // console.log(price);
+
+
+    /** calling find all sitters by price in ascending order function*/
+    // const asc = await dogOwners.getAllSittersByPriceAsc();
+    // console.log(asc);
+
+
+    /** calling find all sitters by price in descending order function*/
+    // const desc = await dogOwners.getAllSittersSortedByPriceDec();
+    // console.log(desc);
+
+
+     /** calling all the current customer information */
+    // const curr = await dogOwners.getCuerrntCustomerInfo('JAMesGranger@yahoo.com');
+    // console.log(curr);
+
+
+    /** calling all the sitters data into customers dashboard from database*/
+    // const foo = await dogOwners.getsitterDataforDashboard();
+    // console.log(foo);
+
+
 
 
 
@@ -71,12 +102,20 @@ async function main() {
     // const sitter = await data.updateSitter("Xu", "Zhao", "luzhao@yahoo.com", "117-112-9988", "female", "Hudson Street", "Hoboken", "new Jersey", "07030", "50", "I love to sit fo dogs. I am a masters student and working as a sitter for part time. It will be a pleasure working as a sitter for your dog.")
     // console.log(sitter);
     
-    
 
     /** seeding delete function in sitters database */
     // const del = await data.DeleteSitter("gvese@yahoo.com");
     // console.log(del);
 
+
+    /** calling getReviews function from database */
+    // const get = await data.getreviews('PhoEbe@gmail.com');
+    // console.log(get);
+
+
+    /** calling get sitter information by email function from database */
+    // const sit = await data.getSitterEmail('LUZHAO@YAHOO.COM');
+    // console.log(sit);
 
 
 
@@ -92,7 +131,42 @@ async function main() {
 
 
 
-    /** seeding filter function in dog owners database*/
+
+
+    /** seeding bookings function in database*/
+    // const book = await bookings.GetbookingOwner('61b22e7ab52d54f50a87376f');
+    // console.log(book);
+
+
+    /** seeding bookings function in database */
+    // const val = await bookings.GetbookingSitter('61b42612a04e998ecfd55e0d');
+    // console.log(val);
+
+
+    /** seeding bookings function in database */
+    // const rev = await bookings.createBooking('61b40a95478686d12776a387', '61b4272e83a50ed448ea0ca4', '2021-12-13 11:00', '2021-12-13 15:00', 500.00, 'Home visit');
+    // console.log(rev);
+
+
+     /** seeding bookings function in database */
+    //  const final = await bookings.UpdateStatusBooking('', 'Accepted');
+    //  console.log(final);
+
+
+     /** seeding bookings function in database */
+    // const div = await bookings.delete('');
+    // console.log(div);
+
+
+    /** seeding bookings function in database */
+    // const bar  = await bookings.getDogOwnerEmail('jamesGranger@yahoo.com');
+    // console.log(bar);
+
+
+    /** seeding bookings function in database */
+    // const variable = await bookings.sitterReviews('miller877@hotmail.com', '61b4272e83a50ed448ea0ca4', 4, 'I loved Xu Zhao service. She lived upto our expectations in terms of taking of our Bailey');
+    // console.log(variable);
+
 
     dbConnection.closeconnection();
     //console.log('Done seeding database');

@@ -1,0 +1,98 @@
+<head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+     <meta name="description" content="" />
+     <meta name="author" content="" />
+     <title>Admin Access Only</title>
+     <!-- Favicon-->
+     <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico" />
+     <!-- Core theme CSS (includes Bootstrap)-->
+     <link href="/public/css/CustomerDashboard.css" rel="stylesheet" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+     <div class="d-flex" id="wrapper">
+          <!-- Sidebar-->
+          <div class="border-end bg-white" id="sidebar-wrapper">
+               <div class="sidebar-heading border-bottom bg-light">Welcome, {{Last_Name}}</div>
+               <div class="list-group list-group-flush">
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getSomeSitter()" >Sitter's List</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getSomeOwner()">Dog Owner's List</a>
+               </div>
+          </div>
+          <!-- Page content wrapper-->
+          <div id="page-content-wrapper">
+               <!-- Top navigation-->
+               <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                    <div class="container-fluid">
+                         <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                              aria-expanded="false" aria-label="Toggle navigation"><span
+                                   class="navbar-toggler-icon"></span></button>
+                         <div class="search-container">
+                              <form method="POST" id="searchForm">
+                                   <label for="search">Name</label>
+                                   <input type="text" placeholder="Search.." for="Search Term" name="search" id="search_term">
+                                   <label for="Zipcode">Zipcode</label>
+                                   <input type="text" placeholder="Zipcode" for="Zipcode" name="zipsearch" id="Zipcode_term">
+                                   <label for="price range">Filter Prices $</label>
+                                   <select for="price" name="price" id="price_val">
+                                        <option value="0">All</option>
+                                       
+                                   </select>
+                                   <label type= "disabled" for="Filter Rating">Filter Ratings</label>
+                                   <select for="Filter Rating" name="ratings" id="rating_val">
+                                        <option value="0">All</option>
+                                       
+                                   </select>
+                                   <button for="submit" type="submit"><i class="fa fa-search"></i></button>
+                              </form>
+                         </div>
+                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                              <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                   <li class="nav-item active"><a class="nav-link" href="/logout">Logout</a></li>
+                              </ul>
+                         </div>
+                    </div>
+               </nav>
+               <!-- Page content-->
+               <div class="container-fluid" id="mainbinder">
+                    
+                    </div>
+                    
+               </div>
+          </div>
+     </div>
+     <!-- Bootstrap core JS-->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+     <!-- Core theme JS-->
+     <script src="/public/scripts/script.js"></script>
+     <script src="/public/scripts/admdashboardscript.js"></script>
+     <script src="/public/scripts/admbooking.js"></script>
+     <script>
+          $(document).ready(function () {
+               $('#error').hide();
+                getSomeSitter();
+          });
+          
+     </script>
+
+     <script>
+  /*export default {
+
+    data() {
+      return {
+        value: null
+      }
+    }
+
+  }*/
+</script>
+
+</body>
