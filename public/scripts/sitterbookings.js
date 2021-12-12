@@ -125,7 +125,7 @@ function Accept(bookingid) {
         alert("this booking has been accepted");
         setTimeout(function () {
           location.reload();
-        }, 7000);
+        }, 2000);
       } else {
         alert("something went wrong");
       }
@@ -148,7 +148,7 @@ function Rejected(bookingid) {
         alert("this booking has been Rejected");
         setTimeout(function () {
           location.reload();
-        }, 7000);
+        }, 2000);
       } else {
         alert("something went wong");
       }

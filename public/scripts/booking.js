@@ -32,14 +32,6 @@ function alert1() {
   }
 }
 
-
-
-
-
-
-
-
-
 function bookthissitter(data) {
   var df = {};
 
@@ -75,17 +67,9 @@ function bookthissitter(data) {
       if (response.reviews.length > 0) {
         for (x of response.reviews) {
           reviewscards.append(
-<<<<<<< HEAD
-            '<div class="card"><div class="card-header"></div><div class="card-body"><h2 class="card-title">' +
-              x.customerEmail +
-              '</h2><p class="card-text"> Review:' +
-=======
-
             '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               x.customerEmail +
               '</h1><p class="card-text"> Review:' +
-
->>>>>>> main
               x.review +
               '</p><p class="card-text">Rating:' +
               x.rating +
@@ -529,15 +513,12 @@ function review(i, b_id, sitter_id) {
 }
 
 function SendReview() {
-
-
-let dataObj = {
-  b_id: $('#bookingID').val(),
-  sitter_id: $('#sitterID').val(),
-  ratingValue : $('#Rating').val(),
-  reviewValue : $('#exampleFormControlTextarea1').val()
-
-}
+  let dataObj = {
+    b_id: $("#bookingID").val(),
+    sitter_id: $("#sitterID").val(),
+    ratingValue: $("#Rating").val(),
+    reviewValue: $("#exampleFormControlTextarea1").val(),
+  };
 
   $.ajax({
     method: "POST",
