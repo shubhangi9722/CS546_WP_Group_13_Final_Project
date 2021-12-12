@@ -5,12 +5,14 @@ const sitterData = data.sitter;
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 var zipcodes = require("zipcodes");
+const xss = require('xss');
 
 //sitter Signup Page
 router.get("/", async (req, res) => {
   try {
     //res.render("sitter/signup");
     res.render("sitter/signupnew");
+    //res.render(xss("sitter/signupnew"));
   } catch (e) {
     console.log(e);
     res.status(500).send();
@@ -210,19 +212,19 @@ router.post("/", async (req, res) => {
     res.statusCode = 400;
     //res.render("sitter/signup"
     res.render("sitter/signupnew", {
-      firstName: rest_params.firstName,
-      lastName: rest_params.lastName,
-      dob: rest_params.dob,
-      email: rest_params.email,
-      phone_number: rest_params.phone_number,
-      gender: rest_params.gender,
-      address: rest_params.address,
-      zipcode: rest_params.zipcode,
-      password: rest_params.password,
+      firstName: xss(rest_params.firstName),
+      lastName: xss(rest_params.lastName),
+      dob: xss(rest_params.dob),
+      email: xss(rest_params.email),
+      phone_number: xss(rest_params.phone_number),
+      gender: xss(rest_params.gender),
+      address: xss(rest_params.address),
+      zipcode: xss(rest_params.zipcode),
+      password: xss(rest_params.password),
       //active_status:rest_params.active_status,
       //service_availability: rest_params.service_availability,
-      price: rest_params.price,
-      bio: rest_params.bio,
+      price: xss(rest_params.price),
+      bio: xss(rest_params.bio),
       error: errors,
       hasErrors: true,
     });
@@ -266,7 +268,7 @@ router.post("/", async (req, res) => {
     );
 
     if (rest.userInserted === true) {
-      req.session.user = { email: email, usertype: "sitter" };
+      req.session.user = { email: xss(email), usertype: "sitter" };
       res.redirect("/sitterDashboard");
     }
   } catch (error) {
@@ -274,18 +276,18 @@ router.post("/", async (req, res) => {
     //res.render("sitter/signup"
     res.render("sitter/signupnew", {
       error: error,
-      firstName: rest_params.firstName,
-      lastName: rest_params.lastName,
-      dob: rest_params.dob,
-      email: rest_params.email,
-      phone_number: rest_params.phone_number,
-      gender: rest_params.gender,
-      address: rest_params.address,
-      zipcode: rest_params.zipcode,
-      password: rest_params.password,
+      firstName: xss(rest_params.firstName),
+      lastName: xss(rest_params.lastName),
+      dob: xss(rest_params.dob),
+      email: xss(rest_params.email),
+      phone_number: xss(rest_params.phone_number),
+      gender: xss(rest_params.gender),
+      address: xss(rest_params.address),
+      zipcode: xss(rest_params.zipcode),
+      password: xss(rest_params.password),
       //service_availability: rest_params.service_availability,
-      price: rest_params.price,
-      bio: rest_params.bio,
+      price: xss(rest_params.price),
+      bio: xss(rest_params.bio),
       //active_status:rest_params.active_status,
       hasserverErrors: true,
     });

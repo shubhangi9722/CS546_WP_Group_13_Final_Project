@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const customerData= data.customer;
+const xss = require('xss');
 
 router.get('/', async (req, res) => {
     try {
@@ -76,8 +77,8 @@ router.get('/', async (req, res) => {
   if (errors.length > 0) {
     res.statusCode = 400;
     res.render('customer/login', {
-      email:rest_params.email,
-      password:rest_params.password,
+      email: xss(rest_params.email),
+      password: xss(rest_params.password),
       error:errors,
       hasErrors:true,
     
@@ -93,14 +94,14 @@ router.get('/', async (req, res) => {
         const rest = await customerData.checkCustomer(email, password);
         if(rest.authenticated===true)
         {
-        req.session.user = { email: email, usertype:'customer'};
+        req.session.user = { email: xss(email), usertype:'customer'};
         return  res.redirect('/customerDashboard');
         }
       } catch (error) {
           res.statusCode = 400;
           res.render('customer/login', {
-          email:rest_params.email,
-          password:rest_params.password,  
+          email: xss(rest_params.email),
+          password: xss(rest_params.password),  
           error:error,
           hasserverErrors:true
      

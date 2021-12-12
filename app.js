@@ -11,6 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+//app.use(xss());
+
 const session = require("express-session");
 app.use(
   session({

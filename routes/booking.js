@@ -4,25 +4,26 @@ const data = require("../data");
 const bookingData = data.booking;
 const customerData = data.customer;
 const sitterData = data.sitter;
+const xss = require('xss');
 
 router.post("/Createbooking", async (req, res) => {
   //Error handling
-  console.log(req.body);
+  //console.log(req.body);
   try {
-    console.log(req.session.user.email);
-    const sitterdata = await sitterData.getSitterEmail(req.body.sitteremail);
+    //console.log(req.session.user.email);
+    const sitterdata = await sitterData.getSitterEmail(xss(req.body.sitteremail));
     let sitter_id = sitterdata._id;
     //console.log(sitterdata);
     const Ownerdata = await bookingData.getDogOwnerEmail(
-      req.session.user.email
+      xss(req.session.user.email)
     );
     let owner_id = Ownerdata._id;
-    console.log(Ownerdata);
+    //console.log(Ownerdata);
 
     let start_date_time = req.body.start_date_time;
     let end_date_time = req.body.end_date_time;
-    let service = req.body.service;
-    let service_charge = req.body.service_charge;
+    let service = xss(req.body.service);
+    let service_charge = xss(req.body.service_charge);
 
     const booking = await bookingData.createBooking(
       owner_id,
@@ -33,7 +34,7 @@ router.post("/Createbooking", async (req, res) => {
       service
     );
     if (booking.BookingCreated == true) {
-      return res.json({ booking: "Succesful" });
+      return res.json({ booking: "Successful" });
     }
   } catch (e) {
     return res.json({ message: "Cannot book for this date and time" });
@@ -44,7 +45,7 @@ router.post("/Createbooking", async (req, res) => {
 //Sitter details
 router.get("/getsitterEmail/:email", async (req, res) => {
   try {
-    const sitterdata = await sitterData.getSitterEmail(req.params.email);
+    const sitterdata = await sitterData.getSitterEmail(xss(req.params.email));
     return res.json(sitterdata);
   } catch (e) {
     res.status(500).send();
@@ -54,7 +55,7 @@ router.get("/getsitterEmail/:email", async (req, res) => {
 //Owner details
 router.get("/getOwnerEmail/:email", async (req, res) => {
   try {
-    const sitterdata = await bookingData.getDogOwnerEmail(req.params.email);
+    const sitterdata = await bookingData.getDogOwnerEmail(xss(req.params.email));
     return res.json(sitterdata);
   } catch (e) {
     res.status(500).send();
@@ -85,10 +86,10 @@ router.post("/sittersReview", async (req, res) => {
    // console.log(req.body);
    // console.log(req.session.user.email)
     const Ownerdata = await bookingData.sitterReviews(
-      req.session.user.email,
-      req.body.sitter_id, 
-      req.body.ratingValue, 
-      req.body.reviewValue
+      xss(req.session.user.email),
+      xss(req.body.sitter_id), 
+      xss(req.body.ratingValue), 
+      xss(req.body.reviewValue)
     );
     return res.json(Ownerdata);
    // console.log(Ownerdata)

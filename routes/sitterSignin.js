@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const sitterData = data.sitter;
+const xss = require('xss');
 
 router.get("/", async (req, res) => {
   try {
     //res.render('sitter/login');
     res.render("sitter/loginnew");
+    //res.render(xss("sitter/loginnew"));
   } catch (e) {
     res.status(500).send();
   }
@@ -48,7 +50,7 @@ router.post("/", async (req, res) => {
   var passRegex = /^[a-zA-Z0-9\-_]{6,40}$/;
   if (!rest_params.password.valueOf().match(passRegex)) {
     errors.push(
-      "passwor cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
+      "password cannot have spaces,only alphanumeric characters and minimum of 6 characters long."
     );
   }
 
@@ -56,8 +58,8 @@ router.post("/", async (req, res) => {
     res.statusCode = 400;
     //res.render("sitter/login", {
     res.render("sitter/loginnew", {
-      email: rest_params.email,
-      password: rest_params.password,
+      email: xss(rest_params.email),
+      password: xss(rest_params.password),
       error: errors,
       hasErrors: true,
     });
@@ -70,15 +72,15 @@ router.post("/", async (req, res) => {
     const rest = await sitterData.checkSitter(email, password);
     // console.log(pass);
     if (rest.authenticated === true) {
-      req.session.user = { email: email, usertype: "sitter" };
+      req.session.user = { email: xss(email), usertype: "sitter" };
       return res.redirect("/sitterDashboard");
     }
   } catch (error) {
     res.statusCode = 400;
     //res.render("sitter/login", {
     res.render("sitter/loginnew", {
-      email: rest_params.email,
-      password: rest_params.password,
+      email: xss(rest_params.email),
+      password: xss(rest_params.password),
       error: error,
       hasserverErrors: true,
     });
