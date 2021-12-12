@@ -4,7 +4,11 @@ const sitters = mongoCollections.sitters;
 const bookings = mongoCollections.bookings;
 const { ObjectId } = require("mongodb");
 const moment = require("moment");
+
+const bookingjs = require("../public/scripts/booking")
+
 var nodemailer = require("nodemailer");
+
 
 async function isOwner_id(Owner_id) {
   if (typeof Owner_id !== "string") {
@@ -472,4 +476,52 @@ module.exports = {
     addedUser._id = addedUser._id.toString();
     return addedUser;
   },
+
+  async sitterReviews(emailId, sitterId, rating, review){
+
+    console.log(emailId);
+    console.log(sitterId)
+    console.log(rating);
+    console.log(review);
+
+    const sittersCollection = await sitters();
+    let objectId = new ObjectId(sitterId);
+    const getSitter = await sittersCollection.findOne({
+      _id: objectId,
+    });
+
+    if (getSitter === null)
+      throw [404, `Sitter Not Found with id:${sitterId}`];
+    //return;
+
+    let createReview = {
+      _id: ObjectId(),
+      customerEmail:emailId,
+      rating: rating,   /////////////////////////////
+      review: review, /////////////////////////////////
+    };
+
+    let sum = 0;
+    for (let i = 0; i < getSitter.reviews.length; i++) {
+      sum += getSitter.reviews[i].rating;
+    }
+    let average = (sum + rating) / (getSitter.reviews.length + 1);
+    average = Number(average.toFixed(2));
+
+  
+    const updatedreviews = await sittersCollection.updateOne(
+      { _id: objectId },
+      { $push: { reviews: createReview }, $set: { overall_rating: average } }
+    );
+
+    // if (!updatedreviews.matchedCount && !updatedreviews.modifiedCount) {
+    //   throw [500, "Could not update reviews successfully"];
+    // }
+    
+  //  return await restaurantsFunctions.get(objectId.toString());
+  
+
+  }
+
+
 };
