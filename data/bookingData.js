@@ -99,37 +99,73 @@ async function sendEmail(booking_id, status) {
   } catch (err) {
     throw new Error(`id ${id} is not a valid ObjectId.`);
   }
-  const sitterCollection = await dogOwners();
-  const addedUser = await sitterCollection.findOne({ _id: parsedId });
+  const OwnerCollection = await dogOwners();
+  const addedUser = await OwnerCollection.findOne({ _id: parsedId });
   const emailid = addedUser.email;
 
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "bowwowsitters362@gmail.com",
-      pass: "123456789@#$",
+      user: "saidexter2021@gmail.com",
+      pass: "Smarty97",
     },
   });
+  booking.start_date_time = moment(booking.start_date_time);
+  booking.end_date_time = moment(booking.end_date_time);
 
   var mailOptions = {
     from: "bowwowsitters362@gmail.com",
-    to: "chavantapish@gmail.com",
+    to: emailid,
     subject: "Regarding your request on BOW-WOW-Sitters",
     text: `Your request to book a sitter for ${booking.start_date_time} to ${booking.end_date_time} has been ${status}`,
   };
+  //try {
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      return false;
+    } else {
+      console.log("Email sent: " + info.response);
+      return true;
+    }
+  });
+}
+
+async function sendEmailToSitter(sitter_id) {
+  //get Sitter  id
+  let parsedid;
   try {
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-        return false;
-      } else {
-        console.log("Email sent: " + info.response);
-        return true;
-      }
-    });
-  } catch (e) {
-    return false;
+    parsedid = ObjectId(sitter_id);
+  } catch (err) {
+    throw new Error(`id ${id} is not a valid ObjectId.`);
   }
+  const sitterCollection = await sitters();
+  const addedUser = await sitterCollection.findOne({ _id: parsedid });
+  const emailid = addedUser.email;
+
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "saidexter2021@gmail.com",
+      pass: "Smarty97",
+    },
+  });
+  var mailOptions = {
+    from: "bowwowsitters362@gmail.com",
+    to: emailid,
+    subject: "Regarding your request on BOW-WOW-Sitters",
+    text: `New Request created for your service on Bow-wow Sitters`,
+  };
+  //try {
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      return false;
+    } else {
+      console.log("Email sent: " + info.response);
+      return true;
+    }
+  });
 }
 
 module.exports = {
@@ -301,6 +337,7 @@ module.exports = {
     if (insertInfo.insertedCount === 0)
       throw new Error("Could not add booking");
     console.log(insertInfo);
+    sendEmailToSitter(sitter_id);
     return { BookingCreated: true };
   },
 
