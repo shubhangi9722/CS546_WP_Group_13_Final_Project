@@ -207,3 +207,33 @@ function getsomebookingsHist(email) {
     },
   });
 }
+function review(email) {
+  $.ajax({
+    method: "GET",
+    url: "/sitterbooking/review/" + email,
+    success: function (response) {
+      if (response) {
+        console.log(response);
+        $("#mainbinder").empty();
+        for (x of response) {
+          $("#mainbinder").append(
+            '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+              x.customerEmail +
+              '</h5><p class="card-text"> Review:' +
+              x.review +
+              '</p><p class="card-text">Rating:' +
+              x.rating +
+              "</p></div></div>"
+          );
+        }
+      } else {
+        alert("Something went wong");
+      }
+
+      //Adding a button to completed accept and reject bookings button
+    },
+    error: function (response) {
+      alert(response.responseJSON);
+    },
+  });
+}

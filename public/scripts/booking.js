@@ -30,9 +30,10 @@ function bookthissitter(data) {
   var df = {};
 
   $("#mainbinder").empty();
-  var row = $("<div class='row'>");
-  var center = $('<div class="card text-center" id="card"></div>');
-  var sitterinfo = $('<div class="card text-center" id="card"></div>');
+  var row = $("<div class='row'></div>");
+  var center = $('<div class="card text-center" id="card"></div>'); //notice
+  var c = $(`<div class="container"></div>`); //info
+  var reviewscards = $("<div></div>"); //reviews
   $.ajax({
     method: "GET",
     url: "/booking/getsitterEmail/" + data,
@@ -40,20 +41,36 @@ function bookthissitter(data) {
       df["sitteremail"] = response.email;
       df["service_charge"] = response.price;
       var res = JSON.stringify(response);
-      var info = $(`<div class="col-sm-6">
-        <div class="card">
-        <div class="card-header"><h5> Please note
-        </h5></div><div class="card-body">
-        <h6 class="card-title">
-        <p>Day Care has fixed timing from 10am to 8pm and</p>
-        <p>Night Care has fixed timing from 8pm to 8am</p>
-        <p>Please select date</p>
-        </div>"
-      </div>
-      </div>`);
-      var c = $(`<div class="col-sm-6">${res}</div>`);
-      sitterinfo.append(c);
-      info.appendTo(row);
+      //c.append(res);
+      console.log(response);
+      //info.append(center);
+      var sitterinfo = $(
+        '<div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+          response.firstName +
+          "&nbsp;" +
+          response.lastName +
+          '</h5><p class="card-text"> Bio:' +
+          response.bio +
+          '</p><p class="card-text">Price:' +
+          response.price +
+          '</p><p class="card-text">Ratings:' +
+          response.overall_rating +
+          "</p></div></div>"
+      );
+      c.append(sitterinfo);
+      if (response.reviews.length > 0) {
+        for (x of response.reviews) {
+          reviewscards.append(
+            '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+              x.customerEmail +
+              '</h5><p class="card-text"> Review:' +
+              x.review +
+              '</p><p class="card-text">Rating:' +
+              x.rating +
+              "</p></div></div>"
+          );
+        }
+      }
     },
   });
 
@@ -78,7 +95,7 @@ function bookthissitter(data) {
     '<label for="service-selection" id="bookinglable">Select Service</label><select id="service-selection" onchange="alert1()" name="service_selection" required><option value="">Choose a service from the List</option><option value="DogWalking">Dog Walking</option><option value="Housevisit">House Sitting</option><option value="Daycare">Day care</option><option value="Nightcare">Night care</option></select></div><br><br>'
   );
   var bookbutton = $(
-    '<a href ="#!" class="btn btn-primary" type="submit" id="bookthis">Book The Sitter</button><br>'
+    '<a href ="#!" class="btn btn-primary" type="submit" id="bookthis">Book The Sitter</button>'
   );
   var backbutton = $(
     '<a href ="#!" class="btn btn-primary" type="submit" id="backbutton">Back</button>'
@@ -183,11 +200,24 @@ function bookthissitter(data) {
     });
   });
   backbutton.attr("onclick", "getSomeSitter()");
+  var info = $(`<div class="col-sm-6">
+  <div class="card">
+  <div class="card-header"><h5> Please note
+  </h5></div><div class="card-body">
+  <h6 class="card-title">
+  <p>Day Care has fixed timing from 10am to 8pm and</p>
+  <p>Night Care has fixed timing from 8pm to 8am</p>
+  <p>Please select date</p>
+  </div>"
+  </div>
+  </div>`);
+  row.append(info);
   backbutton.appendTo(bookingform);
   bookingform.appendTo(row);
   row.appendTo(center);
   $("#mainbinder").append(center);
-  $("#mainbinder").append(sitterinfo);
+  $("#mainbinder").append(c);
+  $("#mainbinder").append(reviewscards);
 }
 /// Get My bookings Accepted future bookings
 function GetMyBookings(email) {
@@ -397,7 +427,7 @@ function GetbookingsOwnerhistory(id) {
           var row = $('<div class="row"></div>');
           var count = 0;
           for (var i = 0; i < response.length; i++) {
-            console.log(response[i].Sitter_id)
+            console.log(response[i].Sitter_id);
             var b = response[i];
             var n = moment(b.end_date_time);
             var m = moment();
@@ -446,10 +476,10 @@ function GetbookingsOwnerhistory(id) {
     getSomeSitter();
   }
 }
-function review(i,b_id, sitter_id) {
-  console.log(i,sitter_id);
+function review(i, b_id, sitter_id) {
+  console.log(i, sitter_id);
   console.log(b_id);
-  let html=`
+  let html = `
   <div class="form-group">
     <label for="exampleFormControlTextarea1">Reviews</label>
     <input type="hidden" id="sitterID" value="${sitter_id}">
@@ -468,38 +498,30 @@ function review(i,b_id, sitter_id) {
     </select>
     <button type="button" class="btn btn-primary" id="${b_id}" onclick="SendReview()">Review</button>
     <button type="button" class="btn btn-primary" onclick="getSomeSitter()">Back</button>
-  </div>`
+  </div>`;
 
-  
   $(`#card${i}`).empty();
   $(`#card${i}`).append(html);
 }
 
-
 function SendReview() {
-
-let dataObj = {
-  i: $(''),
-  sitter_id: $('#sitterID').val(),
-  ratingValue : $('#Rating').val(),
-  reviewValue : $('#exampleFormControlTextarea1').val()
-
-}
+  let dataObj = {
+    i: $(""),
+    sitter_id: $("#sitterID").val(),
+    ratingValue: $("#Rating").val(),
+    reviewValue: $("#exampleFormControlTextarea1").val(),
+  };
   $.ajax({
     method: "POST",
-    url: "/booking/sittersReview/" ,
+    url: "/booking/sittersReview/",
     contentType: "application/json",
     data: JSON.stringify(dataObj),
     success: function (response) {
-      if(response.reviewInserted == true){
+      if (response.reviewInserted == true) {
         alert("Review Succesful");
         location.reload();
-
       }
-     console.log(respose);
+      console.log(respose);
     },
   });
-  
-
-
 }
