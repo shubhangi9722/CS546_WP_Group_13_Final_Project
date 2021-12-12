@@ -10,11 +10,11 @@ function getsomebookings(email) {
         if (response[i].status == "Requested") {
           count = count + 1;
           $("#mainbinder").append(
-            '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+            '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               response[i].firstName +
               "&nbsp;" +
               response[i].lastName +
-              '</h5><p class="card-text">Pet Behavioral Information:' +
+              '</h1><p class="card-text">Pet Behavioral Information:' +
               response[i].behavioral_information +
               '</p><p class="card-text">Start Time:' +
               response[i].start_date_time +
@@ -38,7 +38,7 @@ function getsomebookings(email) {
       }
       if (count == 0) {
         $("#mainbinder").append(
-          '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No New Booking Request Found &nbsp;</div></div>'
+          '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">No New Booking Request Found &nbsp;</div></div>'
         );
       }
     },
@@ -62,11 +62,11 @@ function UpcommingBookings(email) {
           if (moment(m).isBefore(n)) {
             count = count + 1;
             $("#mainbinder").append(
-              '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+              '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
                 response[i].firstName +
                 "&nbsp;" +
                 response[i].lastName +
-                '</h5><p class="card-text">' +
+                '</h1><p class="card-text">' +
                 response[i].behavioral_information +
                 '</p><p class="card-text">Start Time:' +
                 response[i].start_date_time +
@@ -87,7 +87,7 @@ function UpcommingBookings(email) {
       }
       if (count == 0) {
         $("#mainbinder").append(
-          '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No Upcomming Booking Found &nbsp;</div></div>'
+          '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">No Upcomming Booking Found &nbsp;</div></div>'
         );
       }
     },
@@ -177,11 +177,11 @@ function getsomebookingsHist(email) {
         if (moment(n).isBefore(m)) {
           count = count + 1;
           $("#mainbinder").append(
-            '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+            '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               response[i].firstName +
               "&nbsp;" +
               response[i].lastName +
-              '</h5><p class="card-text">' +
+              '</h1><p class="card-text">' +
               response[i].behavioral_information +
               '</p><p class="card-text">Start Time:' +
               response[i].start_date_time +
@@ -201,7 +201,7 @@ function getsomebookingsHist(email) {
       }
       if (count == 0) {
         $("#mainbinder").append(
-          '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No Booking History Found &nbsp;</div></div>'
+          '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">No Booking History Found &nbsp;</div></div>'
         );
       }
     },
@@ -217,9 +217,9 @@ function review(email) {
         $("#mainbinder").empty();
         for (x of response) {
           $("#mainbinder").append(
-            '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+            '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               x.customerEmail +
-              '</h5><p class="card-text"> Review:' +
+              '</h1><p class="card-text"> Review:' +
               x.review +
               '</p><p class="card-text">Rating:' +
               x.rating +
