@@ -97,7 +97,7 @@ let admin = false;
 app.use('/private', (req, res, next) => {
   if (!admin) {  // If user is not authenticated
     req.session.isLogIn = false;
-    res.status(403).render('others/error', { errorDescription: "User is not logged in" , title: "error" })
+    res.status(403).render('others/error', { errorDescription: "User is not Admin" , title: "error" })
   } else {
     req.session.isLogIn = true;
     next();  // hit /private route
