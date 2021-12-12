@@ -28,18 +28,18 @@
           <div id="page-content-wrapper">
                <!-- Top navigation-->
                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                    <div class="container-fluid">
+                    <div class="container-fluid" id ="privateNav">
                          <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
                          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                               data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                               aria-expanded="false" aria-label="Toggle navigation"><span
                                    class="navbar-toggler-icon"></span></button>
-                         <div class="search-container">
+                         <div class="search-container" id="navbarform">
                               <form method="POST" id="searchForm">
-                                   <label for="search">Name</label>
-                                   <input type="text" placeholder="Search.." for="Search Term" name="search" id="search_term">
-                                   <label for="Zipcode">Zipcode</label>
-                                   <input type="text" placeholder="Zipcode" for="Zipcode" name="zipsearch" id="Zipcode_term">
+                                   <label for="search_term">Name</label>
+                                   <input type="text" placeholder="Search.." name="search_term" id="search_term">
+                                   <label for="Zipcode_term">Zipcode</label>
+                                   <input type="text" placeholder="Zipcode" name="Zipcode_term" id="Zipcode_term">
                                    <label for="price range">Filter Prices $</label>
                                    <select for="price" name="price" id="price_val">
                                         <option value="0">All</option>
@@ -50,7 +50,8 @@
                                         <option value="0">All</option>
                                        
                                    </select>
-                                   <button for="submit" type="submit"><i class="fa fa-search"></i></button>
+                                   <label for="my-input">Search</label>
+                                   <button for="submit" id="my-input" type="submit"><i class="fa fa-search"></i></button>
                               </form>
                          </div>
                          <div class="collapse navbar-collapse" id="navbarSupportedContent">

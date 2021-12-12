@@ -1,4 +1,5 @@
 function getSomeSitter() {
+  $("#navbarform").show();
   $.ajax({
     method: "GET",
     url: "/customerDashboard/getsitterfordashboard",
@@ -12,11 +13,11 @@ function getSomeSitter() {
           });
           var center = $('<div class="card text-center" id="card"></div>');
           var main = $(
-            '<div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+            '<div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               response[i].firstName +
               " " +
               response[i].lastName +
-              '</h5><p class="card-text">' +
+              '</h1><p class="card-text">' +
               response[i].bio +
               '</p><label for="rating">Rating:' +
               response[i].overall_rating +
@@ -30,9 +31,7 @@ function getSomeSitter() {
           );
           main.appendTo(center);
           book.appendTo(center);
-          // book.on("click", function (e) {
-          //   bookthissitter(response[i].email);
-          // });
+
           book.attr("onclick", `bookthissitter('${response[i].email}')`);
           $("#mainbinder").append(center);
         }
@@ -44,6 +43,8 @@ function getSomeSitter() {
 }
 
 function getSomeOwner() {
+  $("#navbarform").hide();
+  // $("#privateNav").append(navbar);
   $.ajax({
     method: "GET",
     url: "/customerDashboard/getOwnerfordashboard",
@@ -58,13 +59,15 @@ function getSomeOwner() {
           });
           var center = $('<div class="card text-center" id="card"></div>');
           var main = $(
-            '<div class="card-header"></div><div class="card-body"><h5 class="card-title">'  +
+            '<div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               response[i].firstName +
               " " +
               response[i].lastName +
               '</h3><p class="card-text">' +
-              "Dog name:"+ " " +response[i].dog_name +
-              '</p><label for="rating">Rating:' +
+              "Dog name:" +
+              " " +
+              response[i].dog_name +
+              '</p><label for="rating">Email: ' +
               response[i].email +
               "</label>"
           );
@@ -74,9 +77,7 @@ function getSomeOwner() {
           );
           main.appendTo(center);
           book.appendTo(center);
-          // book.on("click", function (e) {
-          //   bookthissitter(response[i].email);
-          // });
+
           book.attr("onclick", `GetMyBookingsPending('${response[i].email}')`);
           //console.log(response[i].email);
           $("#mainbinder").append(center);
@@ -88,41 +89,21 @@ function getSomeOwner() {
   });
 }
 
-// function GetOwnerDetails(email)
-// {
-//     $.ajax({
-//         method: "GET",
-//         url: "/customerDashboard/getCustomerDetails/"+email,
-//         success: function (response) {
-//           if (response != null) {
-//              $("#mainbinder").empty();
-//              $("#mainbinder").append('<label><b>First Name*</label><br><input type="text" name="firstName" id="firstName" placeholder="First Name " value="'+response.firstName+'"><br><br><label><b>Last Name*</label><br>            <input type="text" name="lastName" id="lastName" placeholder="Last Name" value="'+response.lastName+'">            <br><br>            <label><b>Date of Birth*                           </label><br>            <input type="text" name="dob" id="dob" placeholder="MM/DD/YYYY" value="'+response.dob+'">            <br><br>            <label><b>E-mail*                           </label> <br>           <input type="email" name="email" id="email" placeholder="E-mail" value="'+response.email+'" disabled>            <br><br>            <label><b>Gender*                           </label> <br>           <select name="gender" id="gender">                <option value="m">Male</option>                <option value="f">Female</option>                <option value="o">other</option>            </select>            <br><br>            <label><b>Phone Number*                           </label> <br>           <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number"                value="'+response.phone_number+'">            <br><br>            <label><b>Address*                           </label> <br>           <input type="text" name="address" id="address" placeholder="Address" value="'+response.address+'">            <br><br>            <label><b>Zipcode*                           </label> <br>           <input type="text" name="zipcode" id="zipcode" placeholder="Zipcode" value="'+response.zipcode+'">            <br><br><button class="btn btn-primary" id="update_user" onclick="updateowner(\''+response.email+'\')">Update</button>'); 
-//              $("#gender").val(response.gender);
-//           } else {
-//             alert("Something went wrong");
-//           }
-//         },
-//       });
-//       //onclick="updateowner(\''+response.email+'\')"
-
-// }
-
-
-
 $("#searchForm").submit((event) => {
   event.preventDefault();
-  var serachterm =$('#search_term').val().trim();
-  var zipcode=$('#Zipcode_term').val().trim();
-  var rating=$('#rating_val').val().trim();
-  var pricerange=$('#price_val').val().trim();
-  var obj={
-    serachterm:serachterm,
-    zipcode:zipcode,
-    rating:rating,
-    pricerange,pricerange
-  }
-   var data= JSON.stringify(obj);
-   $.ajax({
+  var serachterm = $("#search_term").val().trim();
+  var zipcode = $("#Zipcode_term").val().trim();
+  var rating = $("#rating_val").val().trim();
+  var pricerange = $("#price_val").val().trim();
+  var obj = {
+    serachterm: serachterm,
+    zipcode: zipcode,
+    rating: rating,
+    pricerange,
+    pricerange,
+  };
+  var data = JSON.stringify(obj);
+  $.ajax({
     type: "POST",
     url: "customerDashboard/getfiltersearchresult",
     data: data,
@@ -138,11 +119,11 @@ $("#searchForm").submit((event) => {
           });
           var center = $('<div class="card text-center" id="card"></div>');
           var main = $(
-            '<div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+            '<div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               response[i].firstName +
               " " +
               response[i].lastName +
-              '</h5><p class="card-text">' +
+              '</h1><p class="card-text">' +
               response[i].bio +
               '</p><label for="rating">Rating:' +
               response[i].overall_rating +
@@ -156,237 +137,12 @@ $("#searchForm").submit((event) => {
           );
           main.appendTo(center);
           book.appendTo(center);
-          // book.on("click", function (e) {
-          //   bookthissitter(response[i].email);
-          // });
           book.attr("onclick", `bookthissitter('${response[i].email}')`);
           $("#mainbinder").append(center);
         }
-
       } else {
-        $("#mainbinder").append('<p>No sitter found try again</p>');
+        $("#mainbinder").append("<p>No sitter found try again</p>");
       }
     },
-   });
+  });
 });
-
-// function updateowner(email) {
-//   var firstName = $("#firstName").val().trim();
-//   var lastName = $("#lastName").val().trim();
-//   var email = $("#email").val().trim();
-//   var phone_number = $("#phone_number").val().trim();
-//   var gender = $("#gender").val().trim();
-//   var address = $("#address").val().trim();
-//   var zipcode = $("#zipcode").val().trim();
-//   var dob = $("#dob").val().trim();
-
-//   if (firstName == "") {
-//     alert("First Name Cannot be empty");
-//     return
-//   }
-//   if (lastName == "") {
-//     alert("Lats Name Cannot be empty");
-//     return
-//   }
-//   if (email == "") {
-//     alert("Email Cannot be empty");
-//     return
-//   }
-//   if (phone_number == "") {
-//     alert("Phone Number Cannot be empty");
-//     return
-//   }
-//   if (gender == "") {
-//     alert("Select a gender be empty");
-//     return
-//   }
-//   if (address == "") {
-//     alert("Address Cannot be empty");
-//     return
-//   }
-//   if (zipcode == "") {
-//     alert("ZipCode Cannot be empty");
-//     return
-//   }
-//   if (dob == "") {
-//     alert("Date of Birth Cannot be empty");
-//     return
-//   }
-
-//   if (typeof firstName !== "string") {
-//     alert("First Name must be a string");
-//     return
-//   }
-//   if (typeof lastName !== "string") {
-//     alert("Last Name must be a string");
-//     return
-//   }
-//   if (typeof email !== "string") {
-//     alert("Email must be a string");
-//   }
-//   if (typeof phone_number !== "string") {
-//     alert("Phone Number must be a string");
-//     return
-//   }
-//   if (typeof gender !== "string") {
-//     alert("gender must be string");
-//     return
-//   }
-//   if (typeof address !== "string") {
-//     alert("Address must be string");
-//     return
-//   }
-//   if (typeof zipcode !== "string") {
-//     alert("ZipCode must be string");
-//     return
-//   }
-//   if (typeof dob !== "string") {
-//     alert("Date of Birth must be string");
-//     return
-//   }
-
-//   var phnregex =
-//     /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-//   if (!phone_number.valueOf().match(phnregex)) {
-//     alert("your phone number format is incorrect");
-//     return
-//   }
-//   var dobregex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
-//   if (!dob.valueOf().match(dobregex)) {
-//     alert("your date of bith format is incorrect");
-//     return
-//   }
-
-//   var zipvalid = /^\d{5}$/;
-//   if (!zipcode.valueOf().match(zipvalid)) {
-//     alert("your zipcode is incorrect");
-//     return
-//   }
-
-
-//   var ownerobj = {
-//     firstName: firstName,
-//     lastName: lastName,
-//     email: email,
-//     phone_number: phone_number,
-//     gender: gender,
-//     address: address,
-//     zipcode: zipcode,
-//     dob: dob,
-//   };
-//   var data = JSON.stringify(ownerobj);
-
-//   $.ajax({
-//     type: "POST",
-//     url: "customerDashboard/UpdateOwner",
-//     data: data,
-//     contentType: "application/json; charset=utf-8",
-//     dataType: "json",
-//     success: function (response) {
-//       if (response.userUpdated == true) {
-//         alert("Your Profile is updated");
-//       } else {
-//         alert("Sorry somerthing went wrong ");
-//       }
-//     },
-//     error: function(response){
-//       alert(response.responseJSON);
-//   }
-//   });
-// }
-
-// function updatdog(email) {
-//   var dog_name = $("#dog_name").val().trim();
-//   var dog_gender = $("#dog_gender").val().trim();
-//   var dog_breed = $("#dog_breed").val().trim();
-//   var dog_dob = $("#dog_dob").val().trim();
-//   var vet_name = $("#vet_name").val().trim();
-//   var vet_phn = $("#vet_phn").val().trim();
-//   var weight = $("#weight").val().trim();
-//   var behavioral_information = $("#behavioral_information").val().trim();
-
-//   if (dog_name == "") {
-//     alert("Dog name Cannot be empty");
-//     return
-//   }
-//   if (dog_gender == "") {
-//     alert("Dog gender Cannot be empty");
-//     return
-//   }
-//   if (dog_breed == "") {
-//     alert("Dog breed Cannot be empty");
-//     return
-//   }
-//   if (dog_dob == "") {
-//     alert("Dog date of birth Cannot be empty");
-//     return
-//   }
-//   if (weight == "") {
-//     alert("Dog Weight Cannot be empty");
-//     return
-//   }
-
-//   if (typeof dog_name !== "string") {
-//     alert("Dog Name must be a string");
-//     return
-//   }
-//   if (typeof dog_gender !== "string") {
-//     alert("Dog gender must be a string");
-//     return
-//   }
-//   if (typeof dog_breed !== "string") {
-//     alert("Dog breed must be a string");
-//     return
-//   }
-//   if (typeof dog_dob !== "string") {
-//     alert("Dog date of birth must be a string");
-//     return
-//   }
-
-//   var dobregex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
-//   if (!dog_dob.valueOf().match(dobregex)) {
-//     alert("your date of bith format is incorrect");
-//     return
-//   }
-//   if(vet_phn!='')
-//   {
-//     var phnregex =
-//     /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-//   if (!vet_phn.valueOf().match(phnregex)) {
-//     alert("your veterinarian phone number format is incorrect");
-//     return
-//   }
-  
-//   }
-
-//   var ownerobj = {
-//     email: email,
-//     dog_name: dog_name,
-//     dog_gender: dog_gender,
-//     dog_breed: dog_breed,
-//     dog_dob: dog_dob,
-//     vet_name: vet_name,
-//     vet_phn: vet_phn,
-//     weight: weight,
-//     behavioral_information: behavioral_information,
-//   };
-//   var data = JSON.stringify(ownerobj);
-
-//   $.ajax({
-//     type: "POST",
-//     url: "customerDashboard/UpdateDog",
-//     data: data,
-//     contentType: "application/json; charset=utf-8",
-//     dataType: "json",
-//     success: function (response) {
-//       if (response.DogUpdated == true) {
-//         alert("Your dog's profile is updated");
-//       } else {
-//         alert("Sorry somerthing went wrong ");
-//       }
-//     },
-//     error: function(response){
-//       alert(response.responseJSON);
-//   }
-//   });
-// }
