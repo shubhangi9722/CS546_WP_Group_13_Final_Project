@@ -1,11 +1,14 @@
 function getsomebookings(email) {
+  $("#mainbinder").empty();
   $.ajax({
     method: "GET",
     url: "/sitterbooking/getsomebookings/" + email,
     success: function (response) {
       console.log(response);
       for (var i = 0; i < response.length; i++) {
+        var count = 0;
         if (response[i].status == "Requested") {
+          count = count + 1;
           $("#mainbinder").append(
             '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
               response[i].firstName +
@@ -23,6 +26,8 @@ function getsomebookings(email) {
               response[i].address +
               '</p><p class="card-text">Your Pay:' +
               response[i].service_charge +
+              '</p><p class="card-text">Service:' +
+              response[i].service +
               '</p><a href="#" class="btn btn-primary" onclick="Accept(\'' +
               response[i]._id +
               '\')">Accept</a>&nbsp;&nbsp;<a href="#" class="btn btn-primary" onclick="Rejected(\'' +
@@ -30,6 +35,60 @@ function getsomebookings(email) {
               "')\">Deny</a> </div></div>"
           );
         }
+      }
+      if (count == 0) {
+        $("#mainbinder").append(
+          '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No New Booking Request Found &nbsp;</div></div>'
+        );
+      }
+    },
+  });
+}
+function UpcommingBookings(email) {
+  $("#mainbinder").empty();
+  $.ajax({
+    method: "GET",
+    url: "/sitterbooking/getsomebookings/" + email,
+    success: function (response) {
+      let count = 0;
+      $("#mainbinder").empty();
+      console.log(response);
+      for (var i = 0; i < response.length; i++) {
+        if (response[i].status == "Accepted") {
+          var b = response[i];
+          var n = moment(b.end_date_time);
+          var m = moment();
+          console.log(moment(m).isBefore(n));
+          if (moment(m).isBefore(n)) {
+            count = count + 1;
+            $("#mainbinder").append(
+              '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+                response[i].firstName +
+                "&nbsp;" +
+                response[i].lastName +
+                '</h5><p class="card-text">' +
+                response[i].behavioral_information +
+                '</p><p class="card-text">Start Time:' +
+                response[i].start_date_time +
+                '</p><p class="card-text">End Time:' +
+                response[i].end_date_time +
+                '</p><p class="card-text">Dog Breed:' +
+                response[i].dog_breed +
+                '</p><p class="card-text">Customer Address:' +
+                response[i].address +
+                '</p><p class="card-text">Your Pay:' +
+                response[i].service_charge +
+                '</p><p class="card-text">Service:' +
+                response[i].service +
+                "</p></div></div>"
+            );
+          }
+        }
+      }
+      if (count == 0) {
+        $("#mainbinder").append(
+          '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No Upcomming Booking Found &nbsp;</div></div>'
+        );
       }
     },
   });
@@ -58,62 +117,93 @@ function getsomebookings(email) {
 function Accept(bookingid) {
   console.log(`${bookingid}`);
   $.ajax({
-    method: "POST",
+    method: "GET",
     url: "/sitterbooking/accept/" + bookingid,
     success: function (response) {
       console.log(response);
       if (response.updated == true) {
         alert("this booking has been accepted");
-        setTimeout(function(){  location.reload(); }, 7000);
+        setTimeout(function () {
+          location.reload();
+        }, 7000);
+      } else {
+        alert("something went wrong");
       }
-      
-      else{
-        alert("something went wrong")
-      }
-      
+
       //Adding a button to completed accept and reject bookings button
     },
-    error: function(response){
+    error: function (response) {
+      console.log(response);
       alert(response.responseJSON);
-  }
+    },
   });
 }
 
 function Rejected(bookingid) {
   $.ajax({
-    method: "POST",
+    method: "GET",
     url: "/sitterbooking/rejected/" + bookingid,
     success: function (response) {
       if (response.updated == true) {
         alert("this booking has been Rejected");
-        setTimeout(function(){  location.reload(); }, 7000);
-      }
-      else{
+        setTimeout(function () {
+          location.reload();
+        }, 7000);
+      } else {
         alert("something went wong");
       }
-     
+
       //Adding a button to completed accept and reject bookings button
     },
-    error: function(response){
+    error: function (response) {
       alert(response.responseJSON);
-  }
-    
+    },
   });
 }
 
-function upcommingbookings(email) {
+function getsomebookingsHist(email) {
+  $("#mainbinder").empty();
   $.ajax({
     method: "GET",
     url: "/sitterbooking/getsomebookings/" + email,
     success: function (response) {
-      for (x in response) {
-        if (x.status == "Accepted") {
-          //make cards here
+      console.log(response);
+      let count = 0;
+      for (var i = 0; i < response.length; i++) {
+        var b = response[i];
+        var n = moment(b.end_date_time);
+        var m = moment();
+        // console.log(moment(n).isBefore(m));
+        if (moment(n).isBefore(m)) {
+          count = count + 1;
+          $("#mainbinder").append(
+            '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+              response[i].firstName +
+              "&nbsp;" +
+              response[i].lastName +
+              '</h5><p class="card-text">' +
+              response[i].behavioral_information +
+              '</p><p class="card-text">Start Time:' +
+              response[i].start_date_time +
+              '</p><p class="card-text">End Time:' +
+              response[i].end_date_time +
+              '</p><p class="card-text">Dog Breed:' +
+              response[i].dog_breed +
+              '</p><p class="card-text">Customer Address:' +
+              response[i].address +
+              '</p><p class="card-text">Your Pay:' +
+              response[i].service_charge +
+              '</p><p class="card-text">Service:' +
+              response[i].service +
+              "</p></div></div>"
+          );
         }
       }
-      console.log(response);
-      //Adding a button to completed accept and reject bookings button
+      if (count == 0) {
+        $("#mainbinder").append(
+          '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No Booking History Found &nbsp;</div></div>'
+        );
+      }
     },
-    
   });
 }

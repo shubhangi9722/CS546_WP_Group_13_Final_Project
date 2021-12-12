@@ -4,7 +4,11 @@ const sitters = mongoCollections.sitters;
 const bookings = mongoCollections.bookings;
 const { ObjectId } = require("mongodb");
 const moment = require("moment");
+
 const bookingjs = require("../public/scripts/booking")
+
+var nodemailer = require("nodemailer");
+
 
 async function isOwner_id(Owner_id) {
   if (typeof Owner_id !== "string") {
@@ -80,6 +84,56 @@ async function getOwnerNameId(id) {
     return addedUser;
   }
   return false;
+}
+async function sendEmail(booking_id, status) {
+  //get dog owner id
+  let parsedid;
+  try {
+    parsedid = ObjectId(booking_id);
+  } catch (err) {
+    throw new Error(`id ${id} is not a valid ObjectId.`);
+  }
+  const bookingsCollection = await bookings();
+  const booking = await bookingsCollection.findOne({ _id: parsedid });
+  id = booking.Owner_id;
+  //get dogownermail
+  let parsedId;
+  try {
+    parsedId = ObjectId(id);
+  } catch (err) {
+    throw new Error(`id ${id} is not a valid ObjectId.`);
+  }
+  const sitterCollection = await dogOwners();
+  const addedUser = await sitterCollection.findOne({ _id: parsedId });
+  const emailid = addedUser.email;
+
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "bowwowsitters362@gmail.com",
+      pass: "123456789@#$",
+    },
+  });
+
+  var mailOptions = {
+    from: "bowwowsitters362@gmail.com",
+    to: "chavantapish@gmail.com",
+    subject: "Regarding your request on BOW-WOW-Sitters",
+    text: `Your request to book a sitter for ${booking.start_date_time} to ${booking.end_date_time} has been ${status}`,
+  };
+  try {
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+        return false;
+      } else {
+        console.log("Email sent: " + info.response);
+        return true;
+      }
+    });
+  } catch (e) {
+    return false;
+  }
 }
 
 module.exports = {
@@ -327,54 +381,57 @@ module.exports = {
 
   //////////////////////Status
   async UpdateStatusBooking(booking_id, status) {
-    
-      if (!status) {
-        throw "status not present";
-      }
-      if (typeof status !== "string") {
-        throw "Status should be a string";
-      }
-      if (
-        status !== "Accepted" &&
-        status !== "Rejected" &&
-        status !== "Completed"
-      ) {
-        throw "Not valid status";
-      }
-      if (!booking_id) {
-        throw "booking_id not found";
-      }
-      if (typeof booking_id !== "string") {
-        throw "booking_id not a string"
-      }
-      let parsedId;
-      try {
-        parsedId = ObjectId(booking_id);
-      } catch (err) {
-        throw `id ${booking_id} is not a valid ObjectId.`
-      }
-      let updatedBooking = {
-        status: status,
-      };
+    if (!status) {
+      throw "status not present";
+    }
+    if (typeof status !== "string") {
+      throw "Status should be a string";
+    }
+    if (
+      status !== "Accepted" &&
+      status !== "Rejected" &&
+      status !== "Completed"
+    ) {
+      throw "Not valid status";
+    }
+    if (!booking_id) {
+      throw "booking_id not found";
+    }
+    if (typeof booking_id !== "string") {
+      throw "booking_id not a string";
+    }
+    let parsedId;
+    try {
+      parsedId = ObjectId(booking_id);
+    } catch (err) {
+      throw `id ${booking_id} is not a valid ObjectId.`;
+    }
+    let updatedBooking = {
+      status: status,
+    };
 
-      const bookingsCollection = await bookings();
-      const booking = await bookingsCollection.findOne({ _id: parsedId });
-      if (booking.status === status) {
-        throw `Status is already ${status}`;
-      }
-      if (booking === null) throw new Error(`No booking exists with id`);
-      const updatedInfo = await bookingsCollection.updateOne(
-        { _id: parsedId },
-        { $set: updatedBooking }
-      );
-      if (updatedInfo.modifiedCount === 0) {
-        throw "Could not update Booking"
-      }
-      let obj={};
-      obj["updated"] = true;
-
-      return obj;
-    
+    const bookingsCollection = await bookings();
+    const booking = await bookingsCollection.findOne({ _id: parsedId });
+    if (booking.status === status) {
+      throw `Status is already ${status}`;
+    }
+    if (booking === null) throw new Error(`No booking exists with id`);
+    const updatedInfo = await bookingsCollection.updateOne(
+      { _id: parsedId },
+      { $set: updatedBooking }
+    );
+    console.log(updatedBooking);
+    if (updatedInfo.modifiedCount === 0) {
+      throw "Could not update Booking";
+    }
+    const mail = await sendEmail(booking_id, status);
+    // if (mail == false) {
+    //   console.log("could not send Email");
+    // }
+    let obj = {};
+    obj["updated"] = true;
+    console.log(obj);
+    return obj;
   },
 
   async delete(booking_id) {
@@ -397,8 +454,12 @@ module.exports = {
     const deletionInfo = await bookingsCollection.deleteOne({ _id: parsedId });
     if (deletionInfo.deletedCount === 0)
       throw new Error(`No Booking exists with id`);
-    return { BookingId: booking._id.toString(), deleted: true };
+    let obj = {};
+    obj["BookingId"] = booking._id.toString();
+    obj["Delete"] = true;
+    return obj;
   },
+
   async getDogOwnerEmail(email) {
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
