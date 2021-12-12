@@ -1,36 +1,3 @@
-function alert1() {
-  var select = $("#service-selection");
-  var value = select.val();
-  $("#checkin").show();
-  $("#checkout").show();
-  $("#checkinDate").show();
-  $("#info").show();
-  if (value == "Daycare" || value == "Nightcare") {
-    $("#checkout").hide();
-    $("#checkin").hide();
-    $("#checkinDate").show();
-    $("#info").show();
-    // $("#checkin").type = "date";
-  } else if (value == "DogWalking") {
-    $("#checkin").show();
-    $("#checkinDate").hide();
-    $("#checkout").hide();
-    $("#info").show();
-  } else if (value == "Housevisit") {
-    $("#checkin").show();
-    $("#checkout").show();
-    $("#checkinDate").hide();
-    $("#info").show();
-  }
-}
-
-
-
-
-
-
-
-
 
 function bookthissitter(data) {
   var df = {};
@@ -106,11 +73,11 @@ function bookthissitter(data) {
   var backbutton = $(
     '<a href ="#!" class="btn btn-primary" type="submit" id="backbutton">Back</button>'
   );
-  serviceoptions.appendTo(bookingform);
-  checkin.appendTo(bookingform);
-  checkinDate.appendTo(bookingform);
-  checkout.appendTo(bookingform);
-  bookbutton.appendTo(bookingform);
+  //serviceoptions.appendTo(bookingform);
+  //checkin.appendTo(bookingform);
+  //checkinDate.appendTo(bookingform);
+  //checkout.appendTo(bookingform);
+  //bookbutton.appendTo(bookingform);
 
   $("#checkin-date").attr("min", now3);
   bookbutton.on("click", function (event) {
@@ -210,15 +177,9 @@ function bookthissitter(data) {
   backbutton.attr("onclick", "getSomeSitter()");
   var info = $(`<div class="col-sm-6">
   <div class="card">
-  <div class="card-header"><h1> Please note
-  </h1></div><div class="card-body">
-  <h2 class="card-title">
-  <p>Day Care has fixed timing from 10am to 8pm and</p>
-  <p>Night Care has fixed timing from 8pm to 8am</p>
-  <p>Please select date</p></h2>
-  </div>"
-  </div>
-  </div>`);
+  <div class="card-header"><h3> Reviews
+  </h3></div>`);
+  
   row.append(info);
   backbutton.appendTo(bookingform);
   bookingform.appendTo(row);
@@ -227,94 +188,6 @@ function bookthissitter(data) {
   $("#mainbinder").append(c);
   $("#mainbinder").append(reviewscards);
 }
-/// Get My bookings Accepted future bookings
-function GetMyBookings(email) {
-  var data = {};
-  data[email] = email;
-  //get id from email
-  $.ajax({
-    method: "GET",
-    url: "/booking/getOwnerEmail/" + email,
-    success: function (response) {
-      console.log(response._id);
-      var id = response._id;
-      if (id) {
-        try {
-          GetbookingsOwner(id);
-        } catch (e) {
-          alert(e.message);
-        }
-      }
-    },
-  });
-}
-//get all bookings from id
-function GetbookingsOwner(id) {
-  try {
-    $.ajax({
-      method: "GET",
-      url: "/booking/owner/" + id,
-      success: function (response) {
-        console.log(response);
-        if (response == "No Bookings Found") {
-          alert("Please book a sitter first");
-          getSomeSitter();
-        }
-        var count = 0;
-        if (response) {
-          var row = $('<div class="row"></div>');
-          for (var i = 0; i < response.length; i++) {
-            var b = response[i];
-
-            if (b.status == "Accepted") {
-              var n = moment(b.start_date_time);
-              var m = moment();
-              console.log(moment(n).isBefore(m));
-              if (moment(m).isBefore(n)) {
-                var count = 1;
-                var column = $(`<div class="column">`);
-                var card = $(
-                  `<div class="card text-center" id="card" id="bookingcard"></div>`
-                );
-
-                // {{#each trips}}
-                var a = $(` <a href="#!">${b}</a>`);
-                //card.append(a);
-                var s = moment(b.start_date_time);
-                var e = moment(b.end_date_time);
-                var bookinginfo = $(`<div class="row"><div class="booking-info">
-              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
-              <p> </h6>Rating:</h6> ${b.OverallRating}</p>
-              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
-              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
-              <p>Status:${b.status}</p>
-              <a href="#!" class="button" hidden>Delete</a>
-              </div></div>`);
-
-                card.append(bookinginfo);
-                column.append(card);
-                column.appendTo(row);
-              }
-            }
-          }
-          if (count == 0) {
-            alert("No Accepted booking found");
-            getSomeSitter();
-          }
-          $("#mainbinder").empty();
-          $("#mainbinder").append(row);
-          console.log(response);
-        } else {
-          alert("Sorry somerthing went wrong ");
-        }
-      },
-    });
-  } catch (e) {
-    alert(e.message);
-    getSomeSitter();
-  }
-}
-//////////////////////////////////////////////// Get Pendings bookings Requested bookings//////////////////////////////////////////////////////////////
 function GetMyBookingsPending(email) {
   var data = {};
   data[email] = email;
@@ -351,9 +224,9 @@ function GetbookingsOwnerPending(id) {
           var row = $('<div class="row"></div>');
           var count = 0;
           $("#mainbinder").empty();
+          
           for (var i = 0; i < response.length; i++) {
             var b = response[i];
-            if (b.status != "Accepted") {
               var count = 1;
               var column = $(`<div class="column">`);
               var card = $(
@@ -377,14 +250,15 @@ function GetbookingsOwnerPending(id) {
               card.append(bookinginfo);
               column.append(card);
               column.appendTo(row);
-            }
+           
             $("#mainbinder").append(row);
             console.log(response);
           }
+     
           if (count == 0) {
             $("#mainbinder").empty();
             $("#mainbinder").append(
-              '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No Pending Request Found &nbsp;</div></div>'
+              '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">NO BOOKING HISTORY FOUND &nbsp;</div></div>'
             );
           }
         } else {
@@ -397,147 +271,241 @@ function GetbookingsOwnerPending(id) {
     getSomeSitter();
   }
 }
+
+// function alert1() {
+//   var select = $("#service-selection");
+//   var value = select.val();
+//   $("#checkin").show();
+//   $("#checkout").show();
+//   $("#checkinDate").show();
+//   $("#info").show();
+//   if (value == "Daycare" || value == "Nightcare") {
+//     $("#checkout").hide();
+//     $("#checkin").hide();
+//     $("#checkinDate").show();
+//     $("#info").show();
+//     // $("#checkin").type = "date";
+//   } else if (value == "DogWalking") {
+//     $("#checkin").show();
+//     $("#checkinDate").hide();
+//     $("#checkout").hide();
+//     $("#info").show();
+//   } else if (value == "Housevisit") {
+//     $("#checkin").show();
+//     $("#checkout").show();
+//     $("#checkinDate").hide();
+//     $("#info").show();
+//   }
+// }
+
+// //get all bookings from id
+// function GetbookingsOwner(id) {
+//   try {
+//     $.ajax({
+//       method: "GET",
+//       url: "/booking/owner/" + id,
+//       success: function (response) {
+//         console.log(response);
+//         if (response == "No Bookings Found") {
+//           alert("Please book a sitter first");
+//           getSomeSitter();
+//         }
+//         var count = 0;
+//         if (response) {
+//           var row = $('<div class="row"></div>');
+//           for (var i = 0; i < response.length; i++) {
+//             var b = response[i];
+
+//             if (b.status == "Accepted") {
+//               var n = moment(b.start_date_time);
+//               var m = moment();
+//               console.log(moment(n).isBefore(m));
+//               if (moment(m).isBefore(n)) {
+//                 var count = 1;
+//                 var column = $(`<div class="column">`);
+//                 var card = $(
+//                   `<div class="card text-center" id="card" id="bookingcard"></div>`
+//                 );
+
+//                 // {{#each trips}}
+//                 var a = $(` <a href="#!">${b}</a>`);
+//                 //card.append(a);
+//                 var s = moment(b.start_date_time);
+//                 var e = moment(b.end_date_time);
+//                 var bookinginfo = $(`<div class="row"><div class="booking-info">
+//               <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
+//               <p> </h6>Rating:</h6> ${b.OverallRating}</p>
+//               <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
+//               <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+//               <p>Status:${b.status}</p>
+//               <a href="#!" class="button" hidden>Delete</a>
+//               </div></div>`);
+
+//                 card.append(bookinginfo);
+//                 column.append(card);
+//                 column.appendTo(row);
+//               }
+//             }
+//           }
+//           if (count == 0) {
+//             alert("No Accepted booking found");
+//             getSomeSitter();
+//           }
+//           $("#mainbinder").empty();
+//           $("#mainbinder").append(row);
+//           console.log(response);
+//         } else {
+//           alert("Sorry somerthing went wrong ");
+//         }
+//       },
+//     });
+//   } catch (e) {
+//     alert(e.message);
+//     getSomeSitter();
+//   }
+// }
+//////////////////////////////////////////////// Get Pendings bookings Requested bookings//////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////GET booking history past bookings///////////////////////////////////////////////////////
 
-function GetMyBookingsHistory(email) {
-  var data = {};
-  data[email] = email;
-  //get id from email
-  $.ajax({
-    method: "GET",
-    url: "/booking/getOwnerEmail/" + email,
-    success: function (response) {
-      console.log(response._id);
-      var id = response._id;
-      if (id) {
-        try {
-          GetbookingsOwnerhistory(id);
-        } catch (e) {
-          alert(e.message);
-        }
-      }
-    },
-  });
-}
+// function GetMyBookingsHistory(email) {
+//   var data = {};
+//   data[email] = email;
+//   //get id from email
+//   $.ajax({
+//     method: "GET",
+//     url: "/booking/getOwnerEmail/" + email,
+//     success: function (response) {
+//       console.log(response._id);
+//       var id = response._id;
+//       if (id) {
+//         try {
+//           GetbookingsOwnerhistory(id);
+//         } catch (e) {
+//           alert(e.message);
+//         }
+//       }
+//     },
+//   });
+// }
 
-function GetbookingsOwnerhistory(id) {
-  try {
-    $.ajax({
-      method: "GET",
-      url: "/booking/owner/" + id,
-      success: function (response) {
-        console.log(response);
-        if (response == "No Bookings Found") {
-          alert("Please book a sitter first");
-          getSomeSitter();
-        }
-        if (response) {
-          var row = $('<div class="row"></div>');
-          var count = 0;
-          for (var i = 0; i < response.length; i++) {
-            console.log(response[i].Sitter_id)
-            var b = response[i];
-            var n = moment(b.end_date_time);
-            var m = moment();
-            console.log(moment(n).isBefore(m));
-            if (moment(n).isBefore(m)) {
-              if (b.status == "Accepted") {
-                console.log("hello");
-                count = 1;
-                var column = $(`<div class="column">`);
-                var card = $(
-                  `<div class="card text-center" id="card${i}" id="bookingcard"></div>`
-                );
-                // {{#each trips}}
-                var a = $(` <a href="#!">${b}</a>`);
-                //card.append(a);
-                var s = moment(b.start_date_time);
-                var e = moment(b.end_date_time);
-                var bookinginfo = $(`<div class="row"><div class="booking-info">
-              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
-              <p> </h6>Rating:</h6> ${b.OverallRating}</p>
-              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
-              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
-              <p>Status:${b.status}</p>
-              <button type="button" class="btn btn-primary" onclick="review('${i}', '${b._id}','${b.Sitter_id}')">Review</button>
-              </div></div>`);
-                card.append(bookinginfo);
-                column.append(card);
-                column.appendTo(row);
-              }
-            }
-          }
-          if (count == 0) {
-            alert("No Previous Booking Found");
-            getSomeSitter();
-          }
-          $("#mainbinder").empty();
-          $("#mainbinder").append(row);
-          console.log(response);
-        } else {
-          alert("Sorry Somerthing went wrong ");
-        }
-      },
-    });
-  } catch (e) {
-    alert(e.message);
-    getSomeSitter();
-  }
-}
-function review(i,b_id, sitter_id) {
-  console.log(i,sitter_id);
-  console.log(b_id);
-  let html=`
-  <div class="form-group">
-    <label for="exampleFormControlTextarea1">Reviews</label>
-    <input type="hidden" id="sitterID" value="${sitter_id}">
-    <input type="hidden" id="bookingID" value="${b_id}">
+// function GetbookingsOwnerhistory(id) {
+//   try {
+//     $.ajax({
+//       method: "GET",
+//       url: "/booking/owner/" + id,
+//       success: function (response) {
+//         console.log(response);
+//         if (response == "No Bookings Found") {
+//           alert("Please book a sitter first");
+//           getSomeSitter();
+//         }
+//         if (response) {
+//           var row = $('<div class="row"></div>');
+//           var count = 0;
+//           for (var i = 0; i < response.length; i++) {
+//             console.log(response[i].Sitter_id)
+//             var b = response[i];
+//             var n = moment(b.end_date_time);
+//             var m = moment();
+//             console.log(moment(n).isBefore(m));
+//             if (moment(n).isBefore(m)) {
+//               if (b.status == "Accepted") {
+//                 console.log("hello");
+//                 count = 1;
+//                 var column = $(`<div class="column">`);
+//                 var card = $(
+//                   `<div class="card text-center" id="card${i}" id="bookingcard"></div>`
+//                 );
+//                 // {{#each trips}}
+//                 var a = $(` <a href="#!">${b}</a>`);
+//                 //card.append(a);
+//                 var s = moment(b.start_date_time);
+//                 var e = moment(b.end_date_time);
+//                 var bookinginfo = $(`<div class="row"><div class="booking-info">
+//               <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
+//               <p> </h6>Rating:</h6> ${b.OverallRating}</p>
+//               <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
+//               <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+//               <p>Status:${b.status}</p>
+//               <button type="button" class="btn btn-primary" onclick="review('${i}', '${b._id}','${b.Sitter_id}')">Review</button>
+//               </div></div>`);
+//                 card.append(bookinginfo);
+//                 column.append(card);
+//                 column.appendTo(row);
+//               }
+//             }
+//           }
+//           if (count == 0) {
+//             alert("No Previous Booking Found");
+//             getSomeSitter();
+//           }
+//           $("#mainbinder").empty();
+//           $("#mainbinder").append(row);
+//           console.log(response);
+//         } else {
+//           alert("Sorry Somerthing went wrong ");
+//         }
+//       },
+//     });
+//   } catch (e) {
+//     alert(e.message);
+//     getSomeSitter();
+//   }
+// }
+// function review(i,b_id, sitter_id) {
+//   console.log(i,sitter_id);
+//   console.log(b_id);
+//   let html=`
+//   <div class="form-group">
+//     <label for="exampleFormControlTextarea1">Reviews</label>
+//     <input type="hidden" id="sitterID" value="${sitter_id}">
+//     <input type="hidden" id="bookingID" value="${b_id}">
     
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    <br>
-    <label class="rating-label">
-    <strong>Rating</strong>
-    <select name="Rating" id="Rating">
-                                        <option value=1>1</option>
-                                        <option value=2>2</option>
-                                        <option value=3>3</option>
-                                        <option value=4>4</option>
-                                        <option value=5>5</option>
-    </select>
-    <button type="button" class="btn btn-primary" id="${b_id}" onclick="SendReview()">Review</button>
-    <button type="button" class="btn btn-primary" onclick="getSomeSitter()">Back</button>
-  </div>`
+//     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+//     <br>
+//     <label class="rating-label">
+//     <strong>Rating</strong>
+//     <select name="Rating" id="Rating">
+//                                         <option value=1>1</option>
+//                                         <option value=2>2</option>
+//                                         <option value=3>3</option>
+//                                         <option value=4>4</option>
+//                                         <option value=5>5</option>
+//     </select>
+//     <button type="button" class="btn btn-primary" id="${b_id}" onclick="SendReview()">Review</button>
+//     <button type="button" class="btn btn-primary" onclick="getSomeSitter()">Back</button>
+//   </div>`
 
   
-  $(`#card${i}`).empty();
-  $(`#card${i}`).append(html);
-}
+//   $(`#card${i}`).empty();
+//   $(`#card${i}`).append(html);
+// }
 
+// function SendReview() {
 
-function SendReview() {
+// let dataObj = {
+//   b_id: $('#bookingID').val(),
+//   sitter_id: $('#sitterID').val(),
+//   ratingValue : $('#Rating').val(),
+//   reviewValue : $('#exampleFormControlTextarea1').val()
 
-let dataObj = {
-  b_id: $('#bookingID').val(),
-  sitter_id: $('#sitterID').val(),
-  ratingValue : $('#Rating').val(),
-  reviewValue : $('#exampleFormControlTextarea1').val()
+// }
+//   $.ajax({
+//     method: "POST",
+//     url: "/booking/sittersReview/" ,
+//     contentType: "application/json",
+//     data: JSON.stringify(dataObj),
+//     success: function (response) {
+//       if(response.reviewInserted == true){
+//         alert("Review Succesful");
+//         location.reload();
 
-}
-  $.ajax({
-    method: "POST",
-    url: "/booking/sittersReview/" ,
-    contentType: "application/json",
-    data: JSON.stringify(dataObj),
-    success: function (response) {
-      if(response.reviewInserted == true){
-        alert("Review Succesful");
-        location.reload();
-
-      }
-     console.log(respose);
-    },
-  });
+//       }
+//      console.log(respose);
+//     },
+//   });
   
 
 
-}
+// }

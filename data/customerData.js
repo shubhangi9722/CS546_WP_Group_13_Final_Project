@@ -338,26 +338,18 @@ module.exports = {
       return sitterList;
     }
   },
+  async getOwnerDataforDashboard() {
+    const OwnerCollection = await dogOwners();
+    const ownerList = await OwnerCollection.find({}).limit(20).toArray();
 
-  async getAllSittersByPriceAsc() {
-    const sittersCollection = await sitters();
-    return await sittersCollection.find({}).sort({ price: 1 }).toArray();
+    if (ownerList.length == 0) {
+      throw [400, `No Owners Found Right Now....!`];
+    } else {
+      return ownerList;
+    }
   },
 
-  async getAllSittersSortedByPriceDec() {
-    const sittersCollection = await sitters();
-    return await sittersCollection.find({}).sort({ price: -1 }).toArray();
-  },
 
-  async findByPriceRange(low, high) {
-    if (!low || typeof low !== "number") throw " You must provide lowest price";
-    if (!high || typeof high !== "number")
-      throw " You must provide highest price";
-    const sittersCollection = await sitters();
-    return await sittersCollection
-      .find({ price: { $gte: low, $lte: high } })
-      .toArray();
-  },
 
   async getCuerrntCustomerInfo(email) {
     if (!email || email.trim() === "") throw " email not available";
