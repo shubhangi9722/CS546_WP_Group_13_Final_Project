@@ -45,11 +45,11 @@ function bookthissitter(data) {
       console.log(response);
       //info.append(center);
       var sitterinfo = $(
-        '<div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+        '<div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
           response.firstName +
           "&nbsp;" +
           response.lastName +
-          '</h5><p class="card-text"> Bio:' +
+          '</h1><p class="card-text"> Bio:' +
           response.bio +
           '</p><p class="card-text">Price:' +
           response.price +
@@ -61,9 +61,9 @@ function bookthissitter(data) {
       if (response.reviews.length > 0) {
         for (x of response.reviews) {
           reviewscards.append(
-            '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">' +
+            '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               x.customerEmail +
-              '</h5><p class="card-text"> Review:' +
+              '</h1><p class="card-text"> Review:' +
               x.review +
               '</p><p class="card-text">Rating:' +
               x.rating +
@@ -202,12 +202,12 @@ function bookthissitter(data) {
   backbutton.attr("onclick", "getSomeSitter()");
   var info = $(`<div class="col-sm-6">
   <div class="card">
-  <div class="card-header"><h5> Please note
-  </h5></div><div class="card-body">
-  <h6 class="card-title">
+  <div class="card-header"><h1> Please note
+  </h1></div><div class="card-body">
+  <h2 class="card-title">
   <p>Day Care has fixed timing from 10am to 8pm and</p>
   <p>Night Care has fixed timing from 8pm to 8am</p>
-  <p>Please select date</p>
+  <p>Please select date</p></h2>
   </div>"
   </div>
   </div>`);
@@ -261,7 +261,7 @@ function GetbookingsOwner(id) {
             if (b.status == "Accepted") {
               var n = moment(b.start_date_time);
               var m = moment();
-              console.log(moment(n).isBefore(m));
+              //console.log(moment(n).isBefore(m));
               if (moment(m).isBefore(n)) {
                 var count = 1;
                 var column = $(`<div class="column">`);
@@ -275,10 +275,10 @@ function GetbookingsOwner(id) {
                 var s = moment(b.start_date_time);
                 var e = moment(b.end_date_time);
                 var bookinginfo = $(`<div class="row"><div class="booking-info">
-              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
-              <p> </h6>Rating:</h6> ${b.OverallRating}</p>
-              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
-              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+              <h1>Sitter:  ${b.firstName} ${b.lastName}</h1>
+              <p> <h2>Rating:</h2> ${b.OverallRating}</p>
+              <p><h2>Service:${b.service}<h2>Charge:${b.service_charge}</h2><p>
+              <p><h2>Starts :</h2> ${s} <h2>   Ends :</h2>${e}</p>
               <p>Status:${b.status}</p>
               <a href="#!" class="button" hidden>Delete</a>
               </div></div>`);
@@ -358,10 +358,10 @@ function GetbookingsOwnerPending(id) {
               var s = moment(b.start_date_time);
               var e = moment(b.end_date_time);
               var bookinginfo = $(`<div class="row"><div class="booking-info">
-              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
+              <h1>Sitter:  ${b.firstName} ${b.lastName}</h1>
               <p> </h6>Rating:</h6> ${b.OverallRating}</p>
-              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
-              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+              <p><h2>Service:${b.service}<h2>Charge:${b.service_charge}</h2><p>
+              <p><h2>Starts :</h2> ${s} <h2>   Ends :</h2>${e}</p>
               <p>Status:${b.status}</p>
               <a href="#!" class="button" hidden>Delete</a>
               </div></div>`);
@@ -376,7 +376,7 @@ function GetbookingsOwnerPending(id) {
           if (count == 0) {
             $("#mainbinder").empty();
             $("#mainbinder").append(
-              '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No Pending Request Found &nbsp;</div></div>'
+              '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">No Pending Request Found &nbsp;</h1></div></div>'
             );
           }
         } else {
@@ -446,10 +446,10 @@ function GetbookingsOwnerhistory(id) {
                 var s = moment(b.start_date_time);
                 var e = moment(b.end_date_time);
                 var bookinginfo = $(`<div class="row"><div class="booking-info">
-              <h2>Sitter:  ${b.firstName} ${b.lastName}</h2>
-              <p> </h6>Rating:</h6> ${b.OverallRating}</p>
-              <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
-              <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
+              <h1>Sitter:  ${b.firstName} ${b.lastName}</h1>
+              <p> <h2>Rating:</h2> ${b.OverallRating}</p>
+              <p><h2>Service:${b.service}<h2>Charge:${b.service_charge}</h2><p>
+              <p><h2>Starts :</h2> ${s} <h2>   Ends :</h2>${e}</p>
               <p>Status:${b.status}</p>
               <button type="button" class="btn btn-primary" onclick="review('${i}', '${b._id}','${b.Sitter_id}')">Review</button>
               </div></div>`);
