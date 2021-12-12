@@ -25,9 +25,9 @@
 
            
 
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"onclick="GetMyBookings('{{email}}')">My Bookings</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"onclick="GetMyBookingsPending('{{email}}')">Pending Request</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"onclick="GetMyBookingsHistory('{{email}}')">Booking History</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetMyBookings('{{email}}')">My Bookings</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetMyBookingsPending('{{email}}')">Pending Request</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetMyBookingsHistory('{{email}}')">Booking History</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetOwnerDetails('{{email}}')">My Profile</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetOwnerDogDetails('{{email}}')">My Dog's Profile</a>
                </div>
@@ -44,6 +44,7 @@
                                    class="navbar-toggler-icon"></span></button>
                          <div class="search-container">
                               <form method="POST" id="searchForm">
+                                   <p>Search here to book a Sitter: </p>
                                    <label for="search">Name</label>
                                    <input type="text" placeholder="Search.." for="Search Term" name="search" id="search_term">
                                    <label for="Zipcode">Zipcode</label>
@@ -95,14 +96,19 @@
                $('#error').hide();
                 getSomeSitter();
           });
+          
      </script>
+
      <script>
   /*export default {
+
     data() {
       return {
         value: null
       }
     }
+
   }*/
 </script>
+
 </body>

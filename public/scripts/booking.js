@@ -397,6 +397,7 @@ function GetbookingsOwnerhistory(id) {
           var row = $('<div class="row"></div>');
           var count = 0;
           for (var i = 0; i < response.length; i++) {
+            console.log(response[i].Sitter_id)
             var b = response[i];
             var n = moment(b.end_date_time);
             var m = moment();
@@ -420,7 +421,7 @@ function GetbookingsOwnerhistory(id) {
               <p><h6>Service:${b.service}<h6>Charge:${b.service_charge}</h6><p>
               <p><h6>Starts :</h6> ${s} <h6>   Ends :</h6>${e}</p>
               <p>Status:${b.status}</p>
-              <button type="button" class="btn btn-primary" onclick="review('${i},${b._id}')">Review</button>
+              <button type="button" class="btn btn-primary" onclick="review('${i}', '${b._id}','${b.Sitter_id}')">Review</button>
               </div></div>`);
                 card.append(bookinginfo);
                 column.append(card);
@@ -445,11 +446,15 @@ function GetbookingsOwnerhistory(id) {
     getSomeSitter();
   }
 }
-function review(i, id) {
-  $(`#card${i}`).empty();
-  $(`#card${i}`).append(`
+function review(i,b_id, sitter_id) {
+  console.log(i,sitter_id);
+  console.log(b_id);
+  let html=`
   <div class="form-group">
     <label for="exampleFormControlTextarea1">Reviews</label>
+    <input type="hidden" id="sitterID" value="${sitter_id}">
+    <input type="hidden" id="bookingID" value="${b_id}">
+    
     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
     <br>
     <label class="rating-label">
@@ -461,9 +466,40 @@ function review(i, id) {
                                         <option value=4>4</option>
                                         <option value=5>5</option>
     </select>
-    <button type="button" class="btn btn-primary" onclick="Sendreview()">Review</button>
+    <button type="button" class="btn btn-primary" id="${b_id}" onclick="SendReview()">Review</button>
     <button type="button" class="btn btn-primary" onclick="getSomeSitter()">Back</button>
-  </div>`);
+  </div>`
+
+  
+  $(`#card${i}`).empty();
+  $(`#card${i}`).append(html);
 }
 
-function SendReview() {}
+
+function SendReview() {
+
+let dataObj = {
+  i: $(''),
+  sitter_id: $('#sitterID').val(),
+  ratingValue : $('#Rating').val(),
+  reviewValue : $('#exampleFormControlTextarea1').val()
+
+}
+  $.ajax({
+    method: "POST",
+    url: "/booking/sittersReview/" ,
+    contentType: "application/json",
+    data: JSON.stringify(dataObj),
+    success: function (response) {
+      if(response.reviewInserted == true){
+        alert("Review Succesful");
+        location.reload();
+
+      }
+     console.log(respose);
+    },
+  });
+  
+
+
+}

@@ -4,7 +4,7 @@ function getsomebookings(email) {
     method: "GET",
     url: "/sitterbooking/getsomebookings/" + email,
     success: function (response) {
-      console.log(response);
+      //console.log(response);
       for (var i = 0; i < response.length; i++) {
         var count = 0;
         if (response[i].status == "Requested") {
@@ -14,7 +14,7 @@ function getsomebookings(email) {
               response[i].firstName +
               "&nbsp;" +
               response[i].lastName +
-              '</h5><p class="card-text">' +
+              '</h5><p class="card-text">Pet Behavioral Information:' +
               response[i].behavioral_information +
               '</p><p class="card-text">Start Time:' +
               response[i].start_date_time +
@@ -52,7 +52,7 @@ function UpcommingBookings(email) {
     success: function (response) {
       let count = 0;
       $("#mainbinder").empty();
-      console.log(response);
+      // console.log(response);
       for (var i = 0; i < response.length; i++) {
         if (response[i].status == "Accepted") {
           var b = response[i];
@@ -120,7 +120,7 @@ function Accept(bookingid) {
     method: "GET",
     url: "/sitterbooking/accept/" + bookingid,
     success: function (response) {
-      console.log(response);
+      //console.log(response);
       if (response.updated == true) {
         alert("this booking has been accepted");
         setTimeout(function () {
@@ -133,7 +133,7 @@ function Accept(bookingid) {
       //Adding a button to completed accept and reject bookings button
     },
     error: function (response) {
-      console.log(response);
+      //console.log(response);
       alert(response.responseJSON);
     },
   });
@@ -167,7 +167,7 @@ function getsomebookingsHist(email) {
     method: "GET",
     url: "/sitterbooking/getsomebookings/" + email,
     success: function (response) {
-      console.log(response);
+      //console.log(response);
       let count = 0;
       for (var i = 0; i < response.length; i++) {
         var b = response[i];
