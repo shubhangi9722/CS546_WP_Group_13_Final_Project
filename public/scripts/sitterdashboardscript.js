@@ -19,6 +19,23 @@ function GetSiiterDetails(email)
 }
 
 
+function getRating(email) {
+  $.ajax({
+    method: "GET",
+    url: "/sitterDashboard/getSitterDetails/"+email,
+    success: function (response) {
+      //console.log(response)
+      if (response != null) {
+         //$("#mainbinder").empty();
+         $("#rating").append('<p><strong>Your overall rating provided by Dog Owners is: '+response.overall_rating+' </strong></p>'); 
+      } else {
+        alert("Something went wrong");
+      }
+    },
+  });
+}
+
+
 
 function updateSitter(email) {
   var firstName = $("#firstName").val().trim();
