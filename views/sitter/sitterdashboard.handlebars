@@ -17,12 +17,13 @@
      <div class="d-flex" id="wrapper">
           <!-- Sidebar-->
           <div class="border-end bg-white" id="sidebar-wrapper">
-               <div class="sidebar-heading border-bottom bg-light">Welcome, {{email}}</div>
+               <div class="sidebar-heading border-bottom bg-light">Welcome, {{email}} </div>
                <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getsomebookings('{{email}}')" >Home</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"onclick="getsomebookingsHist('{{email}}')">Booking History</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="UpcommingBookings('{{email}}')">Upcomming Bookings</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="getsomebookingsHist('{{email}}')">Booking History</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="UpcommingBookings('{{email}}')">Upcoming Bookings</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="GetSiiterDetails('{{email}}')">My Profile</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!" onclick="review('{{email}}')">My Reviews</a>
                </div>
           </div>
           <!-- Page content wrapper-->
@@ -35,6 +36,12 @@
                               data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                               aria-expanded="false" aria-label="Toggle navigation"><span
                                    class="navbar-toggler-icon"></span></button>
+
+                         <div class="collapse navbar-collapse" id="rating">
+                              <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                   <li class="nav-item active"><p><strong>{{response.overall_rating}}</strong></p></li>
+                              </ul>
+                         </div>                
                     
                          <div class="collapse navbar-collapse" id="navbarSupportedContent">
                               <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
@@ -58,7 +65,7 @@
           <script>
           $(document).ready(function () {
                var eval=$('#sitterbooking_get').val();
-                getsomebookings(eval);
+               getRating(eval);
           });
      </script>
      

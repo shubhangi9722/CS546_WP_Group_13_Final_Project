@@ -4,11 +4,7 @@ const sitters = mongoCollections.sitters;
 const bookings = mongoCollections.bookings;
 const { ObjectId } = require("mongodb");
 const moment = require("moment");
-
-const bookingjs = require("../public/scripts/booking")
-
 var nodemailer = require("nodemailer");
-
 
 async function isOwner_id(Owner_id) {
   if (typeof Owner_id !== "string") {
@@ -103,37 +99,73 @@ async function sendEmail(booking_id, status) {
   } catch (err) {
     throw new Error(`id ${id} is not a valid ObjectId.`);
   }
-  const sitterCollection = await dogOwners();
-  const addedUser = await sitterCollection.findOne({ _id: parsedId });
+  const OwnerCollection = await dogOwners();
+  const addedUser = await OwnerCollection.findOne({ _id: parsedId });
   const emailid = addedUser.email;
 
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "bowwowsitters362@gmail.com",
-      pass: "123456789@#$",
+      user: "saidexter2021@gmail.com",
+      pass: "Smarty97",
     },
   });
+  booking.start_date_time = moment(booking.start_date_time);
+  booking.end_date_time = moment(booking.end_date_time);
 
   var mailOptions = {
     from: "bowwowsitters362@gmail.com",
-    to: "chavantapish@gmail.com",
+    to: emailid,
     subject: "Regarding your request on BOW-WOW-Sitters",
     text: `Your request to book a sitter for ${booking.start_date_time} to ${booking.end_date_time} has been ${status}`,
   };
+  //try {
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      return false;
+    } else {
+      console.log("Email sent: " + info.response);
+      return true;
+    }
+  });
+}
+
+async function sendEmailToSitter(sitter_id) {
+  //get Sitter  id
+  let parsedid;
   try {
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-        return false;
-      } else {
-        console.log("Email sent: " + info.response);
-        return true;
-      }
-    });
-  } catch (e) {
-    return false;
+    parsedid = ObjectId(sitter_id);
+  } catch (err) {
+    throw new Error(`id ${id} is not a valid ObjectId.`);
   }
+  const sitterCollection = await sitters();
+  const addedUser = await sitterCollection.findOne({ _id: parsedid });
+  const emailid = addedUser.email;
+
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "saidexter2021@gmail.com",
+      pass: "Smarty97",
+    },
+  });
+  var mailOptions = {
+    from: "bowwowsitters362@gmail.com",
+    to: emailid,
+    subject: "Regarding your request on BOW-WOW-Sitters",
+    text: `New Request created for your service on Bow-wow Sitters`,
+  };
+  //try {
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      return false;
+    } else {
+      console.log("Email sent: " + info.response);
+      return true;
+    }
+  });
 }
 
 module.exports = {
@@ -305,6 +337,7 @@ module.exports = {
     if (insertInfo.insertedCount === 0)
       throw new Error("Could not add booking");
     console.log(insertInfo);
+    sendEmailToSitter(sitter_id);
     return { BookingCreated: true };
   },
 
@@ -477,7 +510,10 @@ module.exports = {
     return addedUser;
   },
 
+
   async sitterReviews(emailId,b_id, sitterId, rating, review){
+
+
 
     // console.log(emailId);
     // console.log(sitterId)
@@ -491,12 +527,12 @@ module.exports = {
       _id: objectId,
     });
 
-    if (getSitter === null)
-      throw [404, `Sitter Not Found with id:${sitterId}`];
+    if (getSitter === null) throw [404, `Sitter Not Found with id:${sitterId}`];
     //return;
 
     let createReview = {
       _id: ObjectId(),
+
       bookingID: b_id,
       customerEmail:emailId,
       rating: parseInt(rating),   /////////////////////////////
@@ -504,35 +540,30 @@ module.exports = {
     };
 
     let sum = 0;
-  //  let reviewLength = getSitter.reviews.length  < 1 ? 1: getSitter.reviews.length; 
+    //  let reviewLength = getSitter.reviews.length  < 1 ? 1: getSitter.reviews.length;
     console.log(getSitter);
     for (let i = 0; i < getSitter.reviews.length; i++) {
       sum += getSitter.reviews[i].rating;
     }
     //console.log(sum);
-   // console.log(createReview.rating);
-   // console.log(getSitter.reviews.length);
+    // console.log(createReview.rating);
+    // console.log(getSitter.reviews.length);
     let average = (sum + createReview.rating) / (getSitter.reviews.length + 1);
-    console.log(getSitter.reviews.length + 1 , '1');
+    console.log(getSitter.reviews.length + 1, "1");
     //console.log(average);
     average = Number(average.toFixed(2));
-      
+
     const updatedreviews = await sittersCollection.updateOne(
       { _id: objectId },
       { $push: { reviews: createReview }, $set: { overall_rating: average } }
     );
 
-      if (!updatedreviews.matchedCount && !updatedreviews.modifiedCount) {
+    if (!updatedreviews.matchedCount && !updatedreviews.modifiedCount) {
       throw [500, "Could not update reviews successfully"];
     }
-
 
     obj["reviewInserted"] = true;
 
     return obj;
- 
-
-  }
-
-
+  },
 };

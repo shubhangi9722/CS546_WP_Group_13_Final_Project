@@ -123,9 +123,8 @@
         <div class="normalOrientation">
           <label for="address">Address* :</label>
           <input
-            type="address"
+            type="text"
             class="textbox"
-            required
             id="address"
             value="{{address}}"
             name="address"
@@ -234,7 +233,7 @@
         </div>
         <br />
         <div class="normalOrientation">
-          <label for="vcontact">Veterinarian Phone Number:</label>
+          <label for="vet_phn">Veterinarian Phone Number:</label>
           <input
             class="textbox"
             type="text"
@@ -253,14 +252,14 @@
         </p>
         <div class="normalOrientation">
           <label for="behavioral_information">Dog Behavioral Information:</label>
-          <textarea
+          <input
+            type="text"
             id="behavioral_information"
             class="textbox"
             required
             name="behavioral_information"
             value="{{behavioral_information}}"
-            rows="5"
-          ></textarea>
+          />
         </div>
         <br />
       </div>

@@ -12,7 +12,9 @@ const privateRoutes = require('./private');
 const userRoutes = require('./admin');
 //const adminListRoutes = require('./adminList');
 
+
 const constructorMethod = (app) => {
+  //app.use(xss());
   app.use("/booking", bookingRoutes);
   app.use("/sitterbooking", SitterBookingRoutes);
   app.use("/customerSignin", custsigninRoutes);

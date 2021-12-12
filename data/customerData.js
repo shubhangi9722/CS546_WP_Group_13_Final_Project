@@ -297,7 +297,7 @@ module.exports = {
     let newcustomer = {
       firstName: firstName,
       lastName: lastName,
-      email: email.toLocaleLowerCase(),
+      email: email.toLowerCase(),
       phone_number: phone_number,
       gender: gender,
       address: address,
@@ -353,6 +353,8 @@ module.exports = {
 
   async getCuerrntCustomerInfo(email) {
     if (!email || email.trim() === "") throw " email not available";
+
+    email = email.toLowerCase();
 
     const dogOwnerCollection = await dogOwners();
     const custInfo = await dogOwnerCollection.findOne({ email: email });
@@ -869,4 +871,22 @@ module.exports = {
 
     return obj;
   },
+
+  // async DeleteCustomer(email) {
+  //   if (!email || email.trim() === "") throw " email not available";
+
+  //   let oldSitterdetails = {
+  //     active_status: 0,
+  //   };
+
+  //   const sitterCollection = await sitters();
+  //   const sitterInfo = await sitterCollection.updateOne(
+  //     { email: email },
+  //     { $set: oldSitterdetails }
+  //   );
+  //   if (sitterInfo === null) throw "User not found";
+  //   sitterInfo["sitterDeleted"] = true;
+
+  //   return sitterInfo;
+  // },
 };

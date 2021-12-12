@@ -5,6 +5,7 @@ const customerData = data.customer;
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 var zipcodes = require("zipcodes");
+const xss = require('xss');
 
 //Customer Signup Page
 router.get("/", async (req, res) => {
@@ -250,25 +251,25 @@ router.post("/", async (req, res) => {
     res.statusCode = 400;
     //res.render("customer/signup"
     res.render("customer/signupnew", {
-      firstName: rest_params.firstName,
-      lastName: rest_params.lastName,
-      email: rest_params.email,
-      phone_number: rest_params.phone_number,
+      firstName: xss(rest_params.firstName),
+      lastName: xss(rest_params.lastName),
+      email: xss(rest_params.email),
+      phone_number: xss(rest_params.phone_number),
       gender: rest_params.gender,
-      address: rest_params.address,
-      zipcode: rest_params.zipcode,
-      dob: rest_params.dob,
-      password: rest_params.password,
-      dog_name: rest_params.dog_name,
+      address: xss(rest_params.address),
+      zipcode: xss(rest_params.zipcode),
+      dob: xss(rest_params.dob),
+      password: xss(rest_params.password),
+      dog_name: xss(rest_params.dog_name),
       dog_gender: rest_params.dog_gender,
-      dog_breed: rest_params.dog_breed,
-      dog_age: rest_params.dog_age,
-      dog_dob: rest_params.dog_dob,
-      vet_name: rest_params.vet_name,
-      vet_phn: rest_params.vet_phn,
-      weight: rest_params.weight,
+      dog_breed: xss(rest_params.dog_breed),
+      dog_age: xss(rest_params.dog_age),
+      dog_dob: xss(rest_params.dog_dob),
+      vet_name: xss(rest_params.vet_name),
+      vet_phn: xss(rest_params.vet_phn),
+      weight: xss(rest_params.weight),
       behavioral_informational_information:
-        rest_params.behavioral_informational_information,
+        xss(rest_params.behavioral_informational_information),
       error: errors,
       hasErrors: true,
     });
@@ -322,7 +323,7 @@ router.post("/", async (req, res) => {
     );
 
     if (rest.userInserted === true) {
-      req.session.user = { email: email, usertype: "customer" };
+      req.session.user = { email: xss(email), usertype: "customer" };
       res.redirect("/customerDashboard");
     }
   } catch (error) {
@@ -331,25 +332,25 @@ router.post("/", async (req, res) => {
     //res.render("customer/signup"
     res.render("customer/signupnew", {
       error: error,
-      firstName: rest_params.firstName,
-      lastName: rest_params.lastName,
-      email: rest_params.email,
-      phone_number: rest_params.phone_number,
+      firstName: xss(rest_params.firstName),
+      lastName: xss(rest_params.lastName),
+      email: xss(rest_params.email),
+      phone_number: xss(rest_params.phone_number),
       gender: rest_params.gender,
-      address: rest_params.address,
-      zipcode: rest_params.zipcode,
-      dob: rest_params.dob,
-      password: rest_params.password,
-      dog_name: rest_params.dog_name,
+      address: xss(rest_params.address),
+      zipcode: xss(rest_params.zipcode),
+      dob: xss(rest_params.dob),
+      password: xss(rest_params.password),
+      dog_name: xss(rest_params.dog_name),
       dog_gender: rest_params.dog_gender,
-      dog_breed: rest_params.dog_breed,
-      dog_age: rest_params.dog_age,
-      dog_dob: rest_params.dog_dob,
-      vet_name: rest_params.vet_name,
-      vet_phn: rest_params.vet_phn,
-      weight: rest_params.weight,
+      dog_breed: xss(rest_params.dog_breed),
+      dog_age: xss(rest_params.dog_age),
+      dog_dob: xss(rest_params.dog_dob),
+      vet_name: xss(rest_params.vet_name),
+      vet_phn: xss(rest_params.vet_phn),
+      weight: xss(rest_params.weight),
       behavioral_informational_information:
-        rest_params.behavioral_informational_information,
+        xss(rest_params.behavioral_informational_information),
       error: errors,
       hasserverErrors: true,
     });
