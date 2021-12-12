@@ -83,13 +83,16 @@ router.get("/owner/:id", async (req, res) => {
 router.post("/sittersReview", async (req, res) => {
   //Error handling
   try{
-   // console.log(req.body);
+    console.log(req.body);
    // console.log(req.session.user.email)
     const Ownerdata = await bookingData.sitterReviews(
+
       xss(req.session.user.email),
+       xss(req.body.b_id),
       xss(req.body.sitter_id), 
       xss(req.body.ratingValue), 
       xss(req.body.reviewValue)
+
     );
     return res.json(Ownerdata);
    // console.log(Ownerdata)

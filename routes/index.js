@@ -8,6 +8,9 @@ const bookingRoutes = require("./booking");
 const landingRoutes = require("./landing");
 const logoutRoutes = require("./logout");
 const SitterBookingRoutes = require("./sitterbookingR");
+const privateRoutes = require('./private');
+const userRoutes = require('./admin');
+//const adminListRoutes = require('./adminList');
 
 
 const constructorMethod = (app) => {
@@ -22,6 +25,8 @@ const constructorMethod = (app) => {
   app.use("/sitterDashboard", sitterDashboardRoutes);
   app.use("/logout", logoutRoutes);
   app.use("/", landingRoutes);
+  app.use('/admin', userRoutes);
+  app.use('/private', privateRoutes);
 
   app.use("*", (req, res) => {
     res.redirect("/");

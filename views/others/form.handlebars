@@ -1,0 +1,20 @@
+<main>
+  <h1>Admin Access Only</h1>
+
+  <form method="POST" action="/login" id="login-form">
+    <label for="username">
+      username
+      <input id="username" type="text" name="username" placeholder="username">
+    </label>
+
+    <label for="password">
+      password
+      <input id="password" type="password" name="password" placeholder="password">
+    </label>
+
+    <button type="submit">login</button>
+  </form>
+  {{#if hasErrors}}
+    <p class="error">{{error}}</p>
+  {{/if}}
+</main>

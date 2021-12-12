@@ -29,6 +29,16 @@ router.get("/getsitterfordashboard", async (req, res) => {
   }
 });
 
+router.get("/getOwnerfordashboard", async (req, res) => {
+  try {
+    const ownerData = await CustomerData.getOwnerDataforDashboard();
+
+    return res.json(ownerData);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
 router.get("/getCustomerDetails/:email", async (req, res) => {
   if (!req.params.email) {
     throw "You must provide email"

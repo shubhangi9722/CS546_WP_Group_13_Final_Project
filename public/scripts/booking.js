@@ -26,6 +26,14 @@ function alert1() {
   }
 }
 
+
+
+
+
+
+
+
+
 function bookthissitter(data) {
   var df = {};
 
@@ -61,9 +69,11 @@ function bookthissitter(data) {
       if (response.reviews.length > 0) {
         for (x of response.reviews) {
           reviewscards.append(
+
             '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               x.customerEmail +
               '</h1><p class="card-text"> Review:' +
+
               x.review +
               '</p><p class="card-text">Rating:' +
               x.rating +
@@ -75,24 +85,24 @@ function bookthissitter(data) {
   });
 
   var now = moment();
-  var now1 = now.add(1, "Hours");
+  var now1 = now.add(2, "Hours");
   var now2 = moment(now1).format("YYYY-MM-DDTHH:mm");
   var now3 = now2.toString();
   var bookingform = $(
     '<form method="post" id="bookingform" class="col-sm-6"></div></form>'
   );
   var checkinDate = $(
-    `<div id="checkinDate"><label for="checkin-date">Check-in Date</label><input type="date" id="checkin-date"  name="checkinDate" required></div><br><br>`
+    `<div id="checkinDate"><label for="checkin-date"><h2>Select a date for day and night care</h2><input type="date" id="checkin-date"  name="checkinDate" class ="form-control" required></label></div><br><br>`
   );
   checkinDate.hide();
   var checkin = $(
-    `<div id="checkin"><label for="checkin-date">Check-in Date</label><input type="datetime-local" id="checkin-datetime" min ="${now3}" name="checkin" required></div><br><br>`
+    `<div id="checkin"><label for="checkin-datetime"><h2>Start date and time</h2><input type="datetime-local" id="checkin-datetime" min ="${now3}" name="checkin" class ="form-control" required></label></div><br><br>`
   );
   var checkout = $(
-    `<div id="checkout" ><label for="checkout-date" id ="checkout">Check-out Date</label><input type="datetime-local" id="checkout-date" name="checkout" required></div><br><br>`
+    `<div id="checkout" ><label for="checkout" id ="checkout"><h2>End date and time</h2><input type="datetime-local" id="checkout" name="checkout" class ="form-control" required></label></div><br><br>`
   );
   var serviceoptions = $(
-    '<label for="service-selection" id="bookinglable">Select Service</label><select id="service-selection" onchange="alert1()" name="service_selection" required><option value="">Choose a service from the List</option><option value="DogWalking">Dog Walking</option><option value="Housevisit">House Sitting</option><option value="Daycare">Day care</option><option value="Nightcare">Night care</option></select></div><br><br>'
+    '<label for="service-selection" id="bookinglable"><h1>Select Service</h1></label><select id="service-selection" onchange="alert1()" name="service_selection" class ="form-control" required><option value="">Choose a service from the List</option><option value="DogWalking">Dog Walking</option><option value="Housevisit">House Sitting</option><option value="Daycare">Day care</option><option value="Nightcare">Night care</option></select></div><br><br>'
   );
   var bookbutton = $(
     '<a href ="#!" class="btn btn-primary" type="submit" id="bookthis">Book The Sitter</button>'
@@ -109,6 +119,7 @@ function bookthissitter(data) {
   $("#checkin-date").attr("min", now3);
   bookbutton.on("click", function (event) {
     var queryString = $("#bookingform").serializeArray();
+    console.log(queryString);
     var dataframe = {};
     for (x of queryString) {
       if (x.value && x.name) {
@@ -121,6 +132,7 @@ function bookthissitter(data) {
       alert("please select service");
       bookthissitter(`bookthissitter('${data}')`);
     }
+    console.log(dataframe);
     var now = moment();
     var service = dataframe.service_selection;
     var s = moment(dataframe.checkin);
@@ -505,12 +517,16 @@ function review(i, b_id, sitter_id) {
 }
 
 function SendReview() {
-  let dataObj = {
-    i: $(""),
-    sitter_id: $("#sitterID").val(),
-    ratingValue: $("#Rating").val(),
-    reviewValue: $("#exampleFormControlTextarea1").val(),
-  };
+
+
+let dataObj = {
+  b_id: $('#bookingID').val(),
+  sitter_id: $('#sitterID').val(),
+  ratingValue : $('#Rating').val(),
+  reviewValue : $('#exampleFormControlTextarea1').val()
+
+}
+
   $.ajax({
     method: "POST",
     url: "/booking/sittersReview/",

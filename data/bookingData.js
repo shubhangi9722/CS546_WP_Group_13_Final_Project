@@ -510,7 +510,11 @@ module.exports = {
     return addedUser;
   },
 
-  async sitterReviews(emailId, sitterId, rating, review) {
+
+  async sitterReviews(emailId,b_id, sitterId, rating, review){
+
+
+
     // console.log(emailId);
     // console.log(sitterId)
     // console.log(rating);
@@ -528,8 +532,10 @@ module.exports = {
 
     let createReview = {
       _id: ObjectId(),
-      customerEmail: emailId,
-      rating: parseInt(rating), /////////////////////////////
+
+      bookingID: b_id,
+      customerEmail:emailId,
+      rating: parseInt(rating),   /////////////////////////////
       review: review, /////////////////////////////////
     };
 
