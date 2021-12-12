@@ -1,3 +1,5 @@
+const res = require("express/lib/response");
+
 function alert1() {
   var select = $("#service-selection");
   var value = select.val();
@@ -30,7 +32,7 @@ function bookthissitter(data) {
   $("#mainbinder").empty();
   var row = $("<div class='row'>");
   var center = $('<div class="card text-center" id="card"></div>');
-
+  var sitterinfo = $('<div class="card text-center" id="card"></div>');
   $.ajax({
     method: "GET",
     url: "/booking/getsitterEmail/" + data,
@@ -38,8 +40,20 @@ function bookthissitter(data) {
       df["sitteremail"] = response.email;
       df["service_charge"] = response.price;
       var res = JSON.stringify(response);
+      var info = $(`<div class="col-sm-6">
+        <div class="card">
+        <div class="card-header"><h5> Please note
+        </h5></div><div class="card-body">
+        <h6 class="card-title">
+        <p>Day Care has fixed timing from 10am to 8pm and</p>
+        <p>Night Care has fixed timing from 8pm to 8am</p>
+        <p>Please select date</p>
+        </div>"
+      </div>
+      </div>`);
       var c = $(`<div class="col-sm-6">${res}</div>`);
-      c.appendTo(row);
+      sitterinfo.append(c);
+      info.appendTo(row);
     },
   });
 
@@ -172,10 +186,8 @@ function bookthissitter(data) {
   backbutton.appendTo(bookingform);
   bookingform.appendTo(row);
   row.appendTo(center);
-  center.append(
-    "<div id ='info'><p>Day Care has fixed timing from 10am to 8pm and</p><p>Night Care has fixed timing from 9pm to 9am</p><p>Please select date</p></div>"
-  );
   $("#mainbinder").append(center);
+  $("#mainbinder").append(sitterinfo);
 }
 /// Get My bookings Accepted future bookings
 function GetMyBookings(email) {

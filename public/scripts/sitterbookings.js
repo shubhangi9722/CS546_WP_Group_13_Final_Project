@@ -14,7 +14,7 @@ function getsomebookings(email) {
               response[i].firstName +
               "&nbsp;" +
               response[i].lastName +
-              '</h5><p class="card-text">' +
+              '</h5><p class="card-text">Pet Behavioral Information:' +
               response[i].behavioral_information +
               '</p><p class="card-text">Start Time:' +
               response[i].start_date_time +
@@ -52,7 +52,7 @@ function UpcommingBookings(email) {
     success: function (response) {
       let count = 0;
       $("#mainbinder").empty();
-     // console.log(response);
+      // console.log(response);
       for (var i = 0; i < response.length; i++) {
         if (response[i].status == "Accepted") {
           var b = response[i];
