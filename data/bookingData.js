@@ -177,6 +177,14 @@ module.exports = {
     service_charge,
     service
   ) {
+    console.log({
+      owner_id,
+      sitter_id,
+      start_date_time,
+      end_date_time,
+      service_charge,
+      service,
+    });
     if (!owner_id) {
       throw "Owner id not found";
     }

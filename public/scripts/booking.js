@@ -1,3 +1,4 @@
+const { json } = require("express/lib/response");
 const res = require("express/lib/response");
 
 function alert1() {
@@ -23,16 +24,13 @@ function alert1() {
     $("#checkout").show();
     $("#checkinDate").hide();
     $("#info").show();
+  } else {
+    $("#checkin").show();
+    $("#checkout").show();
+    $("#checkinDate").hide();
+    $("#info").show();
   }
 }
-
-
-
-
-
-
-
-
 
 function bookthissitter(data) {
   var df = {};
@@ -69,11 +67,9 @@ function bookthissitter(data) {
       if (response.reviews.length > 0) {
         for (x of response.reviews) {
           reviewscards.append(
-
             '<div class="card"><div class="card-header"></div><div class="card-body"><h1 class="card-title">' +
               x.customerEmail +
               '</h1><p class="card-text"> Review:' +
-
               x.review +
               '</p><p class="card-text">Rating:' +
               x.rating +
@@ -493,7 +489,7 @@ function review(i, b_id, sitter_id) {
   console.log(b_id);
   let html = `
   <div class="form-group">
-    <label for="exampleFormControlTextarea1">Reviews</label>
+    <label for="exampleFormControlTextarea1"><h1>Add a Review</h1></label>
     <input type="hidden" id="sitterID" value="${sitter_id}">
     <input type="hidden" id="bookingID" value="${b_id}">
     
@@ -517,15 +513,12 @@ function review(i, b_id, sitter_id) {
 }
 
 function SendReview() {
-
-
-let dataObj = {
-  b_id: $('#bookingID').val(),
-  sitter_id: $('#sitterID').val(),
-  ratingValue : $('#Rating').val(),
-  reviewValue : $('#exampleFormControlTextarea1').val()
-
-}
+  let dataObj = {
+    b_id: $("#bookingID").val(),
+    sitter_id: $("#sitterID").val(),
+    ratingValue: $("#Rating").val(),
+    reviewValue: $("#exampleFormControlTextarea1").val(),
+  };
 
   $.ajax({
     method: "POST",
