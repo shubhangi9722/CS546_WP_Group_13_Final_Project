@@ -9,7 +9,9 @@ const landingRoutes = require("./landing");
 const logoutRoutes = require("./logout");
 const SitterBookingRoutes = require("./sitterbookingR");
 
+
 const constructorMethod = (app) => {
+  //app.use(xss());
   app.use("/booking", bookingRoutes);
   app.use("/sitterbooking", SitterBookingRoutes);
   app.use("/customerSignin", custsigninRoutes);

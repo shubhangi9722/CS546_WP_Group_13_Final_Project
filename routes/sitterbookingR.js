@@ -4,12 +4,13 @@ const data = require("../data");
 const bookingData = data.booking;
 const customerData = data.customer;
 const sitterData = data.sitter;
+const xss = require('xss');
 
 router.get("/getsomebookings/:email", async (req, res) => {
   //send all requested bookings by sitter email
   //first get id sitter by email
   try {
-    const sitterdata = await sitterData.getSitterEmail(req.params.email);
+    const sitterdata = await sitterData.getSitterEmail(xss(req.params.email));
     //console.log(sitterdata);
     if (sitterdata._id) {
       let id = sitterdata._id;
@@ -32,7 +33,7 @@ router.get("/getsomebookings/:email", async (req, res) => {
 router.get("/accept/:id", async (req, res) => {
   try {
     const accept = await bookingData.UpdateStatusBooking(
-      req.params.id,
+      xss(req.params.id),
       "Accepted"
     );
     console.log(accept);
@@ -44,7 +45,7 @@ router.get("/accept/:id", async (req, res) => {
 router.get("/rejected/:id", async (req, res) => {
   try {
     const accept = await bookingData.UpdateStatusBooking(
-      req.params.id,
+      xss(req.params.id),
       "Rejected"
     );
     return res.json(accept);
@@ -62,7 +63,7 @@ router.get("/review/:email", async (req, res) => {
     if (typeof email != "string") {
       throw "Email not string";
     }
-    const accept = await sitterData.getreviews(req.params.email);
+    const accept = await sitterData.getreviews(xss(req.params.email));
     console.log(accept);
     return res.json(accept);
   } catch (e) {

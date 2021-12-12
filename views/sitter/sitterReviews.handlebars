@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="/public/css/dog-sitter-login.css" />
 </head>
 <body>
-  <h2>Sitter Review</h2><br />
+  <h1>Sitter Review</h1><br />
   <div class="container">
     <form id="login" method="post" action="/sitterSignin">
       <div class="tab">
@@ -21,14 +21,14 @@
             required
             id="review"
             name="review"
-            value=""
+            value="{{review}}"
             placeholder="review"
           />
         </div>
         <br />
         <div class="normalOrientation">
-           <label for="ratings">Filter rating</label>
-                                   <select name="ratings" id="rating_val">
+           <label for="rating_val">Filter rating</label>
+                                   <select name="rating_val" id="rating_val">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>

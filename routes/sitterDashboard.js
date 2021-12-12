@@ -4,6 +4,7 @@ const data = require("../data");
 const bookingData = data.booking;
 const sitterData = data.sitter;
 let zipcodes = require('zipcodes');
+const xss = require('xss');
 
 router.get('/', async (req, res) => {
     try {
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
       }
       else
       {
-        res.render('sitter/sitterdashboard',{email:req.session.user.email});
+        res.render('sitter/sitterdashboard',{email: xss(req.session.user.email)});
       
       }
     } catch (e) {
@@ -221,7 +222,7 @@ router.get("/getSitterDetails/:email", async (req, res) => {
     return;
   }
   try {
-    const SitterProfile = await sitterData.getCuerrntSitterInfo(req.params.email);
+    const SitterProfile = await sitterData.getCuerrntSitterInfo(xss(req.params.email));
 
     return res.json(SitterProfile);
   } catch (e) {
@@ -236,7 +237,7 @@ router.get("/deleteSitterProfile/:email", async (req, res) => {
     return;
   }
   try {
-    const obj = await sitterData.DeleteSitter(req.params.email);
+    const obj = await sitterData.DeleteSitter(xss(req.params.email));
 
     return res.json(obj);
   } catch (e) {
