@@ -300,6 +300,7 @@ function GetbookingsOwnerPending(id) {
         if (response) {
           var row = $('<div class="row"></div>');
           var count = 0;
+          $("#mainbinder").empty();
           for (var i = 0; i < response.length; i++) {
             var b = response[i];
             if (b.status != "Accepted") {
@@ -327,14 +328,15 @@ function GetbookingsOwnerPending(id) {
               column.append(card);
               column.appendTo(row);
             }
+            $("#mainbinder").append(row);
+            console.log(response);
           }
           if (count == 0) {
-            alert("No Accepted booking found");
-            getSomeSitter();
+            $("#mainbinder").empty();
+            $("#mainbinder").append(
+              '<div class="card"><div class="card-header"></div><div class="card-body"><h5 class="card-title">No Pending Request Found &nbsp;</div></div>'
+            );
           }
-          $("#mainbinder").empty();
-          $("#mainbinder").append(row);
-          console.log(response);
         } else {
           alert("Sorry somerthing went wrong ");
         }
