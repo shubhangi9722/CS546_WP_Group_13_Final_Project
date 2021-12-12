@@ -479,12 +479,13 @@ module.exports = {
 
   async sitterReviews(emailId, sitterId, rating, review){
 
-    console.log(emailId);
-    console.log(sitterId)
-    console.log(rating);
-    console.log(review);
+    // console.log(emailId);
+    // console.log(sitterId)
+    // console.log(rating);
+    // console.log(review);
 
     const sittersCollection = await sitters();
+    let obj = {};
     let objectId = new ObjectId(sitterId);
     const getSitter = await sittersCollection.findOne({
       _id: objectId,
@@ -497,29 +498,38 @@ module.exports = {
     let createReview = {
       _id: ObjectId(),
       customerEmail:emailId,
-      rating: rating,   /////////////////////////////
+      rating: parseInt(rating),   /////////////////////////////
       review: review, /////////////////////////////////
     };
 
     let sum = 0;
+  //  let reviewLength = getSitter.reviews.length  < 1 ? 1: getSitter.reviews.length; 
+    console.log(getSitter);
     for (let i = 0; i < getSitter.reviews.length; i++) {
       sum += getSitter.reviews[i].rating;
     }
-    let average = (sum + rating) / (getSitter.reviews.length + 1);
+    //console.log(sum);
+   // console.log(createReview.rating);
+   // console.log(getSitter.reviews.length);
+    let average = (sum + createReview.rating) / (getSitter.reviews.length + 1);
+    console.log(getSitter.reviews.length + 1 , '1');
+    //console.log(average);
     average = Number(average.toFixed(2));
-
-  
+      
     const updatedreviews = await sittersCollection.updateOne(
       { _id: objectId },
       { $push: { reviews: createReview }, $set: { overall_rating: average } }
     );
 
-    // if (!updatedreviews.matchedCount && !updatedreviews.modifiedCount) {
-    //   throw [500, "Could not update reviews successfully"];
-    // }
-    
-  //  return await restaurantsFunctions.get(objectId.toString());
-  
+      if (!updatedreviews.matchedCount && !updatedreviews.modifiedCount) {
+      throw [500, "Could not update reviews successfully"];
+    }
+
+
+    obj["reviewInserted"] = true;
+
+    return obj;
+ 
 
   }
 
