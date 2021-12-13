@@ -346,7 +346,7 @@ module.exports = {
     const insertInfo = await bookingsCollection.insertOne(booking);
     if (insertInfo.insertedCount === 0)
       throw new Error("Could not add booking");
-    console.log(insertInfo);
+    //console.log(insertInfo);
     sendEmailToSitter(sitter_id);
     return { BookingCreated: true };
   },
@@ -504,7 +504,7 @@ module.exports = {
   },
 
   async getDogOwnerEmail(email) {
-    email = email.trim();
+    email = email;
 
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

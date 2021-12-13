@@ -5,7 +5,7 @@ const customerData = data.customer;
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 var zipcodes = require("zipcodes");
-const xss = require('xss');
+const xss = require("xss");
 
 //Customer Signup Page
 router.get("/", async (req, res) => {
@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 
 //Customer Signup
 router.post("/", async (req, res) => {
-  const rest_params = xss(req.body);
+  const rest_params = req.body;
   let errors = [];
   if (!rest_params.firstName) {
     errors.push("You must provide first name");
@@ -223,13 +223,11 @@ router.post("/", async (req, res) => {
     );
   }
 
-  
   var phnregex =
     /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
   if (!rest_params.phone_number.valueOf().match(phnregex)) {
     errors.push("your phone number format is incorrect");
   }
-
 
   var phnregex =
     /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
@@ -237,13 +235,10 @@ router.post("/", async (req, res) => {
     errors.push("your dogs veterinarian phone number format is incorrect");
   }
 
-
-
   var zipvalid = /^\d{5}$/;
   if (!rest_params.zipcode.valueOf().match(zipvalid)) {
     errors.push("your zipcode is incorrect");
   }
-
 
   console.log("error length", errors.length);
   console.log("error", errors);
@@ -268,8 +263,9 @@ router.post("/", async (req, res) => {
       vet_name: xss(rest_params.vet_name),
       vet_phn: xss(rest_params.vet_phn),
       weight: xss(rest_params.weight),
-      behavioral_informational_information:
-        xss(rest_params.behavioral_informational_information),
+      behavioral_informational_information: xss(
+        rest_params.behavioral_informational_information
+      ),
       error: errors,
       hasErrors: true,
     });
@@ -349,8 +345,9 @@ router.post("/", async (req, res) => {
       vet_name: xss(rest_params.vet_name),
       vet_phn: xss(rest_params.vet_phn),
       weight: xss(rest_params.weight),
-      behavioral_informational_information:
-        xss(rest_params.behavioral_informational_information),
+      behavioral_informational_information: xss(
+        rest_params.behavioral_informational_information
+      ),
       error: errors,
       hasserverErrors: true,
     });
