@@ -177,8 +177,8 @@ function bookthissitter(data) {
   backbutton.attr("onclick", "getSomeSitter()");
   var info = $(`<div class="col-sm-6">
   <div class="card">
-  <div class="card-header"><h3> Reviews
-  </h3></div>`);
+  <div class="card-header"><h1> Reviews
+  </h1></div>`);
   
   row.append(info);
   backbutton.appendTo(bookingform);

@@ -295,25 +295,25 @@ module.exports = {
     const passhash = await bcrypt.hash(password, saltRounds);
     const dogOwnerCollection = await dogOwners();
     let newcustomer = {
-      firstName: firstName,
-      lastName: lastName,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       email: email.toLowerCase(),
-      phone_number: phone_number,
-      gender: gender,
-      address: address,
-      city: city,
-      state: state,
-      zipcode: zipcode,
-      dob: dob,
+      phone_number: phone_number.trim(),
+      gender: gender.trim(),
+      address: address.trim(),
+      city: city.trim(),
+      state: state.trim(),
+      zipcode: zipcode.trim(),
+      dob: dob.trim(),
       password: passhash,
-      dog_name: dog_name,
-      dog_gender: dog_gender,
-      dog_breed: dog_breed,
-      dog_dob: dog_dob,
-      vet_name: vet_name,
-      vet_phn: vet_phn,
-      weight: weight,
-      behavioral_information: behavioral_information,
+      dog_name: dog_name.trim(),
+      dog_gender: dog_gender.trim(),
+      dog_breed: dog_breed.trim(),
+      dog_dob: dog_dob.trim(),
+      vet_name: vet_name.trim(),
+      vet_phn: vet_phn.trim(),
+      weight: weight.trim(),
+      behavioral_information: behavioral_information.trim(),
     };
 
     const addedUser = await dogOwnerCollection.findOne({
@@ -338,6 +338,8 @@ module.exports = {
       return sitterList;
     }
   },
+
+
   async getOwnerDataforDashboard() {
     const OwnerCollection = await dogOwners();
     const ownerList = await OwnerCollection.find({}).limit(20).toArray();
@@ -354,6 +356,7 @@ module.exports = {
   async getCuerrntCustomerInfo(email) {
     if (!email || email.trim() === "") throw " email not available";
 
+    email = email.trim();
     email = email.toLowerCase();
 
     const dogOwnerCollection = await dogOwners();
@@ -739,23 +742,27 @@ module.exports = {
 
     let obj = {};
 
+    email = email.toLowerCase();
+
     const dogOwnerCollection = await dogOwners();
     let oldcustomer = {
-      firstName: firstName,
-      lastName: lastName,
-      phone_number: phone_number,
-      gender: gender,
-      address: address,
-      city: city,
-      state: state,
-      zipcode: zipcode,
-      dob: dob,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      phone_number: phone_number.trim(),
+      gender: gender.trim(),
+      address: address.trim(),
+      city: city.trim(),
+      state: state.trim(),
+      zipcode: zipcode.trim(),
+      dob: dob.trim(),
     };
+    
 
     const updatedInfo = await dogOwnerCollection.updateOne(
       { email: email },
       { $set: oldcustomer }
     );
+    //console.log(updatedInfo)
     if (updatedInfo.modifiedCount === 0) {
       throw "customer already upto date";
     }
@@ -847,16 +854,18 @@ module.exports = {
 
     let obj = {};
 
+    email = email.toLowerCase();
+
     const dogOwnerCollection = await dogOwners();
     let oldcustomer = {
-      dog_name: dog_name,
-      dog_gender: dog_gender,
-      dog_breed: dog_breed,
-      dog_dob: dog_dob,
-      vet_name: vet_name,
-      vet_phn: vet_phn,
-      weight: weight,
-      behavioral_information: behavioral_information,
+      dog_name: dog_name.trim(),
+      dog_gender: dog_gender.trim(),
+      dog_breed: dog_breed.trim(),
+      dog_dob: dog_dob.trim(),
+      vet_name: vet_name.trim(),
+      vet_phn: vet_phn.trim(),
+      weight: weight.trim(),
+      behavioral_information: behavioral_information.trim(),
     };
 
     const updatedInfo = await dogOwnerCollection.updateOne(

@@ -56,7 +56,7 @@ router.get("/rejected/:id", async (req, res) => {
 
 router.get("/review/:email", async (req, res) => {
   try {
-    email = req.params.email;
+    email = xss (req.params.email);
     if (!email) {
       throw "No email found";
     }
