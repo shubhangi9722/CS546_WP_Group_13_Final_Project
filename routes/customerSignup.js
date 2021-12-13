@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 
 //Customer Signup
 router.post("/", async (req, res) => {
-  const rest_params = req.body;
+  const rest_params = xss(req.body);
   let errors = [];
   if (!rest_params.firstName) {
     errors.push("You must provide first name");
@@ -294,7 +294,7 @@ router.post("/", async (req, res) => {
       vet_phn,
       weight,
       behavioral_information,
-    } = rest_params;
+    } = xss(rest_params);
 
     var zipcitystate = zipcodes.lookup(zipcode);
     if (zipcitystate === null || zipcitystate === undefined) {

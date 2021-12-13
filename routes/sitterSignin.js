@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 ////////////////////////////////////////////
 
 router.post("/", async (req, res) => {
-  const rest_params = req.body;
+  const rest_params = xss(req.body);
   let errors = [];
   if (!rest_params.email) {
     errors.push("You must provide email name");
@@ -67,7 +67,7 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    const { email, password } = rest_params;
+    const { email, password } = xss(rest_params);
     //const pass = await bcrypt.hash(password, saltRounds);
     const rest = await sitterData.checkSitter(email, password);
     // console.log(pass);

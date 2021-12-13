@@ -237,21 +237,22 @@ module.exports = {
     const sittersCollection = await sitters();
 
     let priceInt = parseInt(price);
+    email = email.trim();
 
     let newsitter = {
-      firstName: firstName,
-      lastName: lastName,
-      dob: dob,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      dob: dob.trim(),
       email: email.toLowerCase(),
-      phone_number: phone_number,
-      gender: gender.toLocaleLowerCase(),
-      address: address.toLocaleLowerCase(),
-      city: city.toLocaleLowerCase(),
-      state: state.toLocaleLowerCase(),
-      zipcode: zipcode,
+      phone_number: phone_number.trim(),
+      gender: gender.toLocaleLowerCase().trim(),
+      address: address.toLocaleLowerCase().trim(),
+      city: city.toLocaleLowerCase().trim(),
+      state: state.toLocaleLowerCase().trim(),
+      zipcode: zipcode.trim(),
       password: passhash,
-      price: priceInt,
-      bio: bio,
+      price: priceInt.trim(),
+      bio: bio.trim(),
       //active_status:active_status,
       overall_rating: 0,
       reviews: [],
@@ -445,18 +446,21 @@ module.exports = {
 
     let priceInt = parseInt(price);
 
+    email = email.trim();
+    email = email.toLowerCase();
+
     const sitterCollection = await sitters();
     let oldSitterdetails = {
-      firstName: firstName,
-      lastName: lastName,
-      phone_number: phone_number,
-      gender: gender.toLowerCase(),
-      address: address.toLowerCase(),
-      city: city.toLowerCase(),
-      state: state.toLowerCase(),
-      zipcode: zipcode,
-      price: priceInt,
-      bio: bio,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      phone_number: phone_number.trim(),
+      gender: gender.toLowerCase().trim(),
+      address: address.toLowerCase().trim(),
+      city: city.toLowerCase().trim(),
+      state: state.toLowerCase().trim(),
+      zipcode: zipcode.trim(),
+      price: priceInt.trim(),
+      bio: bio.trim(),
     };
 
     const updatedInfo = await sitterCollection.updateOne(
@@ -472,15 +476,25 @@ module.exports = {
     return updatedSitter;
   },
 
+
+
+
   async getCuerrntSitterInfo(email) {
     if (!email || email.trim() === "") throw " email not available";
 
+    email = email.trim();
+
+    email = email.toLowerCase();
     const sitterCollection = await sitters();
     const sitterInfo = await sitterCollection.findOne({ email: email });
     if (sitterInfo === null) throw "User not found";
 
     return sitterInfo;
   },
+
+
+
+
 
   async DeleteSitter(email) {
     if (!email || email.trim() === "") throw " email not available";
@@ -489,6 +503,10 @@ module.exports = {
       active_status: 0,
     };
 
+    email = email.trim();
+
+    email = email.toLowerCase();
+    //console.log(email)
     const sitterCollection = await sitters();
     const sitterInfo = await sitterCollection.updateOne(
       { email: email },
@@ -499,6 +517,10 @@ module.exports = {
 
     return sitterInfo;
   },
+
+
+
+
   async getreviews(email) {
     if (!email || email.trim() === "") throw " email not available";
     let emailRegex =
@@ -506,9 +528,11 @@ module.exports = {
     if (!email.valueOf().match(emailRegex)) {
       throw "e-mail format is incorrect";
     }
+
+    email = email.trim();
     const sittersCollection = await sitters();
     const addedUser = await sittersCollection.findOne({
-      email: email.toLocaleLowerCase(),
+      email: email.toLowerCase(),
     });
     if (addedUser === null) throw "User does not exists";
     delete addedUser.password;

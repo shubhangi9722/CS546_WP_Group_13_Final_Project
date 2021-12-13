@@ -3,10 +3,11 @@ const router = express.Router();
 const userData = require("../data/admin"); // ./users.js
 const bcrypt = require("bcryptjs");
 const saltRounds = 10; //the higher number, the longer time wil be
+const xss = require('xss');
 
 router.get("/", async (req, res) => {
   try {
-    if (req.session.isLogIn == true && req.session.usertype == "admin") {
+    if (xss(req.session.isLogIn) == true && xss(req.session.usertype) == "admin") {
       res.redirect("/private");
     } else {
       res.render("others/form", { title: "Login" });
@@ -17,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  if (req.session.isLogIn == true && req.session.usertype == "admin") {
+  if (xss(req.session.isLogIn) == true && xss(req.session.usertype) == "admin") {
     res.redirect("/private");
   } else {
     res.status(401).render("others/form", {

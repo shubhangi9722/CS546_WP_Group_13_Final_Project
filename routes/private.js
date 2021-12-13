@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const userData = require('../data/admin');  // ./users.js
+const xss = require('xss');
 
 router.get('/', async (req, res) => {
   // let aUserData = req.body;
   try {
     res.render('others/private', {
-      Username: req.session.user.username,
-      First_Name: req.session.user.firstname,
-      Last_Name: req.session.user.lastname,
+      Username: xss(req.session.user.username),
+      First_Name: xss(req.session.user.firstname),
+      Last_Name: xss(req.session.user.lastname),
 
       title: "private page",
       logoutLink: "http://localhost:3000/logout"
