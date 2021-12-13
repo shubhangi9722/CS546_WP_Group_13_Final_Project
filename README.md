@@ -22,7 +22,7 @@ For the Backend part, you will need to:
                                                   on the webiste. For example: The dog owner books a sitter for 12/13/2021. But, you need to check review function today, 
                                                   so for that in the databse you will need to change the date to 12/12/2021. So, you can check for the review function.
                                                  
-                                                  In the website, user do not have to go through this tedious procedure. This is just for testing purposes on backend.
+   In the website, user do not have to go through this tedious procedure. This is just for testing purposes on backend.
                                                  
 For the Frontend part, you will need to:
 ---- (Sitter Dashboard) : On this dashboard, sitter have its entire information saved in "My Profile". Here, it will be able to update and delete its profile as per its
