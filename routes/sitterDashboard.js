@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/updateSitter", async (req, res) => {
-  const rest_params = req.body;
+  const rest_params = xss(req.body);
   try {
     if (!rest_params.firstName) {
       throw "You must provide first name";
@@ -166,7 +166,7 @@ router.post("/updateSitter", async (req, res) => {
       zipcode,
       price,
       bio,
-    } = rest_params;
+    } = xss(rest_params);
 
     let zipcitystate = zipcodes.lookup(zipcode);
     if (zipcitystate === null || zipcitystate === undefined) {

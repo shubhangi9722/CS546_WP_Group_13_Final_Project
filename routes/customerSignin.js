@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
   ////////////////////////////////////////////
 
   router.post('/', async (req, res) => {
-    const rest_params=req.body;
+    const rest_params= xss(req.body);
    
     let errors =[];
     if(!rest_params.email)
@@ -90,7 +90,7 @@ router.get('/', async (req, res) => {
       try {
 
         
-        const{email, password}=rest_params
+        const{email, password}= xss(rest_params)
         const rest = await customerData.checkCustomer(email, password);
         if(rest.authenticated===true)
         {

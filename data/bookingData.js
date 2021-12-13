@@ -177,14 +177,14 @@ module.exports = {
     service_charge,
     service
   ) {
-    console.log({
-      owner_id,
-      sitter_id,
-      start_date_time,
-      end_date_time,
-      service_charge,
-      service,
-    });
+    //   console.log({
+    //     owner_id,
+    //     sitter_id,
+    //     start_date_time,
+    //     end_date_time,
+    //     service_charge,
+    //     service,
+    //   });
     if (!owner_id) {
       throw "Owner id not found";
     }
@@ -504,14 +504,17 @@ module.exports = {
   },
 
   async getDogOwnerEmail(email) {
+    email = email.trim();
+
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!email.valueOf().match(emailRegex)) {
       throw "e-mail format is incorrect";
     }
+
     const OwnerCollection = await dogOwners();
     const addedUser = await OwnerCollection.findOne({
-      email: email.toLocaleLowerCase(),
+      email: email.toLowerCase(),
     });
     if (addedUser === null) throw "User does not exists";
     delete addedUser.password;
