@@ -177,14 +177,14 @@ module.exports = {
     service_charge,
     service
   ) {
-    console.log({
-      owner_id,
-      sitter_id,
-      start_date_time,
-      end_date_time,
-      service_charge,
-      service,
-    });
+    //   console.log({
+    //     owner_id,
+    //     sitter_id,
+    //     start_date_time,
+    //     end_date_time,
+    //     service_charge,
+    //     service,
+    //   });
     if (!owner_id) {
       throw "Owner id not found";
     }
@@ -229,10 +229,12 @@ module.exports = {
     end_date_time = end_date_time.toString();
     // start_date_time.replace("/", "-");
     // end_date_time.replace("/", "-");
-
     let s = moment(new Date(start_date_time));
     let e = moment(new Date(end_date_time));
-
+    let now = moment();
+    if (moment(s).isBefore(now)) {
+      throw "please select future Start date and time ";
+    }
     if (s.isValid() == false || e.isValid() == false) {
       throw "start date or end date is not valid";
     }
@@ -344,7 +346,7 @@ module.exports = {
     const insertInfo = await bookingsCollection.insertOne(booking);
     if (insertInfo.insertedCount === 0)
       throw new Error("Could not add booking");
-    console.log(insertInfo);
+    //console.log(insertInfo);
     sendEmailToSitter(sitter_id);
     return { BookingCreated: true };
   },
@@ -502,15 +504,13 @@ module.exports = {
   },
 
   async getDogOwnerEmail(email) {
-
-    email = email.trim();
+    email = email;
 
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!email.valueOf().match(emailRegex)) {
       throw "e-mail format is incorrect";
     }
-
 
     const OwnerCollection = await dogOwners();
     const addedUser = await OwnerCollection.findOne({
@@ -523,11 +523,7 @@ module.exports = {
     return addedUser;
   },
 
-
-  async sitterReviews(emailId,b_id, sitterId, rating, review){
-
-
-
+  async sitterReviews(emailId, b_id, sitterId, rating, review) {
     // console.log(emailId);
     // console.log(sitterId)
     // console.log(rating);
@@ -547,8 +543,8 @@ module.exports = {
       _id: ObjectId(),
 
       bookingID: b_id,
-      customerEmail:emailId,
-      rating: parseInt(rating),   /////////////////////////////
+      customerEmail: emailId,
+      rating: parseInt(rating), /////////////////////////////
       review: review, /////////////////////////////////
     };
 

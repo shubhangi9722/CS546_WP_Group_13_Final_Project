@@ -1,4 +1,4 @@
-  const mongoCollections = require("../config/mongoCollections");
+const mongoCollections = require("../config/mongoCollections");
 const sitters = mongoCollections.sitters;
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
@@ -240,9 +240,9 @@ module.exports = {
     email = email.trim();
 
     let newsitter = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      dob: dob.trim(),
+      firstName: firstName,
+      lastName: lastName,
+      dob: dob,
       email: email.toLowerCase(),
       phone_number: phone_number.trim(),
       gender: gender.toLocaleLowerCase().trim(),
@@ -251,8 +251,8 @@ module.exports = {
       state: state.toLocaleLowerCase().trim(),
       zipcode: zipcode.trim(),
       password: passhash,
-      price: priceInt.trim(),
-      bio: bio.trim(),
+      price: priceInt,
+      bio: bio,
       //active_status:active_status,
       overall_rating: 0,
       reviews: [],
@@ -451,16 +451,16 @@ module.exports = {
 
     const sitterCollection = await sitters();
     let oldSitterdetails = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      phone_number: phone_number.trim(),
+      firstName: firstName,
+      lastName: lastName,
+      phone_number: phone_number,
       gender: gender.toLowerCase().trim(),
       address: address.toLowerCase().trim(),
       city: city.toLowerCase().trim(),
       state: state.toLowerCase().trim(),
       zipcode: zipcode.trim(),
       price: priceInt.trim(),
-      bio: bio.trim(),
+      bio: bio,
     };
 
     const updatedInfo = await sitterCollection.updateOne(
@@ -476,9 +476,6 @@ module.exports = {
     return updatedSitter;
   },
 
-
-
-
   async getCuerrntSitterInfo(email) {
     if (!email || email.trim() === "") throw " email not available";
 
@@ -491,10 +488,6 @@ module.exports = {
 
     return sitterInfo;
   },
-
-
-
-
 
   async DeleteSitter(email) {
     if (!email || email.trim() === "") throw " email not available";
@@ -517,9 +510,6 @@ module.exports = {
 
     return sitterInfo;
   },
-
-
-
 
   async getreviews(email) {
     if (!email || email.trim() === "") throw " email not available";

@@ -4,7 +4,7 @@ const data = require("../data");
 const bookingData = data.booking;
 const CustomerData = data.customer;
 var zipcodes = require("zipcodes");
-const xss = require('xss');
+const xss = require("xss");
 
 router.get("/", async (req, res) => {
   try {
@@ -61,7 +61,7 @@ router.get("/getCustomerDetails/:email", async (req, res) => {
 });
 
 router.post("/getfiltersearchresult", async (req, res) => {
-  const rest_params = xss(req.body);
+  const rest_params = req.body;
   try {
     const { serachterm, zipcode, rating, pricerange } = rest_params;
 
@@ -79,7 +79,7 @@ router.post("/getfiltersearchresult", async (req, res) => {
 });
 
 router.post("/UpdateOwner", async (req, res) => {
-  const rest_params = xss(req.body);
+  const rest_params = req.body;
   try {
     if (!rest_params.firstName) {
       throw "You must provide first name";
@@ -167,7 +167,6 @@ router.post("/UpdateOwner", async (req, res) => {
       throw "date of birth cannot be empty string";
     }
 
-    
     var emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!rest_params.email.valueOf().match(emailRegex)) {
@@ -227,7 +226,7 @@ router.post("/UpdateOwner", async (req, res) => {
 });
 
 router.post("/UpdateDog", async (req, res) => {
-  const rest_params = xss(req.body);
+  const rest_params = req.body;
   try {
     if (!rest_params.dog_name) {
       throw "You must provide dog name";
