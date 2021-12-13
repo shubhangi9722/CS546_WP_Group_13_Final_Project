@@ -349,8 +349,6 @@ module.exports = {
     }
   },
 
-
-
   async getCuerrntCustomerInfo(email) {
     if (!email || email.trim() === "") throw " email not available";
 
@@ -366,8 +364,7 @@ module.exports = {
   async filterresult(serachterm, zipcode, rating, pricerange) {
     const sittersCollection = await sitters();
 
-    var overallrating =rating
-    
+    var overallrating = rating;
 
     const namearray = serachterm.split(" ");
     var fname = namearray[0];
@@ -376,6 +373,7 @@ module.exports = {
     const pricearray = pricerange.split("-");
     var lbound = parseInt(pricearray[0]);
     var ubound = parseInt(pricearray[1]);
+    lbound = lbound - 1;
 
     if (
       serachterm == "" &&
@@ -428,7 +426,7 @@ module.exports = {
           $and: [
             { firstName: fname },
             { zipcode: zipcode },
-            { overall_rating: parseInt(overallrating) },
+            { overall_rating: { $gt: parseInt(overallrating) } },
           ],
         })
         .toArray();
@@ -448,7 +446,7 @@ module.exports = {
           $and: [
             { firstName: fname },
             { zipcode: zipcode },
-            { overall_rating: parseInt(overallrating) },
+            { overall_rating: { $gt: parseInt(overallrating) } },
             { price: { $gt: lbound } },
             { price: { $lt: ubound } },
           ],
@@ -480,7 +478,12 @@ module.exports = {
       pricerange == "0"
     ) {
       const sitterList = await sittersCollection
-        .find({ $and: [{ zipcode: zipcode }, { overall_rating: parseInt(overallrating) }] })
+        .find({
+          $and: [
+            { zipcode: zipcode },
+            { overall_rating: { $gt: parseInt(overallrating) } },
+          ],
+        })
         .toArray();
 
       if (sitterList.length == 0) {
@@ -497,7 +500,7 @@ module.exports = {
         .find({
           $and: [
             { zipcode: zipcode },
-            { overall_rating: parseInt(overallrating) },
+            { overall_rating: { $gt: parseInt(overallrating) } },
             { price: { $gt: lbound } },
             { price: { $lt: ubound } },
           ],
@@ -515,7 +518,7 @@ module.exports = {
       pricerange == "0"
     ) {
       const sitterList = await sittersCollection
-        .find({ overall_rating: parseInt(overallrating) })
+        .find({ overall_rating: { $gt: parseInt(overallrating) } })
         .toArray();
 
       if (sitterList.length == 0) {
@@ -531,7 +534,7 @@ module.exports = {
       const sitterList = await sittersCollection
         .find({
           $and: [
-            { overall_rating: parseInt(overallrating) },
+            { overall_rating: { $gt: parseInt(overallrating) } },
             { price: { $gt: lbound } },
             { price: { $lt: ubound } },
           ],

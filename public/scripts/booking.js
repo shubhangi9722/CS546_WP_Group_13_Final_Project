@@ -88,14 +88,14 @@ function bookthissitter(data) {
     '<form method="post" id="bookingform" class="col-sm-6"></div></form>'
   );
   var checkinDate = $(
-    `<div id="checkinDate"><label for="checkin-date"><h2>Select a date for day and night care</h2><input type="date" id="checkin-date"  name="checkinDate" class ="form-control" required></label></div><br><br>`
+    `<div id="checkinDate"><label for="checkin-date"><h2>Select a date for day and night care</h2><input type="date" id="checkin-date" min ="${now3}" name="checkinDate" class ="form-control" required></label></div><br><br>`
   );
   checkinDate.hide();
   var checkin = $(
     `<div id="checkin"><label for="checkin-datetime"><h2>Start date and time</h2><input type="datetime-local" id="checkin-datetime" min ="${now3}" name="checkin" class ="form-control" required></label></div><br><br>`
   );
   var checkout = $(
-    `<div id="checkout" ><label for="checkout" id ="checkout"><h2>End date and time</h2><input type="datetime-local" id="checkout" name="checkout" class ="form-control" required></label></div><br><br>`
+    `<div id="checkout" ><label for="checkout" id ="checkout"><h2>End date and time</h2><input type="datetime-local" id="checkout" min ="${now3}" name="checkout" class ="form-control" required></label></div><br><br>`
   );
   var serviceoptions = $(
     '<label for="service-selection" id="bookinglable"><h1>Select Service</h1></label><select id="service-selection" onchange="alert1()" name="service_selection" class ="form-control" required><option value="">Choose a service from the List</option><option value="DogWalking">Dog Walking</option><option value="Housevisit">House Sitting</option><option value="Daycare">Day care</option><option value="Nightcare">Night care</option></select></div><br><br>'
@@ -111,7 +111,7 @@ function bookthissitter(data) {
   checkinDate.appendTo(bookingform);
   checkout.appendTo(bookingform);
   bookbutton.appendTo(bookingform);
-
+  let count = 0;
   $("#checkin-date").attr("min", now3);
   bookbutton.on("click", function (event) {
     var queryString = $("#bookingform").serializeArray();
@@ -126,14 +126,22 @@ function bookthissitter(data) {
     }
     if (dataframe.service_selection == "") {
       alert("please select service");
+      count = 1;
       bookthissitter(`bookthissitter('${data}')`);
     }
     console.log(dataframe);
     var now = moment();
+    var now2 = now.add(2, "hours");
     var service = dataframe.service_selection;
     var s = moment(dataframe.checkin);
+
     if (service == "DogWalking") {
       var s1 = moment(dataframe.checkin);
+      if (moment(s1).isBefore(now)) {
+        alert("please select atleast 2 hours in future");
+        count = 1;
+        bookthissitter(data);
+      }
       var e1 = s1.add(30, "minutes");
       var e2 = moment(e1).format("MM/DD/YYYY HH:mm");
       var s3 = moment(s).format("MM/DD/YYYY HH:mm");
@@ -141,6 +149,11 @@ function bookthissitter(data) {
       var b = e2.toString();
     } else if (service == "Daycare") {
       var s1 = moment(dataframe.checkinDate);
+      if (moment(s1).isBefore(now)) {
+        alert("please select Start time of future");
+        count = 1;
+        bookthissitter(data);
+      }
       var s2 = s1.add(10, "Hours");
       var s3 = moment(s2).format("MM/DD/YYYY HH:mm:ss");
 
@@ -151,9 +164,13 @@ function bookthissitter(data) {
       var b = e2.toString();
     } else if (service == "Nightcare") {
       var s1 = moment(dataframe.checkinDate);
+      if (moment(s1).isBefore(now)) {
+        count = 1;
+        alert("please select a Valid Start date or Time");
+        bookthissitter(data);
+      }
       var s2 = s1.add(22, "Hours");
       var s3 = moment(s2).format("MM/DD/YYYY HH:mm:ss");
-
       var s4 = moment(dataframe.checkinDate);
       var e1 = s1.add(12, "Hours");
       var e2 = moment(e1).format("MM/DD/YYYY HH:mm:ss");
@@ -162,16 +179,24 @@ function bookthissitter(data) {
     } else {
       var e1 = moment(dataframe.checkout);
       var s1 = moment(dataframe.checkin);
+      if (moment(s1).isBefore(now)) {
+        alert("please select a Valid Start date time");
+        count = 1;
+        bookthissitter(data);
+      }
       if (e1.diff(s1) / 60000 < 60) {
+        count = 1;
         alert("Minimun 60 minutes of house visit");
         //bookthissitter(data);
       } else {
         if (dataframe.checkin == "") {
-          alert("please select Start");
+          alert("please select Start date time");
+          count = 1;
           bookthissitter(data);
         }
         if (dataframe.checkout == "") {
-          alert("please select End");
+          alert("please select End end date time");
+          count = 1;
           bookthissitter(data);
         }
         var e2 = moment(e1).format("MM/DD/YYYY HH:mm:ss");
@@ -202,7 +227,9 @@ function bookthissitter(data) {
         if (response.booking == "Succesful") {
           alert("Your booking has been created");
         } else {
-          alert("Please Select some Other Date");
+          if (count == 0) {
+            alert("Please Select some Other Date");
+          }
         }
       },
     });
