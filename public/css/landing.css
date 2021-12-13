@@ -11,7 +11,6 @@ ul {
   text-align:center;
   font-size: 16pt;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-style: italic;
 }
 
 li {
@@ -20,7 +19,6 @@ li {
   text-align:center;
   font-size: 16pt;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-style: italic;
 }
 
 a {
@@ -54,7 +52,6 @@ a:active {
 .head-form {
   font-size: 20pt;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-style:italic;
   text-align: center;
   color:darkmagenta;
 }
@@ -72,7 +69,6 @@ a:active {
 p {
   font-size: 14pt;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-style: italic;
   text-align: center;
   color:navy;
 }
@@ -81,13 +77,11 @@ p {
   color: navy;
   font-size: 14pt;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-style: italic;
 }
 
 footer{
   color: black;
   font-size: 12pt;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-style: italic;
   text-align: center;
 }

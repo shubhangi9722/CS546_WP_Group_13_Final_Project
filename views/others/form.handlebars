@@ -6,16 +6,17 @@
 
   <form method="POST" action="/login" id="login-form">
     <label for="username">
-      username
+      Username
       <input id="username" type="text" name="username" placeholder="username">
     </label>
-
+    <br> <br>
     <label for="password">
-      password
+      Password
       <input id="password" type="password" name="password" placeholder="password">
     </label>
 
-    <button type="submit">login</button>
+    <br>
+    <button type="submit">Login</button>
   </form>
   {{#if hasErrors}}
     <p class="error">{{error}}</p>
